@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupportpocketstuff.api.modals.Modal;
 
 public class PocketPlayer {
 
@@ -39,4 +40,15 @@ public class PocketPlayer {
 		//TODO: I don't know howWWwwww.. someone controlled you.. they bought and sold you..
 		//connection.sendRawPacket(ModalRequest.create(id, Modals.get(id), connection.getVersion()).unwrap().array());
 	}
+	
+	/***
+	 * Sends a PocketPlayer a dynamic modal. 
+	 * (Id is still required for callback!)
+	 * @param id
+	 * @param modal
+	 */
+	public void sendModal(int id, Modal modal) {
+		
+	}
+	
 }
