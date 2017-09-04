@@ -49,7 +49,7 @@ public class ModalBuilder {
 	
 	@Override
 	public String toString() {
-		return json.getAsString();
+		return json.toString();
 	}
 	
 }

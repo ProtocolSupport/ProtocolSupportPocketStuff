@@ -39,7 +39,7 @@ gen.mkdirs();
 //TODO: Add ProtocolSupport to dlibs (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 task updateLibs(type: Download) {
 	src([
-		'https://yivesmirror.com/files/bukkit/bukkit-latest.jar'
+		'https://yivesmirror.com/files/spigot/spigot-1.12.1-R0.1-SNAPSHOT-b1378.jar'
 	])
 	dest dllibs
 	onlyIfNewer true
@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-	shadow files(new File(dllibs, 'bukkit-latest.jar'), new File(dllibs, 'ProtocolSupport.jar'))
+	shadow files(new File(dllibs, 'spigot-1.12.1-R0.1-SNAPSHOT-b1378.jar'), new File(dllibs, 'ProtocolSupport.jar'))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'

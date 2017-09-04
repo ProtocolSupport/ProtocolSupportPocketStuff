@@ -21,7 +21,7 @@ public class Modals {
 	 * @param modal
 	 * @return the id of the modal added.
 	 */
-	public static int add(Modal modal) {
+	public static int register(Modal modal) {
 		modals.put(modals.size(), modal);
 		return modals.size() - 1;
 	}

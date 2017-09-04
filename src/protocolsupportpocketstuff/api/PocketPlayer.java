@@ -4,7 +4,11 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ModalRequest;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.modals.Modal;
+import protocolsupportpocketstuff.api.modals.Modals;
 
 public class PocketPlayer {
 
@@ -37,8 +41,7 @@ public class PocketPlayer {
 	 * @param id
 	 */
 	public void sendModal(int id) {
-		//TODO: I don't know howWWwwww.. someone controlled you.. they bought and sold you..
-		//connection.sendRawPacket(ModalRequest.create(id, Modals.get(id), connection.getVersion()).unwrap().array());
+		sendModal(id, Modals.get(id));
 	}
 	
 	/***
@@ -48,7 +51,15 @@ public class PocketPlayer {
 	 * @param modal
 	 */
 	public void sendModal(int id, Modal modal) {
-		
+		sendPocketPacket(ModalRequest.create(id, modal.getModalString(), connection.getVersion()));
+	}
+	
+	/***
+	 * Sends a custom pocket PS packet to the player.
+	 * @param data
+	 */
+	public void sendPocketPacket(ClientBoundPacketData data) {
+		connection.sendRawPacket(MiscSerializer.readAllBytes(data));
 	}
 	
 }
