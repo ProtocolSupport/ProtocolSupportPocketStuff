@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 
-public class Utils {
+public class PocketUtils {
 
 	/***
 	 * Checks if the player is a pocket player.

@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.PocketPlayer;
-import protocolsupportpocketstuff.api.Utils;
+import protocolsupportpocketstuff.api.PocketConnection;
+import protocolsupportpocketstuff.api.PocketUtils;
 
 public class SkinListener implements Listener {
 	
@@ -26,9 +26,9 @@ public class SkinListener implements Listener {
 		if(e.getMessage().contains(".meep")) {
 			Player p = e.getPlayer();
 			p.sendMessage("Meep!");
-			if(Utils.isPocketPlayer(p)) {
-				PocketPlayer pp = new PocketPlayer(p);
-				pp.sendModal(plugin.helloModal);
+			if(PocketUtils.isPocketPlayer(p)) {
+				PocketConnection pcc = PocketConnection.get(p);
+				
 			}
 		}
 	}
