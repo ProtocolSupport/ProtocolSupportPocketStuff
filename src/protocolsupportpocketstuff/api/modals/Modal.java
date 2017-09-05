@@ -1,18 +1,13 @@
 package protocolsupportpocketstuff.api.modals;
 
-public class Modal {
+public interface Modal {
 	
-	private final String modalString;
+	public ModalType getType();
 	
-	public Modal(String modalString) {
-		this.modalString = modalString;
-	}
+	public String getPeType();
 	
-	/***
-	 * Get this modal's JSON.
-	 * @return the modal's JSON code.
-	 */
-	public String getModalString() {
-		return modalString;
-	}
+	public String toJSON();
+	
+	public static Modal fromJson(String json) { return null; }
+	
 }

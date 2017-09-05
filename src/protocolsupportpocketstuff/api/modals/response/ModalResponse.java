@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api.modals;
+package protocolsupportpocketstuff.api.modals.response;
 
 public class ModalResponse {
 
