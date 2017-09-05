@@ -11,7 +11,6 @@ import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.modals.Modals;
 
 public class PocketPlayer {
-
 	private Player player;
 	private Connection connection;
 	
