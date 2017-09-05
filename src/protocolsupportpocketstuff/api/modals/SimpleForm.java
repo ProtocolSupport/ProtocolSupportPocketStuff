@@ -1,16 +1,17 @@
 package protocolsupportpocketstuff.api.modals;
 
-import com.google.gson.Gson;
-
 import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import protocolsupport.libs.com.google.gson.Gson;
+
 public class SimpleForm implements Modal {
 	
 	private final transient ModalType modalType = ModalType.SIMPLE_FORM;
 	private final String type = modalType.getPeName();
+	
 	private String title;
 	private String content;
 	private List<ModalUIElement> buttons = new ArrayList<>();

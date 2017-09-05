@@ -8,9 +8,12 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.PocketConnection;
 import protocolsupportpocketstuff.api.PocketUtils;
+import protocolsupportpocketstuff.api.modals.SimpleForm;
 
 public class SkinListener implements Listener {
 	
+	//Whatever. Will be used later probably.
+	@SuppressWarnings("unused")
 	private ProtocolSupportPocketStuff plugin;
 	
 	public SkinListener(ProtocolSupportPocketStuff plugin) {
@@ -28,7 +31,7 @@ public class SkinListener implements Listener {
 			p.sendMessage("Meep!");
 			if(PocketUtils.isPocketPlayer(p)) {
 				PocketConnection pcc = PocketConnection.get(p);
-				
+				pcc.sendModal(new SimpleForm().setTitle("Meep"));
 			}
 		}
 	}

@@ -33,7 +33,7 @@ public abstract class PocketConnection extends Connection {
 	 */
 	@Deprecated
 	public void sendModal(int id, Modal modal) {
-		sendPocketPacket(ModalRequest.create(id, modal.getModalString(), version));
+		sendPocketPacket(ModalRequest.create(id, modal.toJSON(), version));
 	}
 	
 	/***
