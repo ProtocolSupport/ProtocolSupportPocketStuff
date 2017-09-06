@@ -31,7 +31,7 @@ public class SkinListener implements Listener {
 			p.sendMessage("Meep!");
 			if(PocketUtils.isPocketPlayer(p)) {
 				PocketConnection pcc = PocketConnection.get(p);
-				pcc.sendModal(new SimpleForm().setTitle("Meep"));
+				pcc.sendModal(new SimpleForm().setTitle("Meep Meep"));
 			}
 		}
 	}
