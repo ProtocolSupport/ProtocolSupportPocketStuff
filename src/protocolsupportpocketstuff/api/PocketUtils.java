@@ -1,5 +1,10 @@
 package protocolsupportpocketstuff.api;
 
+import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
@@ -14,6 +19,18 @@ public class PocketUtils {
 	 */
 	public static boolean isPocketPlayer(Player player) {
 		return ProtocolSupportAPI.getProtocolVersion(player).getProtocolType().equals(ProtocolType.PE);
+	}
+	
+	/***
+	 * Gets all pocket players on the server.
+	 * @return
+	 */
+	public static Collection<? extends Player> getPocketPlayers() {
+		return Bukkit.getOnlinePlayers().stream().filter(pocketFilter()).collect(Collectors.toList());
+	}
+	
+	static Predicate <Player> pocketFilter() {
+		return p -> isPocketPlayer(p);
 	}
 	
 }

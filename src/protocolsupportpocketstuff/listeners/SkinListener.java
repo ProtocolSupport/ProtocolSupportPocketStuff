@@ -9,6 +9,8 @@ import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.PocketConnection;
 import protocolsupportpocketstuff.api.PocketUtils;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
+import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
+import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton.ModalImageType;
 
 public class SkinListener implements Listener {
 	
@@ -27,11 +29,12 @@ public class SkinListener implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		if(e.getMessage().contains(".meep")) {
-			Player p = e.getPlayer();
-			p.sendMessage("Meep!");
-			if(PocketUtils.isPocketPlayer(p)) {
+			e.getPlayer().sendMessage("Meep!");
+			for(Player p : PocketUtils.getPocketPlayers()) {
+				e.getPlayer().sendMessage("MEEEEEEP!");
 				PocketConnection pcc = PocketConnection.get(p);
-				pcc.sendModal(new SimpleForm().setTitle("Meep Meep"));
+				pcc.sendModal(new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
+				//pcc.sendModal(0, "{'type':'modal','title':'MEEP','content':'Meep, Meep.','button1':'Meep?','button2':'Meep!'}");
 			}
 		}
 	}
