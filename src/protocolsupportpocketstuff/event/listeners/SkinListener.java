@@ -1,12 +1,14 @@
-package protocolsupportpocketstuff.listeners;
+package protocolsupportpocketstuff.event.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.PocketConnection;
+import protocolsupportpocketstuff.api.ConnectionUtils;
 import protocolsupportpocketstuff.api.PocketUtils;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
@@ -22,19 +24,15 @@ public class SkinListener implements Listener {
 		this.plugin = plugin;
 	}
 	
-	//TODO: MAKE EVERYTHING :P
-	
-	
 	//Test to send packet.
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		if(e.getMessage().contains(".meep")) {
 			e.getPlayer().sendMessage("Meep!");
 			for(Player p : PocketUtils.getPocketPlayers()) {
+				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
-				PocketConnection pcc = PocketConnection.get(p);
-				pcc.sendModal(new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
-				//pcc.sendModal(0, "{'type':'modal','title':'MEEP','content':'Meep, Meep.','button1':'Meep?','button2':'Meep!'}");
+				ConnectionUtils.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
 			}
 		}
 	}

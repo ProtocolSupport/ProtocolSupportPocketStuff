@@ -29,7 +29,11 @@ public class PocketUtils {
 		return Bukkit.getOnlinePlayers().stream().filter(pocketFilter()).collect(Collectors.toList());
 	}
 	
-	static Predicate <Player> pocketFilter() {
+	/***
+	 * Filter to filter PE players.
+	 * @return
+	 */
+	public static Predicate <Player> pocketFilter() {
 		return p -> isPocketPlayer(p);
 	}
 	

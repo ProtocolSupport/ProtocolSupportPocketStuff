@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import protocolsupportpocketstuff.listeners.SkinListener;
+import protocolsupportpocketstuff.event.listeners.SkinListener;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin {
 	
