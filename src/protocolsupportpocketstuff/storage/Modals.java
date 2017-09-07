@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api.modals;
+package protocolsupportpocketstuff.storage;
 
 public class Modals {
 

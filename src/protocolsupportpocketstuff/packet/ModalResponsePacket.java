@@ -35,4 +35,12 @@ public class ModalResponsePacket extends PePacket {
 		modalJSON = StringSerializer.readString(clientData, connection.getVersion());
 	}
 	
+	public int getModalId() {
+		return modalId;
+	}
+	
+	public String getModalJSON() {
+		return modalJSON;
+	}
+	
 }
