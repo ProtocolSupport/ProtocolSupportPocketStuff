@@ -14,7 +14,7 @@ public class ComplexForm implements Modal {
 	private final String type = modalType.getPeName();
 	
 	private String title;
-	private List<ModalComplexUIElement> elements = new ArrayList<>();
+	private List<ModalComplexUIElement> content = new ArrayList<>();
 	private ModalImage iconUrl; // Only for server settings ~ https://sel-utils.github.io/protocol/pocket134/play/server-settings-response
 
 	public ModalType getType() {
@@ -35,7 +35,7 @@ public class ComplexForm implements Modal {
 	}
 
 	public ComplexForm addElement(ModalComplexUIElement element) {
-		this.elements.add(element);
+		this.content.add(element);
 		return this;
 	}
 
@@ -47,7 +47,7 @@ public class ComplexForm implements Modal {
 	}
 
 	public List<ModalComplexUIElement> getElements() {
-		return elements;
+		return content;
 	}
 
 	public ComplexForm setIcon(ModalImage.ModalImageType imageType, String imagePath) {
