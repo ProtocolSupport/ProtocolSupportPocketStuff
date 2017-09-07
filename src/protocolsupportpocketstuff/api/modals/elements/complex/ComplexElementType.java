@@ -1,9 +1,10 @@
-package protocolsupportpocketstuff.api.modals.elements;
+package protocolsupportpocketstuff.api.modals.elements.complex;
 
 public enum ComplexElementType {
+	
 	DROPDOWN("dropdown"), INPUT("input"), LABEL("label"), SLIDER("slider"), STEP_SLIDER("step_slider"), TOGGLE("toggle");
 
-	private String peName;
+	private final String peName;
 
 	ComplexElementType(String peName) {
 		this.peName = peName;
@@ -12,4 +13,5 @@ public enum ComplexElementType {
 	public String getPeName() {
 		return peName;
 	}
+	
 }

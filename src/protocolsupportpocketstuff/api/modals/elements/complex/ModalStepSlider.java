@@ -1,11 +1,10 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModalStepSlider extends ModalComplexUIElement {
+	
 	private List<String> steps = new ArrayList<String>();
 	private int defaultStepIndex;
 
@@ -34,6 +33,10 @@ public class ModalStepSlider extends ModalComplexUIElement {
 		this.defaultStepIndex = defaultStepIndex;
 		return this;
 	}
+	
+	public int getDefaultStepIndex() {
+		return defaultStepIndex;
+	}
 
 	public List<String> getOptions() {
 		return steps;
@@ -43,4 +46,5 @@ public class ModalStepSlider extends ModalComplexUIElement {
 		this.steps = steps;
 		return this;
 	}
+	
 }

@@ -1,21 +1,15 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModalDropdown extends ModalComplexUIElement {
+	
 	private List<String> options = new ArrayList<String>();
 	private int defaultOptionIndex;
 
 	public ModalDropdown() {
 		super(ComplexElementType.DROPDOWN);
-	}
-
-	public ModalDropdown setText(String text) {
-		super.setText(text);
-		return this;
 	}
 
 	public ModalDropdown addOption(String optionText) {
@@ -38,9 +32,14 @@ public class ModalDropdown extends ModalComplexUIElement {
 	public List<String> getOptions() {
 		return options;
 	}
+	
+	public int getDefaultOptionIndex() {
+		return defaultOptionIndex;
+	}
 
 	public ModalDropdown setOptions(List<String> options) {
 		this.options = options;
 		return this;
 	}
+	
 }

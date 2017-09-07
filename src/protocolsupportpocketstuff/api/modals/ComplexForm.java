@@ -2,14 +2,14 @@ package protocolsupportpocketstuff.api.modals;
 
 import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
-import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
 import protocolsupportpocketstuff.api.modals.elements.complex.ModalComplexUIElement;
-import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ComplexForm implements Modal {
+	
 	private final transient ModalType modalType = ModalType.COMPLEX_FORM;
 	private final String type = modalType.getPeName();
 	
@@ -40,18 +40,20 @@ public class ComplexForm implements Modal {
 	}
 
 	public ComplexForm addElements(ModalComplexUIElement... elements) {
-		for (ModalComplexUIElement element : elements) {
-			addElement(element);
-		}
+		this.content.addAll(Arrays.asList(elements));
 		return this;
 	}
 
 	public List<ModalComplexUIElement> getElements() {
 		return content;
 	}
+	
+	public ModalImage getIconUrl() {
+		return iconUrl;
+	}
 
-	public ComplexForm setIcon(ModalImage.ModalImageType imageType, String imagePath) {
-		iconUrl = new ModalImage().setType(imageType.getInternalType()).setData(imagePath);
+	public ComplexForm setIcon(ModalImage image) {
+		iconUrl = image;
 		return this;
 	}
 

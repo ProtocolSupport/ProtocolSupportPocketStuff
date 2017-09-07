@@ -6,9 +6,18 @@ import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
 public class ModalButton extends ModalUIElement {
 	
 	private ModalImage image;
+	
+	public ModalButton(String text) {
+		this.setText(text);
+	}
+	
+	public ModalButton(String text, ModalImage image) {
+		this.setText(text);
+		this.setImage(image);
+	}
 
-	public ModalButton setImage(ModalImage.ModalImageType imageType, String imagePath) {
-		image = new ModalImage().setType(imageType.getInternalType()).setData(imagePath);
+	public ModalButton setImage(ModalImage image) {
+		this.image = image;
 		return this;
 	}
 
@@ -20,4 +29,5 @@ public class ModalButton extends ModalUIElement {
 	public ModalImage getButtonImage() {
 		return image;
 	}
+	
 }

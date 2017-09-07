@@ -8,11 +8,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.ConnectionUtils;
-import protocolsupportpocketstuff.api.PocketUtils;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
+import protocolsupportpocketstuff.api.util.PocketCon;
+import protocolsupportpocketstuff.api.util.PocketUtils;
 
 public class SkinListener implements Listener {
 	
@@ -32,7 +32,7 @@ public class SkinListener implements Listener {
 			for(Player p : PocketUtils.getPocketPlayers()) {
 				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
-				ConnectionUtils.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
+				PocketCon.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png"))));
 			}
 		}
 	}

@@ -1,11 +1,7 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class ModalSlider extends ModalComplexUIElement {
+	
 	private float min;
 	private float max;
 	private float step;
@@ -25,7 +21,7 @@ public class ModalSlider extends ModalComplexUIElement {
 		return this;
 	}
 
-	public ModalSlider setDefaultValue(float step) {
+	public ModalSlider setDefaultValue(float defaultValue) {
 		this.defaultValue = defaultValue;
 		return this;
 	}
@@ -39,4 +35,21 @@ public class ModalSlider extends ModalComplexUIElement {
 		this.max = max;
 		return this;
 	}
+	
+	public float getMinimumValue() {
+		return min;
+	}
+	
+	public float getMaximumValue() {
+		return max;
+	}
+	
+	public float getDefaultValue() {
+		return defaultValue;
+	}
+	
+	public float getStep() {
+		return step;
+	}
+	
 }

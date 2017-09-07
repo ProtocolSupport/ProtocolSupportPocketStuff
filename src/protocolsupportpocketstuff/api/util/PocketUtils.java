@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api;
+package protocolsupportpocketstuff.api.util;
 
 import java.util.Collection;
 import java.util.function.Predicate;

@@ -1,10 +1,7 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
-import protocolsupport.libs.com.google.gson.annotations.SerializedName;
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
-import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
-
 public class ModalLabel extends ModalComplexUIElement {
+	
 	public ModalLabel() {
 		super(ComplexElementType.LABEL);
 	}
@@ -13,4 +10,5 @@ public class ModalLabel extends ModalComplexUIElement {
 		super.setText(text);
 		return this;
 	}
+	
 }

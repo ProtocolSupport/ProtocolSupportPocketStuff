@@ -1,10 +1,6 @@
 package protocolsupportpocketstuff.api.modals;
 
 import protocolsupport.libs.com.google.gson.Gson;
-import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModalWindow implements Modal {
 	
@@ -50,6 +46,14 @@ public class ModalWindow implements Modal {
 	public ModalWindow setFalseButtonText(String text) {
 		button2 = text;
 		return this;
+	}
+	
+	public String getTrueButtonText() {
+		return button1;
+	}
+	
+	public String getFalseButtonText() {
+		return button2;
 	}
 
 	public String toJSON() {

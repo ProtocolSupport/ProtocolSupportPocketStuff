@@ -1,9 +1,9 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
 import protocolsupport.libs.com.google.gson.annotations.SerializedName;
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
 
 public class ModalInput extends ModalComplexUIElement {
+	
 	private String placeholder;
 	@SerializedName("default")
 	private String defaultText;
@@ -26,4 +26,13 @@ public class ModalInput extends ModalComplexUIElement {
 		this.defaultText = defaultText;
 		return this;
 	}
+	
+	public String getPlaceHolder() {
+		return placeholder;
+	}
+	
+	public String getDefaultText() {
+		return defaultText;
+	}
+	
 }

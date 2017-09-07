@@ -1,7 +1,6 @@
 package protocolsupportpocketstuff.api.modals.elements.complex;
 
 import protocolsupport.libs.com.google.gson.annotations.SerializedName;
-import protocolsupportpocketstuff.api.modals.elements.ComplexElementType;
 
 public class ModalToggle extends ModalComplexUIElement {
 	@SerializedName("default")

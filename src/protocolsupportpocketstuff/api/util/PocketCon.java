@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api;
+package protocolsupportpocketstuff.api.util;
 
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -7,7 +7,7 @@ import protocolsupportpocketstuff.api.modals.Modals;
 import protocolsupportpocketstuff.packet.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.PePacket;
 
-public class ConnectionUtils {
+public class PocketCon {
 	
 	/***
 	 * Sends a modal and gets the corresponding id.
@@ -28,7 +28,7 @@ public class ConnectionUtils {
 	 */
 	@Deprecated
 	public static void sendModal(Connection connection, int id, String modalJSON) {
-		ConnectionUtils.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON));
+		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON));
 	}
 	
 	/***

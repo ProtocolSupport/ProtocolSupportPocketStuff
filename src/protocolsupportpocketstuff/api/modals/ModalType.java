@@ -4,7 +4,7 @@ public enum ModalType {
 
 	MODAL_WINDOW("modal"), SIMPLE_FORM("form"), COMPLEX_FORM("custom_form");
 
-	private String peName;
+	private final String peName;
 
 	ModalType(String peName) {
 		this.peName = peName;
