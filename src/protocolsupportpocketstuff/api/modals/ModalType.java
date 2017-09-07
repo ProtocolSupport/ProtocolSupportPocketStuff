@@ -2,7 +2,7 @@ package protocolsupportpocketstuff.api.modals;
 
 public enum ModalType {
 	
-	SIMPLE_MODAL("modal"), SIMPLE_FORM("form"), CURSOM_FORM("custom_form");
+	SIMPLE_MODAL("modal"), SIMPLE_FORM("form"), CUSTOM_FORM("custom_form");
 	
 	private String peName;
 	
