@@ -11,8 +11,8 @@ import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.ConnectionUtils;
 import protocolsupportpocketstuff.api.PocketUtils;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
+import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
-import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton.ModalImageType;
 
 public class SkinListener implements Listener {
 	
@@ -32,7 +32,7 @@ public class SkinListener implements Listener {
 			for(Player p : PocketUtils.getPocketPlayers()) {
 				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
-				ConnectionUtils.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
+				ConnectionUtils.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton().setText("Magbot").setImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")));
 			}
 		}
 	}

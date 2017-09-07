@@ -1,13 +1,14 @@
 package protocolsupportpocketstuff.api.modals.elements.simple;
 
+import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
 
 public class ModalButton extends ModalUIElement {
 	
-	private ModalButtonImage image;
+	private ModalImage image;
 
-	public ModalButton setImage(ModalImageType imageType, String imagePath) {
-		image = new ModalButtonImage().setType(imageType.getInternalType()).setData(imagePath); 
+	public ModalButton setImage(ModalImage.ModalImageType imageType, String imagePath) {
+		image = new ModalImage().setType(imageType.getInternalType()).setData(imagePath);
 		return this;
 	}
 
@@ -16,45 +17,7 @@ public class ModalButton extends ModalUIElement {
 		return this;
 	}
 	
-	public ModalButtonImage getButtonImage() {
+	public ModalImage getButtonImage() {
 		return image;
 	}
-
-	public enum ModalImageType {
-		
-		CLIENT_IMAGE("path"), EXTERNAL_IMAGE("url");
-
-		private String internalType;
-
-		ModalImageType(String internalType) {
-			this.internalType = internalType;
-		}
-
-		public String getInternalType() {
-			return internalType;
-		}
-		
-	}
-
-	class ModalButtonImage {
-		private String type;
-		private String data;
-
-		public String getType() {
-			return type;
-		}
-		
-		public String getData() {
-			return data;
-		}
-		
-		public ModalButtonImage setType(String type) {
-			this.type = type; return this;
-		}
-
-		public ModalButtonImage setData(String data) {
-			this.data = data; return this;
-		}
-	}
-	
 }
