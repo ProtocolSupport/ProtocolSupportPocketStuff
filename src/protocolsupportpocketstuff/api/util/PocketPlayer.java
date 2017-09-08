@@ -14,7 +14,11 @@ import protocolsupportpocketstuff.api.skins.PocketSkin;
 import protocolsupportpocketstuff.packet.PePacket;
 import protocolsupportpocketstuff.storage.Modals;
 
-public class PocketPlay {
+/***
+ * Utility class to 
+ *
+ */
+public class PocketPlayer {
 
     //=====================================================\\
     //						Getting						   \\
@@ -31,6 +35,9 @@ public class PocketPlay {
 	
 	/***
 	 * Gets all pocket players on the server.
+	 * <br/><br/>
+	 * <i>If your goal is sending packets, we advise to use
+	 * {@link PocketCon.getPocketConnections} instead for better performance.</i>
 	 * @return
 	 */
 	public static Collection<? extends Player> getPocketPlayers() {

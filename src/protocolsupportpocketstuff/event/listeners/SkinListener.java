@@ -15,7 +15,7 @@ import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.api.util.PocketPlay;
+import protocolsupportpocketstuff.api.util.PocketPlayer;
 import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.skin.SkinDownloader;
 import protocolsupportpocketstuff.storage.Skins;
@@ -33,29 +33,33 @@ public class SkinListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 		if(e.getMessage().contains(".meep")) {
 			e.getPlayer().sendMessage("Meep!");
-			for(Player p : PocketPlay.getPocketPlayers()) {
+			for(Player p : PocketPlayer.getPocketPlayers()) {
 				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
 				PocketCon.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png"))));
 			}
 		} else if (e.getMessage().contains(".moop")) {
-			PocketPlay.getPocketPlayers().forEach(p -> PocketPlay.sendSkins(p));
+			PocketPlayer.getPocketPlayers().forEach(p -> PocketPlayer.sendSkins(p));
 		}
 	}
 	
 	
 	//REAL:
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onSkinResolve(PlayerPropertiesResolveEvent e) {
+		System.out.println("Resolved PlayerProperties: ");
+		System.out.println(e.toString());
+		System.out.println(e.getProperties());
 		if(e.getProperties().containsKey(SkinUtils.skinPropertyName)) {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin,
-					new SkinDownloader(e.getConnection().getPlayer().getUniqueId(), e.getName(), e.getProperties().get(SkinUtils.skinPropertyName).getValue()));
+					new SkinDownloader(e.getName(), e.getProperties().get(SkinUtils.skinPropertyName).getValue()));
 		}
 	}
 	
 	@EventHandler()
 	public void onLogOut(PlayerQuitEvent e) {
 		Skins.INSTANCE.clearSkin(e.getPlayer().getName().trim());
+		Skins.INSTANCE.getPeSkins().forEach((name, skin) -> plugin.getServer().getConsoleSender().sendMessage(name));
 	}
 	
 }
