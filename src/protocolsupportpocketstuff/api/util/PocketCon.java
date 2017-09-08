@@ -1,6 +1,12 @@
 package protocolsupportpocketstuff.api.util;
 
+import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.skins.PocketSkin;
@@ -11,26 +17,59 @@ import protocolsupportpocketstuff.storage.Skins;
 
 public class PocketCon {
 	
+    //=====================================================\\
+    //						Getting						   \\
+    //=====================================================\\
+
+	/***
+	 * Checks if a connection is a pocket connection.
+	 * @param player
+	 * @return the truth
+	 */
+	public static boolean isPocketConnection(Connection connection) {
+		return connection.getVersion().getProtocolType().equals(ProtocolType.PE);
+	}
+	
+	/**
+	 * Gets all pocket connections on the server.
+	 * @return
+	 */
+	public static Collection<? extends Connection> getPocketConnections() {
+		return ProtocolSupportAPI.getConnections().stream().filter(pocketFilter()).collect(Collectors.toList());
+	}
+	
+	/***
+	 * Filter to filter PE connections.
+	 * @return
+	 */
+	public static Predicate<Connection> pocketFilter() {
+		return c -> isPocketConnection(c);
+	}
+	
+    //=====================================================\\
+    //						Packets						   \\
+    //=====================================================\\
+	
 	/***
 	 * Sends a modal and gets the corresponding id.
 	 * @param modal
 	 * @return
 	 */
 	public static int sendModal(Connection connection, Modal modal) {
-		int id = Modals.INSTANCE.takeId(); 
-		sendModal(connection, id, modal.toJSON()); 
-		return id;
+		return sendModal(connection, Modals.INSTANCE.takeId(), modal.toJSON()); 
 	}
 	
 	/***
-	 * Sends a modal with a id.
-	 * Nonono custom ids!
+	 * Sends a modal with an id specified.
+	 * Nonono, don't use custom ids!
+	 * If you like you can use this function in combination with
+	 * {@link Modals.INSTANCE.takeId} to send custom JSON to the player.
 	 * @param id
 	 * @param modal
+	 * @return
 	 */
-	@Deprecated
-	public static void sendModal(Connection connection, int id, String modalJSON) {
-		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON));
+	public static int sendModal(Connection connection, int id, String modalJSON) {
+		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
 	}
 	
 	/***
@@ -38,9 +77,7 @@ public class PocketCon {
 	 * @param connection
 	 */
 	public static void sendSkins(Connection connection) {
-		for(PocketSkin peSkin : Skins.INSTANCE.getPeSkins().values()) {
-			sendSkin(connection, peSkin);
-		}
+		Skins.INSTANCE.getPeSkins().forEach((name, skin) -> sendSkin(connection, skin));
 	}
 	
 	/***

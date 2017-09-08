@@ -15,7 +15,7 @@ import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.api.util.PocketUtils;
+import protocolsupportpocketstuff.api.util.PocketPlay;
 import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.skin.SkinDownloader;
 import protocolsupportpocketstuff.storage.Skins;
@@ -33,11 +33,13 @@ public class SkinListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 		if(e.getMessage().contains(".meep")) {
 			e.getPlayer().sendMessage("Meep!");
-			for(Player p : PocketUtils.getPocketPlayers()) {
+			for(Player p : PocketPlay.getPocketPlayers()) {
 				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
 				PocketCon.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png"))));
 			}
+		} else if (e.getMessage().contains(".moop")) {
+			PocketPlay.getPocketPlayers().forEach(p -> PocketPlay.sendSkins(p));
 		}
 	}
 	
