@@ -2,8 +2,15 @@ package protocolsupportpocketstuff.api.util;
 
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.libs.com.google.gson.JsonParser;
+import protocolsupport.protocol.typeremapper.pe.PESkin;
+import protocolsupportpocketstuff.storage.Skins;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Base64;
+
+import javax.imageio.ImageIO;
 
 public class SkinUtils {
 	
@@ -23,7 +30,25 @@ public class SkinUtils {
 		boolean isSlim = skinObject.has("metadata") && skinObject.get("metadata").getAsJsonObject().has("model") && skinObject.get("metadata").getAsJsonObject().get("model").getAsString().equals("slim");
 		return new SkinDataWrapper(skinUrl, isSlim);
 	}
-
+	
+	/**
+	 * Gets from cache or downloads and caches a PocketSkin.
+	 * @param url
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
+	public static byte[] getOrDownloadAndCache(String url) throws MalformedURLException, IOException {
+		Skins skins = Skins.INSTANCE;
+		if (skins.hasPeSkin(url)) {
+			return skins.getPeSkin(url);
+		} else {
+			byte[] skin = PESkin.toNetworkData(ImageIO.read(new URL(url)));
+			skins.cachePeSkin(url, skin);
+			return skin;
+		}
+	}
+	
 	public static class SkinDataWrapper {
 		
 		private String skinUrl;

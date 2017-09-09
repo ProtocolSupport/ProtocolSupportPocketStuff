@@ -13,7 +13,6 @@ import protocolsupportpocketstuff.api.skins.PocketSkin;
 import protocolsupportpocketstuff.packet.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.PePacket;
 import protocolsupportpocketstuff.storage.Modals;
-import protocolsupportpocketstuff.storage.Skins;
 
 public class PocketCon {
 	
@@ -70,14 +69,6 @@ public class PocketCon {
 	 */
 	public static int sendModal(Connection connection, int id, String modalJSON) {
 		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
-	}
-	
-	/***
-	 * Sends all cached skins to a pocket connection.
-	 * @param connection
-	 */
-	public static void sendSkins(Connection connection) {
-		Skins.INSTANCE.getPeSkins().forEach((name, skin) -> sendSkin(connection, skin));
 	}
 	
 	/***

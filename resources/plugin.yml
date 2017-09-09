@@ -1,4 +1,5 @@
 name: ProtocolSupportPocketStuff
 main: protocolsupportpocketstuff.ProtocolSupportPocketStuff
+depend: [ProtocolSupport]
 version: 0.01-dev
 author: ProtocolSupportTeam

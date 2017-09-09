@@ -87,18 +87,6 @@ public class PocketPlayer {
 	}
 	
 	/***
-	 * Sends all cached skins to a pocket connection.
-	 * <br/><br/>
-	 * <i>When sending multiple packets to pocket it is advised
-	 * to get the connection using {@link ProtocolSupportAPI.getConnection}
-	 * first and then use {@link PocketCon} to send the packets.</i>
-	 * @param connection
-	 */
-	public static void sendSkins(Player player) {
-		PocketCon.sendSkins(ProtocolSupportAPI.getConnection(player));
-	}
-	
-	/***
 	 * Sends a PocketSkin to a pocket connection.
 	 * <br/><br/>
 	 * <i>When sending multiple packets to pocket it is advised

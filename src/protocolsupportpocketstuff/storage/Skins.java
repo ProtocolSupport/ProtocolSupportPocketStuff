@@ -1,30 +1,37 @@
 package protocolsupportpocketstuff.storage;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-import protocolsupportpocketstuff.api.skins.PocketSkin;
+import protocolsupportpocketstuff.libs.jodah.expiringmap.ExpiringMap;
 
 public class Skins {
 	
-	private ConcurrentHashMap<String, PocketSkin> cache = new ConcurrentHashMap<String, PocketSkin>();
+	private Map<String, byte[]> pocketSkinCache = ExpiringMap.builder().maxSize(250).expiration(1, TimeUnit.DAYS).build();
 	
 	public static final Skins INSTANCE = new Skins();
 	private Skins() { }
 	
-	public void cacheSkin(String name, PocketSkin skin) {
-		cache.put(name, skin);
+	public void cachePeSkin(String url, byte[] skin) {
+		pocketSkinCache.putIfAbsent(url, skin);
 	}
 	
-	public void clearSkin(String name) {
-		cache.remove(name);
+	public void clearPeSkin(String url) {
+		pocketSkinCache.remove(url);
 	}
 	
-	public PocketSkin getSkin(String name) {
-		return cache.get(name);
+	public boolean hasPeSkin(String url) {
+		return pocketSkinCache.containsKey(url);
 	}
 	
-	public ConcurrentHashMap<String, PocketSkin> getPeSkins() {
-		return cache;
+	public byte[] getPeSkin(String name) {
+		return pocketSkinCache.get(name);
+	}
+	
+	public Set<Entry<String, byte[]>> getPeSkins() {
+		return pocketSkinCache.entrySet();
 	}
 	
 }
