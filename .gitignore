@@ -1,7 +1,6 @@
 # Build Folders #
 bin/
 build/
-libs/
 target/
 gen/
 dllibs/
