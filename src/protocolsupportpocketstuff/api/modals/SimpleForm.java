@@ -16,6 +16,11 @@ public class SimpleForm implements Modal {
 	private String content;
 	private List<ModalUIElement> buttons = new ArrayList<>();
 
+	public SimpleForm(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
 	public ModalType getType() {
 		return modalType;
 	}

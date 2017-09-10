@@ -12,6 +12,13 @@ public class ModalWindow implements Modal {
 	private String button1;
 	private String button2;
 
+	public ModalWindow(String title, String content, String trueButtonText, String falseButtonText) {
+		this.title = title;
+		this.content = content;
+		this.button1 = trueButtonText;
+		this.button2 = falseButtonText;
+	}
+	
 	public ModalType getType() {
 		return modalType;
 	}

@@ -17,6 +17,10 @@ public class ComplexForm implements Modal {
 	private List<ModalComplexUIElement> content = new ArrayList<>();
 	private ModalImage iconUrl; // Only for server settings ~ https://sel-utils.github.io/protocol/pocket134/play/server-settings-response
 
+	public ComplexForm(String title) {
+		this.title = title;
+	}
+
 	public ModalType getType() {
 		return modalType;
 	}
