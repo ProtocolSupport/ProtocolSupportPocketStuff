@@ -38,7 +38,7 @@ public class SkinRunner implements Runnable {
 				System.out.println("Skintype: " + skinType);
 				byte[] skin = SkinUtils.getOrDownloadAndCache(sdw.getSkinUrl());
 				if(PocketCon.isPocketConnection(connection)) {
-					SkinPacket skinPacket = new SkinPacket(uuid, name, skinType, skinType, skin, new byte[0], "", new byte[0]);
+					SkinPacket skinPacket = new SkinPacket(uuid, name, skinType, skinType, skin, new byte[0], skinType, new byte[0]);
 					PocketCon.sendPocketPacket(connection, skinPacket);
 				}
 			}

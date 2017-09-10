@@ -15,8 +15,7 @@ import protocolsupportpocketstuff.packet.PePacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 /***
- * Utility class to 
- *
+ * Utility class to get and do pocket-only-stuff for pocket 
  */
 public class PocketPlayer {
 
