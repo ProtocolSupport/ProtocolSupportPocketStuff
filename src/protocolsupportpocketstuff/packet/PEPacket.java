@@ -5,20 +5,20 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class PePacket {
+public abstract class PEPacket {
 
 	public abstract int getPacketId();
 	
-	public abstract void encodePayload(Connection connection, ByteBuf serializer);
+	public abstract void toData(Connection connection, ByteBuf serializer);
 	
-	public abstract void decodePayload(Connection connection, ByteBuf clientData);
+	public abstract void readFromClientData(Connection connection, ByteBuf clientData);
 	
 	public ByteBuf encode(Connection connection) {
 		ByteBuf serializer = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(serializer, getPacketId());
 		serializer.writeByte(0);
 		serializer.writeByte(0);
-		encodePayload(connection, serializer);
+		toData(connection, serializer);
 		return serializer;
 	}
 	

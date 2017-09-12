@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
-public class ModalRequestPacket extends PePacket {
+public class ModalRequestPacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;
@@ -24,13 +24,13 @@ public class ModalRequestPacket extends PePacket {
 	}
 
 	@Override
-	public void encodePayload(Connection connection, ByteBuf serializer) {
+	public void toData(Connection connection, ByteBuf serializer) {
 		VarNumberSerializer.writeVarInt(serializer, modalId);
 		StringSerializer.writeString(serializer, connection.getVersion(), modalJSON);
 	}
 
 	@Override
-	public void decodePayload(Connection connection, ByteBuf clientData) {
+	public void readFromClientData(Connection connection, ByteBuf clientData) {
 		modalId = VarNumberSerializer.readVarInt(clientData);
 		modalJSON = StringSerializer.readString(clientData, connection.getVersion());
 	}

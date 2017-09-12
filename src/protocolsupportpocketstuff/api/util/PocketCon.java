@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.api.util;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -9,9 +10,10 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.modals.Modal;
-import protocolsupportpocketstuff.api.skins.PocketSkin;
+import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.packet.ModalRequestPacket;
-import protocolsupportpocketstuff.packet.PePacket;
+import protocolsupportpocketstuff.packet.PEPacket;
+import protocolsupportpocketstuff.packet.SkinPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 public class PocketCon {
@@ -23,7 +25,7 @@ public class PocketCon {
 	/***
 	 * Checks if a connection is a pocket connection.
 	 * @param player
-	 * @return the truth
+	 * @return the truth.
 	 */
 	public static boolean isPocketConnection(Connection connection) {
 		return connection.getVersion().getProtocolType().equals(ProtocolType.PE);
@@ -31,7 +33,7 @@ public class PocketCon {
 	
 	/**
 	 * Gets all pocket connections on the server.
-	 * @return
+	 * @return all pocket connections.
 	 */
 	public static Collection<? extends Connection> getPocketConnections() {
 		return ProtocolSupportAPI.getConnections().stream().filter(pocketFilter()).collect(Collectors.toList());
@@ -39,7 +41,7 @@ public class PocketCon {
 	
 	/***
 	 * Filter to filter PE connections.
-	 * @return
+	 * @return the truth is a predicate.
 	 */
 	public static Predicate<Connection> pocketFilter() {
 		return c -> isPocketConnection(c);
@@ -65,19 +67,22 @@ public class PocketCon {
 	 * {@link Modals.INSTANCE.takeId} to send custom JSON to the player.
 	 * @param id
 	 * @param modal
-	 * @return
+	 * @return the modal's callback id.
 	 */
 	public static int sendModal(Connection connection, int id, String modalJSON) {
-		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
+		sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
 	}
 	
 	/***
 	 * Sends a PocketSkin to a pocket connection.
 	 * @param connection
+	 * @param uuid
 	 * @param skin
+	 * @param skinModel
 	 */
-	public static void sendSkin(Connection connection, PocketSkin skin) {
-		sendPocketPacket(connection, skin.getPacket());
+	public static void sendSkin(Connection connection, UUID uuid, byte[] skin, PocketSkinModel skinModel) {
+		//TODO: "Steve" is actually a hack. The name send should be the previous skin name. Not sure if this matters though. Works for now :S"
+		sendPocketPacket(connection, new SkinPacket(uuid, skinModel.getSkinId(), skinModel.getSkinName(), "Steve", skin, new byte[0], skinModel.getGeometryId(), skinModel.getGeometryData()));
 	}
 	
 	/***
@@ -85,7 +90,7 @@ public class PocketCon {
 	 * @param connection
 	 * @param packet
 	 */
-	public static void sendPocketPacket(Connection connection, PePacket packet) {
+	public static void sendPocketPacket(Connection connection, PEPacket packet) {
 		connection.sendRawPacket(MiscSerializer.readAllBytes(packet.encode(connection)));
 	}
 	

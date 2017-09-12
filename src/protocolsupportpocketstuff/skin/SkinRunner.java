@@ -7,10 +7,10 @@ import java.util.UUID;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.api.util.SkinUtils.SkinDataWrapper;
-import protocolsupportpocketstuff.packet.SkinPacket;
 
 public class SkinRunner implements Runnable {
 
@@ -38,8 +38,12 @@ public class SkinRunner implements Runnable {
 				System.out.println("Skintype: " + skinType);
 				byte[] skin = SkinUtils.getOrDownloadAndCache(sdw.getSkinUrl());
 				if(PocketCon.isPocketConnection(connection)) {
-					SkinPacket skinPacket = new SkinPacket(uuid, name, skinType, skinType, skin, new byte[0], skinType, new byte[0]);
-					PocketCon.sendPocketPacket(connection, skinPacket);
+					PocketSkinModel psm = SkinUtils.getDefaultSkin(sdw.isSlim());
+					System.out.println(psm.getSkinId());
+					System.out.println(psm.getSkinName());
+					System.out.println(psm.getGeometryId());
+					System.out.println(psm.getGeometryData());
+					PocketCon.sendSkin(connection, uuid, skin, psm);
 				}
 			}
 		} catch (IOException e) {
