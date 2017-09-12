@@ -1,20 +1,20 @@
 package protocolsupportpocketstuff.event.listeners;
 
 import org.bukkit.event.EventHandler;
-//import org.bukkit.event.EventPriority;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerListEvent;
-//import protocolsupport.api.events.PlayerPropertiesResolveEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
-//import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.skin.SkinRunner;
 
 public class SkinListener implements Listener {
@@ -49,11 +49,11 @@ public class SkinListener implements Listener {
 	
 	//Somehow this seems to mess with a PE client that also has a PC skin.
 	//Since we will do PE -> PC skins in the future I do not really care(tm).
-//	@EventHandler(priority = EventPriority.MONITOR)
-//	public void propertyResolve(PlayerPropertiesResolveEvent e) {
-//		if(e.hasProperty(SkinUtils.skinPropertyName) && PocketCon.isPocketConnection(e.getConnection())) {
-//			e.removeProperty(SkinUtils.skinPropertyName);
-//		}
-//	}
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void propertyResolve(PlayerPropertiesResolveEvent e) {
+		if(e.hasProperty(SkinUtils.skinPropertyName) && PocketCon.isPocketConnection(e.getConnection())) {
+			e.removeProperty(SkinUtils.skinPropertyName);
+		}
+	}
 	
 }
