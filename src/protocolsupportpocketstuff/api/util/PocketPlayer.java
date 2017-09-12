@@ -11,7 +11,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.skins.PocketSkin;
-import protocolsupportpocketstuff.packet.PePacket;
+import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 /***
@@ -107,7 +107,7 @@ public class PocketPlayer {
 	 * @param connection
 	 * @param packet
 	 */
-	public static void sendPocketPacket(Player player, PePacket packet) {
+	public static void sendPocketPacket(Player player, PEPacket packet) {
 		PocketCon.sendPocketPacket(ProtocolSupportAPI.getConnection(player), packet);
 	}
 	

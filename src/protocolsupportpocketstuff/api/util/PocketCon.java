@@ -11,7 +11,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.skins.PocketSkin;
 import protocolsupportpocketstuff.packet.ModalRequestPacket;
-import protocolsupportpocketstuff.packet.PePacket;
+import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 public class PocketCon {
@@ -85,7 +85,7 @@ public class PocketCon {
 	 * @param connection
 	 * @param packet
 	 */
-	public static void sendPocketPacket(Connection connection, PePacket packet) {
+	public static void sendPocketPacket(Connection connection, PEPacket packet) {
 		connection.sendRawPacket(MiscSerializer.readAllBytes(packet.encode(connection)));
 	}
 	

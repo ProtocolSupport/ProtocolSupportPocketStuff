@@ -10,7 +10,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
-public class SkinPacket extends PePacket {
+public class SkinPacket extends PEPacket {
 
 	private UUID uuid;
 	private String skinId;

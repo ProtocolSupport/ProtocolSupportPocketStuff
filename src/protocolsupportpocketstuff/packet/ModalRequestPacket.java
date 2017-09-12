@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
-public class ModalRequestPacket extends PePacket {
+public class ModalRequestPacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;

@@ -5,7 +5,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class PePacket {
+public abstract class PEPacket {
 
 	public abstract int getPacketId();
 	

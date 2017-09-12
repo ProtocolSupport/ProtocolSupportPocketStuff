@@ -35,7 +35,7 @@ public class SkinListener implements Listener {
 			for(Player p : PocketPlayer.getPocketPlayers()) {
 				Connection con = ProtocolSupportAPI.getConnection(p);
 				e.getPlayer().sendMessage("MEEEEEEP!");
-				PocketCon.sendModal(con, new SimpleForm().setTitle("Hoi").setContent("hallo").addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png"))));
+				PocketCon.sendModal(con, new SimpleForm("Hoi", "hallo").addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImage.ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png"))));
 			}
 		}
 	}
