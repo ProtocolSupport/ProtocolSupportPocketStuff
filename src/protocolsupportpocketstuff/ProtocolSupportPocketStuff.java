@@ -4,21 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.event.listeners.SkinListener;
+import protocolsupportpocketstuff.skin.PcToPeProvider;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin {
 	
 	public ProtocolSupportPocketStuff() { }
-	public static ProtocolSupportPocketStuff INSTANCE;
-	private boolean offlineMode = true;
-	
-	public boolean serverInOfflinemode() {
-		return offlineMode;
-	}
 	
 	@Override
 	public void onEnable() {
-		ProtocolSupportPocketStuff.INSTANCE = this;
+		PESkinsProviderSPI.setProvider(new PcToPeProvider(this));
 		getServer().getPluginManager().registerEvents(new SkinListener(this), this);
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "Hello World!" + ChatColor.RESET);
 	}
