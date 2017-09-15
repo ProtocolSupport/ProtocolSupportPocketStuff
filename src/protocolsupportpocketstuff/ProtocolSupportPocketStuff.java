@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
-import protocolsupportpocketstuff.event.listeners.SkinListener;
+import protocolsupportpocketstuff.listeners.event.SkinListener;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin {
