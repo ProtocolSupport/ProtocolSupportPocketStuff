@@ -1,28 +1,31 @@
 package protocolsupportpocketstuff.api.event;
 
+import java.awt.image.BufferedImage;
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
-import protocolsupportpocketstuff.api.modals.response.ModalResponse;
 
-public class ModalResponseEvent extends Event implements Cancellable {
-	
+public class PocketChangeSkinEvent extends Event implements Cancellable {
+
 	static final HandlerList handlers = new HandlerList();
-	
-	private Connection connection;
-	private int modalId;
-	private ModalResponse response;
 	private boolean cancelled = false;
+	private Connection connection;
+	private UUID uuid;
+	private BufferedImage skin;
+	private boolean isSlim;
 	
-	public ModalResponseEvent(Connection connection, int modalId, ModalResponse response) {
+	public PocketChangeSkinEvent(Connection connection, UUID uuid, BufferedImage skin, boolean isSlim) {
 		this.connection = connection;
-		this.modalId = modalId;
-		this.response = response;
+		this.uuid = uuid;
+		this.skin = skin;
+		this.isSlim = isSlim;
 	}
-	
+
 	public Connection getConnection() {
 		return connection;
 	}
@@ -30,21 +33,25 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	public Player getPlayer() {
 		return connection.getPlayer();
 	}
-	
-	public int getModalId() {
-		return modalId;
+
+	public UUID getUuid() {
+		return uuid;
 	}
-	
-	public void setModalId(int modalId) {
-		this.modalId = modalId;
+
+	public BufferedImage getSkin() {
+		return skin;
 	}
-	
-	public ModalResponse getResponse() {
-		return response;
+
+	public void setSkin(BufferedImage skin) {
+		this.skin = skin;
 	}
-	
-	public void setResponse(ModalResponse response) {
-		this.response = response;
+
+	public boolean isSlim() {
+		return isSlim;
+	}
+
+	public void setSlim(boolean isSlim) {
+		this.isSlim = isSlim;
 	}
 
 	@Override
@@ -56,7 +63,7 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;

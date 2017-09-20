@@ -1,26 +1,27 @@
-package protocolsupportpocketstuff.packet;
+package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupportpocketstuff.packet.PEPacket;
 
-public class ModalResponsePacket extends PEPacket {
+public class ModalRequestPacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;
 	
-	public ModalResponsePacket() { }
+	public ModalRequestPacket() { }
 	
-	public ModalResponsePacket(int modalId, String modalJSON) {
+	public ModalRequestPacket(int modalId, String modalJSON) {
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
 	}
 
 	@Override
 	public int getPacketId() {
-		return PEPacketIDs.MODAL_RESPONSE;
+		return PEPacketIDs.MODAL_REQUEST;
 	}
 
 	@Override
@@ -42,5 +43,5 @@ public class ModalResponsePacket extends PEPacket {
 	public String getModalJSON() {
 		return modalJSON;
 	}
-	
+
 }

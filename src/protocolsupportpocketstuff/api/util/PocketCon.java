@@ -11,9 +11,9 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
-import protocolsupportpocketstuff.packet.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.packet.SkinPacket;
+import protocolsupportpocketstuff.packet.play.ModalRequestPacket;
+import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 public class PocketCon {

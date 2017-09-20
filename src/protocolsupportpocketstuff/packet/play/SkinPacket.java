@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.packet;
+package protocolsupportpocketstuff.packet.play;
 
 import java.util.UUID;
 
@@ -9,6 +9,10 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
+import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.packet.PEPacket;
 
 public class SkinPacket extends PEPacket {
 
@@ -97,4 +101,18 @@ public class SkinPacket extends PEPacket {
 		return geometryData;
 	}
 
+	public class decodeHandler extends PEPacket.decodeHandler {
+
+		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
+			super(plugin, connection);
+		}
+
+		@Override
+		public void handle() {
+			SkinPacket parent = SkinPacket.this;
+			pm.callEvent(new PocketChangeSkinEvent(connection, parent.uuid, SkinUtils.fromData(parent.skinData), parent.getSkinName().equals("skin.Standard.CustomSlim")));
+		}
+		
+	}
+	
 }

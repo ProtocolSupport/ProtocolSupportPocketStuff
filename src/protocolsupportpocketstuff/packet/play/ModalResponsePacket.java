@@ -1,26 +1,30 @@
-package protocolsupportpocketstuff.packet;
+package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.api.event.ModalResponseEvent;
+import protocolsupportpocketstuff.api.modals.response.ModalResponse;
+import protocolsupportpocketstuff.packet.PEPacket;
 
-public class ModalRequestPacket extends PEPacket {
+public class ModalResponsePacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;
 	
-	public ModalRequestPacket() { }
+	public ModalResponsePacket() { }
 	
-	public ModalRequestPacket(int modalId, String modalJSON) {
+	public ModalResponsePacket(int modalId, String modalJSON) {
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
 	}
 
 	@Override
 	public int getPacketId() {
-		return PEPacketIDs.MODAL_REQUEST;
+		return PEPacketIDs.MODAL_RESPONSE;
 	}
 
 	@Override
@@ -41,6 +45,20 @@ public class ModalRequestPacket extends PEPacket {
 	
 	public String getModalJSON() {
 		return modalJSON;
+	}
+
+	public class decodeHandler extends PEPacket.decodeHandler {
+
+		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
+			super(plugin, connection);
+		}
+
+		@Override
+		public void handle() {
+			ModalResponsePacket parent = ModalResponsePacket.this;
+			pm.callEvent(new ModalResponseEvent(connection, parent.modalId, new ModalResponse(parent.modalJSON)));
+		}
+		
 	}
 	
 }
