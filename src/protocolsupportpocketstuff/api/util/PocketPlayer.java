@@ -6,7 +6,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
@@ -101,6 +103,20 @@ public class PocketPlayer {
 	 */
 	public static void sendSkin(Player player, UUID uuid, byte[] skin, PocketSkinModel skinModel) {
 		PocketCon.sendSkin(ProtocolSupportAPI.getConnection(player), uuid, skin, skinModel);
+	}
+	
+	/***
+	 * Sends a dimension change to a pocket connection.
+	 * <br/><br/>
+	 * <i>When sending multiple packets to pocket it is advised
+	 * to get the connection using {@link ProtocolSupportAPI.getConnection}
+	 * first and then use {@link PocketCon} to send the packets.</i>
+	 * @param player
+	 * @param environment
+	 * @param location
+	 */
+	public static void sendDimensionChange(Player player, Environment environment, Vector location) {
+		PocketCon.sendDimensionChange(ProtocolSupportAPI.getConnection(player), environment, location);
 	}
 	
 	/***

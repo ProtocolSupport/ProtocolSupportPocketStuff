@@ -110,7 +110,8 @@ public class SkinPacket extends PEPacket {
 		@Override
 		public void handle() {
 			SkinPacket parent = SkinPacket.this;
-			pm.callEvent(new PocketChangeSkinEvent(connection, parent.uuid, SkinUtils.fromData(parent.skinData), parent.getSkinName().equals("skin.Standard.CustomSlim")));
+			pm.callEvent(new PocketChangeSkinEvent(connection, 
+					parent.getUUID(), SkinUtils.fromData(parent.getSkinData()), parent.getSkinName().equals("skin.Standard.CustomSlim")));
 		}
 		
 	}

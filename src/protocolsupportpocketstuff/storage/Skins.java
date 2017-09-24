@@ -9,16 +9,22 @@ import protocolsupportpocketstuff.libs.jodah.expiringmap.ExpiringMap;
 
 public class Skins {
 	
-	private Map<String, byte[]> pocketSkinCache = ExpiringMap.builder().maxSize(250).expiration(1, TimeUnit.DAYS).build();
+	private Map<String, byte[]> pocketSkinCache;
 	
 	public static final Skins INSTANCE = new Skins();
 	private Skins() { }
+	
+	public void buildCache(int size, int rate) {
+		if(size > 0 && rate > 0) {
+			pocketSkinCache = ExpiringMap.builder().maxSize(size).expiration(rate, TimeUnit.HOURS).build();
+		}
+	}
 	
 	public void cachePeSkin(String url, byte[] skin) {
 		pocketSkinCache.putIfAbsent(url, skin);
 	}
 	
-	public void clearPeSkin(String url) {
+	public void clearPeSkin(String url) { 
 		pocketSkinCache.remove(url);
 	}
 	

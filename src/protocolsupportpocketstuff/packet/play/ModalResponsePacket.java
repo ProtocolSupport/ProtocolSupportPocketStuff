@@ -56,7 +56,8 @@ public class ModalResponsePacket extends PEPacket {
 		@Override
 		public void handle() {
 			ModalResponsePacket parent = ModalResponsePacket.this;
-			pm.callEvent(new ModalResponseEvent(connection, parent.modalId, new ModalResponse(parent.modalJSON)));
+			pm.callEvent(new ModalResponseEvent(connection, 
+					parent.getModalId(), new ModalResponse(parent.getModalJSON())));
 		}
 		
 	}

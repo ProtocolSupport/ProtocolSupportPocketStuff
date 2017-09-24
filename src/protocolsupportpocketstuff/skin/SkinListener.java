@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.listeners.event;
+package protocolsupportpocketstuff.skin;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
