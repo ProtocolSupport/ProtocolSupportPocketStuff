@@ -2,15 +2,21 @@ package protocolsupportpocketstuff.api.event;
 
 import protocolsupport.api.Connection;
 
-public class SimpleFormResponseEvent extends ClientResponseEvent {
+public class SimpleFormResponseEvent extends ModalResponseEvent {
+	
 	private int clickedButton;
 
-	public SimpleFormResponseEvent(Connection connection, int modalId, int clickedButton) {
-		super(connection, modalId);
+	public SimpleFormResponseEvent(Connection connection, int modalId, String modalJSON, int clickedButton) {
+		super(connection, modalId, modalJSON);
 		this.clickedButton = clickedButton;
 	}
 
 	public int getClickedButton() {
 		return clickedButton;
 	}
+	
+	public void setClickedButton(int clickedButton) {
+		this.clickedButton = clickedButton;
+	}
+	
 }

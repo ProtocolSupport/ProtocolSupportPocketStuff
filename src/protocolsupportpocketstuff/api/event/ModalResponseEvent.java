@@ -6,17 +6,19 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 
-public class ClientResponseEvent extends Event implements Cancellable {
+public class ModalResponseEvent extends Event implements Cancellable {
 	
 	static final HandlerList handlers = new HandlerList();
 	
 	private Connection connection;
 	private int modalId;
+	private String modalJSON;
 	private boolean cancelled = false;
 	
-	public ClientResponseEvent(Connection connection, int modalId) {
+	public ModalResponseEvent(Connection connection, int modalId, String modalJSON) {
 		this.connection = connection;
 		this.modalId = modalId;
+		this.modalJSON = modalJSON;
 	}
 	
 	public Connection getConnection() {
@@ -29,6 +31,10 @@ public class ClientResponseEvent extends Event implements Cancellable {
 	
 	public int getModalId() {
 		return modalId;
+	}
+
+	public String getModalJSON() {
+		return modalJSON;
 	}
 
 	@Override

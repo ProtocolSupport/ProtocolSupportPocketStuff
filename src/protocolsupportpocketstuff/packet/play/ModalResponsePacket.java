@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
+import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.packet.PEPacket;
@@ -64,18 +65,21 @@ public class ModalResponsePacket extends PEPacket {
 
 			if (element.isJsonArray()) {
 				pm.callEvent(new ComplexFormResponseEvent(connection,
-						parent.getModalId(), element.getAsJsonArray()));
+						parent.getModalId(), parent.getModalJSON(), element.getAsJsonArray()));
+				return;
 			} else if (element.isJsonPrimitive()) {
 				if (element.getAsJsonPrimitive().isBoolean()) {
 					pm.callEvent(new ModalWindowResponseEvent(connection,
-							parent.getModalId(), element.getAsBoolean()));
+							parent.getModalId(), parent.getModalJSON(), element.getAsBoolean()));
+					return;
 				} else if (element.getAsJsonPrimitive().isNumber()) {
 					pm.callEvent(new SimpleFormResponseEvent(connection,
-							parent.getModalId(), element.getAsNumber().intValue()));
-				} else {
-					throw new RuntimeException("Invalid form response! " + element);
+							parent.getModalId(), parent.getModalJSON(), element.getAsNumber().intValue()));
+					return;
 				}
 			}
+			
+			pm.callEvent(new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON()));
 		}
 	}
 }

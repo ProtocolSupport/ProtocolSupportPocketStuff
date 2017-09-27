@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public class PocketStuffAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(3);
+	private static final BigInteger apiversion = BigInteger.valueOf(4);
 	
 	/***
 	 * Get's PocketStuff's API version. This number is incremented on every dev release.
