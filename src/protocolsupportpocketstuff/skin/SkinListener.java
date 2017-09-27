@@ -8,8 +8,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.event.ClientResponseEvent;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
+import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
@@ -51,7 +51,7 @@ public class SkinListener implements Listener {
 	
 	//:F
 	@EventHandler
-	public void onClientResponse(ClientResponseEvent e) {
+	public void onClientResponse(ModalResponseEvent e) {
 		plugin.pm("ClientResponseEvent received ~ " + e.getClass().getSimpleName());
 	}
 
