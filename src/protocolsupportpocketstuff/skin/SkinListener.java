@@ -8,8 +8,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
+import protocolsupportpocketstuff.api.event.ClientResponseEvent;
+import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
+import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
+import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
@@ -48,8 +51,23 @@ public class SkinListener implements Listener {
 	
 	//:F
 	@EventHandler
-	public void onModalResponse(ModalResponseEvent e) {
-		plugin.pm("YAAAP: " + e.getResponse().getResponseString());
+	public void onClientResponse(ClientResponseEvent e) {
+		plugin.pm("ClientResponseEvent received ~ " + e.getClass().getSimpleName());
+	}
+
+	@EventHandler
+	public void onModalWindowResponse(ModalWindowResponseEvent e) {
+		plugin.pm("ModalWindowResponseEvent received ~ " + e.getResult());
+	}
+
+	@EventHandler
+	public void onSimpleFormResponse(SimpleFormResponseEvent e) {
+		plugin.pm("SimpleFormResponseEvent received ~ " + e.getClickedButton());
+	}
+
+	@EventHandler
+	public void onComplexFormResponse(ComplexFormResponseEvent e) {
+		plugin.pm("ComplexFormResponseEvent received ~ " + e.getJsonArray());
 	}
 	
 	//Somehow this seems to mess with a PE client that also has a PC skin.

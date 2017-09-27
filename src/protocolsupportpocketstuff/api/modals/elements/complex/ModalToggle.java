@@ -6,8 +6,9 @@ public class ModalToggle extends ModalComplexUIElement {
 	@SerializedName("default")
 	private boolean defaultValue;
 
-	public ModalToggle() {
+	public ModalToggle(String text) {
 		super(ComplexElementType.TOGGLE);
+		super.setText(text);
 	}
 
 	public ModalToggle setText(String text) {

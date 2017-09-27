@@ -27,6 +27,7 @@ public abstract class PEPacket {
 	}
 	
 	public void decode(Connection connection, ByteBuf clientData) {
+		VarNumberSerializer.readVarInt(clientData);
 		clientData.readByte();
 		clientData.readByte();
 		readFromClientData(connection, clientData);

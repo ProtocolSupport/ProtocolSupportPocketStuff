@@ -8,8 +8,9 @@ public class ModalStepSlider extends ModalComplexUIElement {
 	private List<String> steps = new ArrayList<String>();
 	private int defaultStepIndex;
 
-	public ModalStepSlider() {
+	public ModalStepSlider(String text) {
 		super(ComplexElementType.STEP_SLIDER);
+		super.setText(text);
 	}
 
 	public ModalStepSlider setText(String text) {

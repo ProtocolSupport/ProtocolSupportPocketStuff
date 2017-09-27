@@ -8,8 +8,9 @@ public class ModalInput extends ModalComplexUIElement {
 	@SerializedName("default")
 	private String defaultText;
 
-	public ModalInput() {
+	public ModalInput(String text) {
 		super(ComplexElementType.INPUT);
+		super.setText(text);
 	}
 
 	public ModalInput setText(String text) {

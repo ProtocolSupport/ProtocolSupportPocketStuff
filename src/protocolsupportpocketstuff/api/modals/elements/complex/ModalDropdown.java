@@ -8,8 +8,9 @@ public class ModalDropdown extends ModalComplexUIElement {
 	private List<String> options = new ArrayList<String>();
 	private int defaultOptionIndex;
 
-	public ModalDropdown() {
+	public ModalDropdown(String text) {
 		super(ComplexElementType.DROPDOWN);
+		super.setText(text);
 	}
 
 	public ModalDropdown addOption(String optionText) {
