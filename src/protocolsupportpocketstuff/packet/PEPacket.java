@@ -27,7 +27,6 @@ public abstract class PEPacket {
 	}
 	
 	public void decode(Connection connection, ByteBuf clientData) {
-		VarNumberSerializer.readVarInt(clientData);
 		clientData.readByte();
 		clientData.readByte();
 		readFromClientData(connection, clientData);
@@ -48,7 +47,7 @@ public abstract class PEPacket {
 		public void onRawPacketReceiving(RawPacketEvent e) {
 			ByteBuf clientData = e.getData();
 			if(VarNumberSerializer.readVarInt(clientData) == PEPacket.this.getPacketId()) {
-				PEPacket.this.decode(connection, e.getData());
+				PEPacket.this.decode(connection, clientData);
 				handle();
 			}
 		}
