@@ -68,7 +68,7 @@ public class PocketCon {
 	 * @return
 	 */
 	public static int sendModal(Connection connection, int id, String modalJSON) {
-		PocketCon.sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
+		sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON)); return id;
 	}
 	
 	/***
