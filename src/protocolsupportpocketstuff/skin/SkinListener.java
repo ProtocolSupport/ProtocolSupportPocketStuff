@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
@@ -52,7 +51,9 @@ public class SkinListener implements Listener {
 	//:F
 	@EventHandler
 	public void onClientResponse(ModalResponseEvent e) {
-		plugin.pm("ClientResponseEvent received ~ " + e.getClass().getSimpleName());
+		plugin.pm("ClientResponseEvent received ~ " + e.getClass().getSimpleName() + " ~ JSON: " + e.getModalJSON());
+
+		PocketCon.handleModalResponse(e.getConnection(), e);
 	}
 
 	@EventHandler

@@ -1,21 +1,21 @@
 package protocolsupportpocketstuff.api.util;
 
-import java.util.Collection;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupportpocketstuff.api.modals.Modal;
+import protocolsupportpocketstuff.api.modals.callback.ModalCallback;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Modals;
+
+import java.util.Collection;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /***
  * Utility class to get and do pocket-only-stuff for pocket 
@@ -71,7 +71,11 @@ public class PocketPlayer {
 	public static int sendModal(Player player, Modal modal) {
 		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modal);
 	}
-	
+
+	public static int sendModal(Player player, Modal modal, ModalCallback modalCallback) {
+		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modal, modalCallback);
+	}
+
 	/***
 	 * Sends a modal with an id specified.
 	 * Nonono, don't use custom ids!
@@ -88,6 +92,10 @@ public class PocketPlayer {
 	 */
 	public static int sendModal(Player player, int modalId, String modalJSON) {
 		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modalId, modalJSON);
+	}
+
+	public static int sendModal(Player player, int modalId, String modalJSON, ModalCallback modalCallback) {
+		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modalId, modalJSON, modalCallback);
 	}
 	
 	/***

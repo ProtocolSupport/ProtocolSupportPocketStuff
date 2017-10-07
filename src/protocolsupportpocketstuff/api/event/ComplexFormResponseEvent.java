@@ -4,7 +4,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonArray;
 
 public class ComplexFormResponseEvent extends ModalResponseEvent {
-	
+
 	//TODO: No JSON array, but an array of response objects.
 	private JsonArray jsonArray;
 
@@ -20,5 +20,5 @@ public class ComplexFormResponseEvent extends ModalResponseEvent {
 	public void setJsonArray(JsonArray jsonArray) {
 		this.jsonArray = jsonArray;
 	}
-	
+
 }

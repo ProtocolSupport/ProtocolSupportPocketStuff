@@ -3,7 +3,7 @@ package protocolsupportpocketstuff.api.event;
 import protocolsupport.api.Connection;
 
 public class SimpleFormResponseEvent extends ModalResponseEvent {
-	
+
 	private int clickedButton;
 
 	public SimpleFormResponseEvent(Connection connection, int modalId, String modalJSON, int clickedButton) {
@@ -18,5 +18,5 @@ public class SimpleFormResponseEvent extends ModalResponseEvent {
 	public void setClickedButton(int clickedButton) {
 		this.clickedButton = clickedButton;
 	}
-	
+
 }

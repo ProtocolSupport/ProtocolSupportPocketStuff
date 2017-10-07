@@ -3,7 +3,7 @@ package protocolsupportpocketstuff.api.event;
 import protocolsupport.api.Connection;
 
 public class ModalWindowResponseEvent extends ModalResponseEvent {
-	
+
 	private boolean result;
 
 	public ModalWindowResponseEvent(Connection connection, int modalId, String modalJSON, boolean result) {
@@ -18,5 +18,5 @@ public class ModalWindowResponseEvent extends ModalResponseEvent {
 	public void setResult(boolean result) {
 		this.result = result;
 	}
-	
+
 }
