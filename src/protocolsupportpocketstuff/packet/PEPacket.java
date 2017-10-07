@@ -45,7 +45,6 @@ public abstract class PEPacket {
 		}
 		
 		public void onRawPacketReceiving(RawPacketEvent e) {
-			if (e.getData().refCnt() == 0) { System.out.println("Ignoring packet with refCnt = 0"); return; }
 			ByteBuf clientData = e.getData();
 			if(VarNumberSerializer.readVarInt(clientData) == PEPacket.this.getPacketId()) {
 				PEPacket.this.decode(connection, clientData);
