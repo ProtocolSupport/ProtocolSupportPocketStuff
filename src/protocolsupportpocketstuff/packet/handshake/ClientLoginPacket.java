@@ -27,6 +27,7 @@ import java.util.UUID;
 
 public class ClientLoginPacket extends PEPacket {
 	int protocolVersion;
+	JsonObject clientPayload;
 
 	public ClientLoginPacket() { }
 
@@ -44,6 +45,7 @@ public class ClientLoginPacket extends PEPacket {
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
 		if (connection.getVersion().getProtocolType() != ProtocolType.PE)
 			return;
+
 		protocolVersion = clientData.readInt(); //protocol version
 
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
@@ -63,19 +65,7 @@ public class ClientLoginPacket extends PEPacket {
 			while ((length = inputStream.read(buffer)) != -1) {
 				result.write(buffer, 0, length);
 			}
-			JsonObject jsonObject = decodeToken(result.toString("UTF-8"));
-			String skinData = jsonObject.get("SkinData").getAsString();
-			String uniqueSkinId = UUID.nameUUIDFromBytes(skinData.getBytes()).toString();
-
-			if (Skins.INSTANCE.hasPcSkin(uniqueSkinId)) {
-				System.out.println("Already cached skin, adding to the Connection's metadata...");
-				connection.addMetadata("applySkinOnJoin", Skins.INSTANCE.getPcSkin(uniqueSkinId));
-				return;
-			}
-			byte[] skinByteArray = Base64.getDecoder().decode(skinData);
-
-			MineskinThread mineskinThread = new MineskinThread(connection, uniqueSkinId, skinByteArray, jsonObject.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
-			mineskinThread.start();
+			clientPayload = decodeToken(result.toString("UTF-8"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +87,20 @@ public class ClientLoginPacket extends PEPacket {
 
 		@Override
 		public void handle() {
+			ClientLoginPacket clientLoginPacket = ClientLoginPacket.this;
 
+			String skinData = clientLoginPacket.clientPayload.get("SkinData").getAsString();
+			String uniqueSkinId = UUID.nameUUIDFromBytes(skinData.getBytes()).toString();
+
+			if (Skins.INSTANCE.hasPcSkin(uniqueSkinId)) {
+				System.out.println("Already cached skin, adding to the Connection's metadata...");
+				connection.addMetadata("applySkinOnJoin", Skins.INSTANCE.getPcSkin(uniqueSkinId));
+				return;
+			}
+			byte[] skinByteArray = Base64.getDecoder().decode(skinData);
+
+			MineskinThread mineskinThread = new MineskinThread(connection, uniqueSkinId, skinByteArray, clientLoginPacket.clientPayload.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
+			mineskinThread.start();
 		}
 	}
 }

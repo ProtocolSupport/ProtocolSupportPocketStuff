@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.libs.kevinsawicki.http.HttpRequest;
 import protocolsupportpocketstuff.storage.Skins;
 
 import javax.imageio.ImageIO;
@@ -123,6 +125,6 @@ public class MineskinThread extends Thread {
 							onlinePlayer.showPlayer(player);
 						});
 			}
-		}.runTask(Bukkit.getPluginManager().getPlugin("ProtocolSupportPocketStuff"));
+		}.runTask(ProtocolSupportPocketStuff.getInstance());
 	}
 }

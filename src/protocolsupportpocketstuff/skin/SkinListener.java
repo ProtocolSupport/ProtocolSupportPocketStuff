@@ -26,6 +26,19 @@ public class SkinListener implements Listener {
 	public SkinListener(ProtocolSupportPocketStuff plugin) {
 		this.plugin = plugin;
 	}
+
+	@EventHandler
+	public void onPlayerPropertiesResolve(PlayerPropertiesResolveEvent e) {
+		Connection con = e.getConnection();
+		if (PocketCon.isPocketConnection(con)) {
+			if (con.hasMetadata("applySkinOnJoin")) {
+				System.out.println("Applying cached for " + e.getConnection() + "...");
+				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
+				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty("textures", skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+				con.removeMetadata("applySkinOnJoin");
+			}
+		}
+	}
 	
 	//Test to send packet.
 	@EventHandler

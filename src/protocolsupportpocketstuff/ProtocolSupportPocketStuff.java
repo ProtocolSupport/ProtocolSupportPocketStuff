@@ -8,10 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
@@ -21,9 +19,11 @@ import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
+	private static ProtocolSupportPocketStuff INSTANCE;
+
 	@Override
 	public void onEnable() {
-		
+		this.INSTANCE = this;
 		// = Config = \\
 		saveDefaultConfig();
 		
@@ -40,19 +40,6 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		Skins.INSTANCE.buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
 		
 		pm("Hello world! :D");
-	}
-
-	@EventHandler
-	public void onPlayerPropertiesResolve(PlayerPropertiesResolveEvent e) {
-		Connection con = e.getConnection();
-		if (PocketCon.isPocketConnection(con)) {
-			if (con.hasMetadata("applySkinOnJoin")) {
-				System.out.println("Applying cached for " + e.getConnection() + "...");
-				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
-				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty("textures", skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
-				con.removeMetadata("applySkinOnJoin");
-			}
-		}
 	}
 
 	@EventHandler
@@ -86,5 +73,8 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public void pm(String msg) {
 		getServer().getConsoleSender().sendMessage("[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] " + msg);
 	}
-	
+
+	public static ProtocolSupportPocketStuff getInstance() {
+		return INSTANCE;
+	}
 }
