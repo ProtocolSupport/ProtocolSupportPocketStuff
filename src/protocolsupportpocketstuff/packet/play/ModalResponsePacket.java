@@ -78,8 +78,10 @@ public class ModalResponsePacket extends PEPacket {
 					return;
 				}
 			}
-			
-			pm.callEvent(new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON()));
+
+			ModalResponseEvent event = new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON());
+			event.setCancelled(element.isJsonNull());
+			pm.callEvent(event);
 		}
 	}
 }

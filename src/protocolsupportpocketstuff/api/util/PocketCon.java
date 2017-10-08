@@ -5,6 +5,7 @@ import org.bukkit.util.Vector;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
+import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;
@@ -23,9 +24,7 @@ import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -116,16 +115,19 @@ public class PocketCon {
 		if (modalCallback == null)
 			return;
 
-		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON());
-		if (event instanceof SimpleFormResponseEvent) {
+		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled());
+		if (modalCallback instanceof SimpleFormCallback) {
 			SimpleFormCallback simpleFormCallback = (SimpleFormCallback) modalCallback;
-			simpleFormCallback.onSimpleFormResponse(connection.getPlayer(), event.getModalJSON(), ((SimpleFormResponseEvent) event).getClickedButton());
-		} else if (event instanceof ComplexFormResponseEvent) {
+			int clickedButton = event instanceof SimpleFormResponseEvent ? ((SimpleFormResponseEvent) event).getClickedButton() : -1;
+			simpleFormCallback.onSimpleFormResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), clickedButton);
+		} else if (modalCallback instanceof ComplexFormCallback) {
 			ComplexFormCallback complexFormCallback = (ComplexFormCallback) modalCallback;
-			complexFormCallback.onComplexFormResponse(connection.getPlayer(), event.getModalJSON(), ((ComplexFormResponseEvent) event).getJsonArray());
-		} else if (event instanceof ModalWindowResponseEvent) {
+			JsonArray jsonArray = event instanceof ComplexFormResponseEvent ? ((ComplexFormResponseEvent) event).getJsonArray() : null;
+			complexFormCallback.onComplexFormResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), jsonArray);
+		} else if (modalCallback instanceof ModalWindowCallback) {
 			ModalWindowCallback modalWindowResponseEvent = (ModalWindowCallback) modalCallback;
-			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), ((ModalWindowResponseEvent) event).getResult());
+			boolean result = event instanceof ModalWindowResponseEvent ? ((ModalWindowResponseEvent) event).getResult() : false;
+			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), result);
 		}
 
 		PocketCon.removeCallback(connection);
