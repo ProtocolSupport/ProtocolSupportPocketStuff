@@ -1,14 +1,13 @@
 package protocolsupportpocketstuff.api.event;
 
-import java.awt.image.BufferedImage;
-import java.util.UUID;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
 import protocolsupport.api.Connection;
+
+import java.awt.image.BufferedImage;
+import java.util.UUID;
 
 public class PocketChangeSkinEvent extends Event implements Cancellable {
 
