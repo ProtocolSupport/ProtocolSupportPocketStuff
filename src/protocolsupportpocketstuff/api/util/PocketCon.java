@@ -7,7 +7,6 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupport.libs.com.google.gson.JsonObject;
-import protocolsupport.libs.com.google.gson.JsonParser;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;

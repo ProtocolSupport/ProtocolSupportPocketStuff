@@ -5,7 +5,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
 import protocolsupportpocketstuff.api.util.PocketPlayer;
 
 public class DimensionListener implements Listener {

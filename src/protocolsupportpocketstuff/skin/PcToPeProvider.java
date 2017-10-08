@@ -1,14 +1,13 @@
 package protocolsupportpocketstuff.skin;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.function.Consumer;
-
-import javax.imageio.ImageIO;
-
 import protocolsupport.api.unsafe.peskins.PESkinsProvider;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.storage.Skins;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.net.URL;
+import java.util.function.Consumer;
 
 public class PcToPeProvider extends PESkinsProvider {
 

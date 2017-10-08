@@ -5,12 +5,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
+import protocolsupport.api.events.ConnectionOpenEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
+import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
+import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
@@ -38,7 +41,27 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		
 		pm("Hello world! :D");
 	}
-	
+
+	@EventHandler
+	public void onPlayerPropertiesResolve(PlayerPropertiesResolveEvent e) {
+		Connection con = e.getConnection();
+		if (PocketCon.isPocketConnection(con)) {
+			if (con.hasMetadata("applySkinOnJoin")) {
+				System.out.println("Applying cached for " + e.getConnection() + "...");
+				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
+				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty("textures", skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+				con.removeMetadata("applySkinOnJoin");
+			}
+		}
+	}
+
+	@EventHandler
+	public void onConnectionOpen(ConnectionOpenEvent e) {
+		Connection con = e.getConnection();
+		// We can't check if it is a PE player yet because it is too early to figure out
+		con.addPacketListener(new ClientLoginPacket().new decodeHandler(this, con));
+	}
+
 	@EventHandler
 	public void onConnectionHandshake(ConnectionHandshakeEvent e) {
 		Connection con = e.getConnection();

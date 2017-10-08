@@ -1,5 +1,8 @@
 package protocolsupportpocketstuff.libs.jodah.expiringmap;
 
+import protocolsupportpocketstuff.libs.jodah.expiringmap.internal.Assert;
+import protocolsupportpocketstuff.libs.jodah.expiringmap.internal.NamedThreadFactory;
+
 import java.lang.ref.WeakReference;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
@@ -27,9 +30,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import protocolsupportpocketstuff.libs.jodah.expiringmap.internal.Assert;
-import protocolsupportpocketstuff.libs.jodah.expiringmap.internal.NamedThreadFactory;
 
 /**
  * A thread-safe map that expires entries. Optional features include expiration policies, variable entry expiration,

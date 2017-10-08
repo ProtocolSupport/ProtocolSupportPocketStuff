@@ -1,7 +1,5 @@
 package protocolsupportpocketstuff.packet.play;
 
-import java.util.UUID;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
@@ -13,6 +11,8 @@ import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
 import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
+
+import java.util.UUID;
 
 public class SkinPacket extends PEPacket {
 

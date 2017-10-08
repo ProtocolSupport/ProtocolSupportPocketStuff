@@ -1,9 +1,8 @@
 package protocolsupportpocketstuff.packet;
 
-import org.bukkit.plugin.PluginManager;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import org.bukkit.plugin.PluginManager;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
