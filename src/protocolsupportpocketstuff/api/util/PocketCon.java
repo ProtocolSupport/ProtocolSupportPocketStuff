@@ -6,12 +6,15 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.libs.com.google.gson.JsonArray;
+import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.libs.com.google.gson.JsonParser;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.Modal;
+import protocolsupportpocketstuff.api.modals.ModalType;
 import protocolsupportpocketstuff.api.modals.callback.ComplexFormCallback;
 import protocolsupportpocketstuff.api.modals.callback.ModalCallback;
 import protocolsupportpocketstuff.api.modals.callback.ModalWindowCallback;
@@ -94,8 +97,25 @@ public class PocketCon {
 		if (callback != null)
 			addCallback(connection, id, callback);
 
+		connection.addMetadata("modalType", detectModalType(modalJSON));
 		sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON));
 		return id;
+	}
+
+	public static void addModalType(Connection connection, ModalType type) {
+		connection.addMetadata("modalType", type);
+	}
+
+	public static ModalType getModalType(Connection connection) {
+		return (ModalType) connection.getMetadata("modalType");
+	}
+
+	public static ModalType detectModalType(String modalJSON) {
+		System.out.println(modalJSON);
+		JsonObject jsonParser = new JsonParser().parse(modalJSON).getAsJsonObject();
+		String pocketType = jsonParser.get("type").getAsString();
+		ModalType type = ModalType.getByPeName(pocketType);
+		return type;
 	}
 
 	public static void addCallback(Connection connection, int id, ModalCallback callback) {

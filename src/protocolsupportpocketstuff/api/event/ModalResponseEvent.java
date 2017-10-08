@@ -5,6 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
+import protocolsupportpocketstuff.api.modals.ModalType;
 
 public class ModalResponseEvent extends Event implements Cancellable {
 	
@@ -14,11 +15,13 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	private int modalId;
 	private String modalJSON;
 	private boolean cancelled = false;
-	
-	public ModalResponseEvent(Connection connection, int modalId, String modalJSON) {
+	private ModalType modalType;
+
+	public ModalResponseEvent(Connection connection, int modalId, String modalJSON, ModalType modalType) {
 		this.connection = connection;
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
+		this.modalType = modalType;
 	}
 	
 	public Connection getConnection() {
@@ -36,6 +39,8 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	public String getModalJSON() {
 		return modalJSON;
 	}
+
+	public ModalType getModalType() { return modalType; }
 
 	@Override
 	public boolean isCancelled() {

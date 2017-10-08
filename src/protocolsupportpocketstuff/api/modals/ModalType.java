@@ -14,4 +14,12 @@ public enum ModalType {
 		return peName;
 	}
 
+	public static ModalType getByPeName(String peName) {
+		for (ModalType type : ModalType.values()) {
+			if (type.getPeName().equals(peName)) {
+				return type;
+			}
+		}
+		return null;
+	}
 }

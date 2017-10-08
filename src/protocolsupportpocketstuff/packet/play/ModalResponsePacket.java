@@ -12,15 +12,17 @@ import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
+import protocolsupportpocketstuff.api.modals.ModalType;
+import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class ModalResponsePacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;
-	
+
 	public ModalResponsePacket() { }
-	
+
 	public ModalResponsePacket(int modalId, String modalJSON) {
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
@@ -42,11 +44,11 @@ public class ModalResponsePacket extends PEPacket {
 		modalId = VarNumberSerializer.readVarInt(clientData);
 		modalJSON = StringSerializer.readString(clientData, connection.getVersion());
 	}
-	
+
 	public int getModalId() {
 		return modalId;
 	}
-	
+
 	public String getModalJSON() {
 		return modalJSON;
 	}
@@ -60,27 +62,29 @@ public class ModalResponsePacket extends PEPacket {
 		@Override
 		public void handle() {
 			ModalResponsePacket parent = ModalResponsePacket.this;
-
+			ModalType modalType = PocketCon.getModalType(connection);
 			JsonElement element = new JsonParser().parse(parent.getModalJSON());
+			boolean isClosedByClient = element.isJsonNull();
 
-			if (element.isJsonArray()) {
-				pm.callEvent(new ComplexFormResponseEvent(connection,
-						parent.getModalId(), parent.getModalJSON(), element.getAsJsonArray()));
+			if (modalType == ModalType.COMPLEX_FORM) {
+				ComplexFormResponseEvent event = new ComplexFormResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? null : element.getAsJsonArray());
+				event.setCancelled(isClosedByClient);
+				pm.callEvent(event);
 				return;
-			} else if (element.isJsonPrimitive()) {
-				if (element.getAsJsonPrimitive().isBoolean()) {
-					pm.callEvent(new ModalWindowResponseEvent(connection,
-							parent.getModalId(), parent.getModalJSON(), element.getAsBoolean()));
-					return;
-				} else if (element.getAsJsonPrimitive().isNumber()) {
-					pm.callEvent(new SimpleFormResponseEvent(connection,
-							parent.getModalId(), parent.getModalJSON(), element.getAsNumber().intValue()));
-					return;
-				}
+			} else if (modalType == ModalType.MODAL_WINDOW) {
+				ModalWindowResponseEvent event = new ModalWindowResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? false : element.getAsBoolean());
+				event.setCancelled(isClosedByClient);
+				pm.callEvent(event);
+				return;
+			} else if (modalType == ModalType.SIMPLE_FORM) {
+				SimpleFormResponseEvent event = new SimpleFormResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? -1 : element.getAsNumber().intValue());
+				event.setCancelled(isClosedByClient);
+				pm.callEvent(event);
+				return;
 			}
 
-			ModalResponseEvent event = new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON());
-			event.setCancelled(element.isJsonNull());
+			ModalResponseEvent event = new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType);
+			event.setCancelled(isClosedByClient);
 			pm.callEvent(event);
 		}
 	}
