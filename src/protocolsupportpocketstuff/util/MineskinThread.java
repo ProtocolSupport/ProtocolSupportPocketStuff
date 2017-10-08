@@ -15,7 +15,6 @@ import protocolsupportpocketstuff.libs.kevinsawicki.http.HttpRequest;
 import protocolsupportpocketstuff.storage.Skins;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,23 +38,7 @@ public class MineskinThread extends Thread {
 	public void run() {
 		super.run();
 		System.out.println("Sending skin " + uniqueSkinId + " to MineSkin...");
-		BufferedImage skin = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-
-		int x = 0;
-		int y = 0;
-		for (int i = 0; skinByteArray.length > i; i += 4) {
-			if (x == 64) {
-				x = 0;
-				y++;
-			}
-			int r = (skinByteArray[i]) & 0xFF;
-			int g = (skinByteArray[i + 1]) & 0xFF;
-			int b = (skinByteArray[i + 2]) & 0xFF;
-			int a = (skinByteArray[i + 3]) & 0xFF;
-
-			skin.setRGB(x, y, new Color(r, g, b, a).getRGB());
-			x++;
-		}
+		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
 		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
 				.userAgent("ProtocolSupportPocketStuff");

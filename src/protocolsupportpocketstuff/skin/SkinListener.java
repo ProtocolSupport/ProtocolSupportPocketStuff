@@ -39,7 +39,7 @@ public class SkinListener implements Listener {
 			}
 		}
 	}
-	
+
 	//Test to send packet.
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {

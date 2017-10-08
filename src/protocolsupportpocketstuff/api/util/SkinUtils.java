@@ -11,7 +11,6 @@ public class SkinUtils {
 	//TODO: Why here? :S
 	public static String skinPropertyName = "textures";
 
-
 	public static BufferedImage fromData(byte[] data) {
 		System.out.println(data.length);
 		Validate.isTrue((data.length == 8192) || (data.length == 16384), "Skin data must be either 8192 or 16384 bytes long!");
