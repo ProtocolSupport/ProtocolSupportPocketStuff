@@ -6,8 +6,8 @@ public class SimpleFormResponseEvent extends ModalResponseEvent {
 
 	private int clickedButton;
 
-	public SimpleFormResponseEvent(Connection connection, int modalId, String modalJSON, int clickedButton) {
-		super(connection, modalId, modalJSON);
+	public SimpleFormResponseEvent(Connection connection, int modalId, String modalJSON, boolean isClosedByClient, int clickedButton) {
+		super(connection, modalId, modalJSON, isClosedByClient);
 		this.clickedButton = clickedButton;
 	}
 
