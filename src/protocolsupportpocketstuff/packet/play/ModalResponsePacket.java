@@ -3,7 +3,6 @@ package protocolsupportpocketstuff.packet.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonElement;
-import protocolsupport.libs.com.google.gson.JsonParser;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -15,6 +14,7 @@ import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.ModalType;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.PEPacket;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class ModalResponsePacket extends PEPacket {
 
@@ -63,7 +63,7 @@ public class ModalResponsePacket extends PEPacket {
 		public void handle() {
 			ModalResponsePacket parent = ModalResponsePacket.this;
 			ModalType modalType = PocketCon.getModalType(connection);
-			JsonElement element = new JsonParser().parse(parent.getModalJSON());
+			JsonElement element = StuffUtils.JSON_PARSER.parse(parent.getModalJSON());
 			boolean isClosedByClient = element.isJsonNull();
 
 			if (modalType == ModalType.COMPLEX_FORM) {

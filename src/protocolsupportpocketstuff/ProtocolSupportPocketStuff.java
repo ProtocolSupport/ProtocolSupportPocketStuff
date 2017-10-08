@@ -18,7 +18,6 @@ import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
-	
 	@Override
 	public void onEnable() {
 		

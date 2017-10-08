@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.api.modals;
 
 import protocolsupport.libs.com.google.gson.Gson;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class ModalWindow implements Modal {
 	
@@ -64,12 +65,12 @@ public class ModalWindow implements Modal {
 	}
 
 	public String toJSON() {
-		Gson gson = new Gson();
+		Gson gson = StuffUtils.GSON;
 		return gson.toJson(this);
 	}
 	
 	public static ModalWindow fromJson(String JSON) {
-		Gson gson = new Gson(); 
+		Gson gson = StuffUtils.GSON;
 		return gson.fromJson(JSON, ModalWindow.class);
 	}
 	

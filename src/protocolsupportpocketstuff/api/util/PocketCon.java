@@ -25,6 +25,7 @@ import protocolsupportpocketstuff.packet.play.DimensionPacket;
 import protocolsupportpocketstuff.packet.play.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.storage.Modals;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -112,7 +113,7 @@ public class PocketCon {
 
 	public static ModalType detectModalType(String modalJSON) {
 		System.out.println(modalJSON);
-		JsonObject jsonParser = new JsonParser().parse(modalJSON).getAsJsonObject();
+		JsonObject jsonParser = StuffUtils.JSON_PARSER.parse(modalJSON).getAsJsonObject();
 		String pocketType = jsonParser.get("type").getAsString();
 		ModalType type = ModalType.getByPeName(pocketType);
 		return type;

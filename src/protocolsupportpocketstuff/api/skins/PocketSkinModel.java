@@ -3,7 +3,7 @@ package protocolsupportpocketstuff.api.skins;
 import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupport.libs.com.google.gson.GsonBuilder;
 import protocolsupport.libs.com.google.gson.JsonObject;
-import protocolsupport.libs.com.google.gson.JsonParser;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class PocketSkinModel {
 
@@ -16,7 +16,7 @@ public class PocketSkinModel {
 		this.skinId = skinId;
 		this.skinName = skinName;
 		this.geometryId = geometryId;
-		this.geometryData = new JsonParser().parse(geometryData).getAsJsonObject();
+		this.geometryData = StuffUtils.JSON_PARSER.parse(geometryData).getAsJsonObject();
 	}
 
 	public String getSkinId() {
@@ -53,7 +53,7 @@ public class PocketSkinModel {
 	}
 
 	public void setGeometryData(String geometryData) {
-		setGeometryData(new JsonParser().parse(geometryData).getAsJsonObject());
+		setGeometryData(StuffUtils.JSON_PARSER.parse(geometryData).getAsJsonObject());
 	}
 	
 	public void setGeometryData(JsonObject geometryData) {
@@ -61,11 +61,11 @@ public class PocketSkinModel {
 	}
 
 	public String toJSON() {
-		return new Gson().toJson(this);
+		return StuffUtils.GSON.toJson(this);
 	}
 	
 	public static PocketSkinModel fromJSON(String skinJSON) {
-		return new Gson().fromJson(skinJSON, PocketSkinModel.class);
+		return StuffUtils.GSON.fromJson(skinJSON, PocketSkinModel.class);
 	}
 	
 }
