@@ -23,7 +23,9 @@ import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -114,16 +116,16 @@ public class PocketCon {
 		if (modalCallback == null)
 			return;
 
-		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON(), event.isClosedByClient());
+		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON());
 		if (event instanceof SimpleFormResponseEvent) {
 			SimpleFormCallback simpleFormCallback = (SimpleFormCallback) modalCallback;
-			simpleFormCallback.onSimpleFormResponse(connection.getPlayer(), event.getModalJSON(), event.isClosedByClient(), ((SimpleFormResponseEvent) event).getClickedButton());
+			simpleFormCallback.onSimpleFormResponse(connection.getPlayer(), event.getModalJSON(), ((SimpleFormResponseEvent) event).getClickedButton());
 		} else if (event instanceof ComplexFormResponseEvent) {
 			ComplexFormCallback complexFormCallback = (ComplexFormCallback) modalCallback;
-			complexFormCallback.onComplexFormResponse(connection.getPlayer(), event.getModalJSON(), event.isClosedByClient(), ((ComplexFormResponseEvent) event).getJsonArray());
+			complexFormCallback.onComplexFormResponse(connection.getPlayer(), event.getModalJSON(), ((ComplexFormResponseEvent) event).getJsonArray());
 		} else if (event instanceof ModalWindowResponseEvent) {
 			ModalWindowCallback modalWindowResponseEvent = (ModalWindowCallback) modalCallback;
-			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), event.isClosedByClient(), ((ModalWindowResponseEvent) event).getResult());
+			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), ((ModalWindowResponseEvent) event).getResult());
 		}
 
 		PocketCon.removeCallback(connection);

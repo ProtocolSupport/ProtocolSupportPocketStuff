@@ -14,13 +14,11 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	private int modalId;
 	private String modalJSON;
 	private boolean cancelled = false;
-	private boolean isClosedByClient = false;
-
-	public ModalResponseEvent(Connection connection, int modalId, String modalJSON, boolean isClosedByClient) {
+	
+	public ModalResponseEvent(Connection connection, int modalId, String modalJSON) {
 		this.connection = connection;
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
-		this.isClosedByClient = isClosedByClient;
 	}
 	
 	public Connection getConnection() {
@@ -38,8 +36,6 @@ public class ModalResponseEvent extends Event implements Cancellable {
 	public String getModalJSON() {
 		return modalJSON;
 	}
-
-	public boolean isClosedByClient() { return isClosedByClient; }
 
 	@Override
 	public boolean isCancelled() {

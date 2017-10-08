@@ -65,21 +65,21 @@ public class ModalResponsePacket extends PEPacket {
 
 			if (element.isJsonArray()) {
 				pm.callEvent(new ComplexFormResponseEvent(connection,
-						parent.getModalId(), parent.getModalJSON(), element.isJsonNull(), element.isJsonNull() ? null : element.getAsJsonArray()));
+						parent.getModalId(), parent.getModalJSON(), element.getAsJsonArray()));
 				return;
 			} else if (element.isJsonPrimitive()) {
 				if (element.getAsJsonPrimitive().isBoolean()) {
 					pm.callEvent(new ModalWindowResponseEvent(connection,
-							parent.getModalId(), parent.getModalJSON(), element.isJsonNull(), element.isJsonNull() ? false : element.getAsBoolean()));
+							parent.getModalId(), parent.getModalJSON(), element.getAsBoolean()));
 					return;
 				} else if (element.getAsJsonPrimitive().isNumber()) {
 					pm.callEvent(new SimpleFormResponseEvent(connection,
-							parent.getModalId(), parent.getModalJSON(), element.isJsonNull(), element.isJsonNull() ? -1 : element.getAsNumber().intValue()));
+							parent.getModalId(), parent.getModalJSON(), element.getAsNumber().intValue()));
 					return;
 				}
 			}
 			
-			pm.callEvent(new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), element.isJsonNull()));
+			pm.callEvent(new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON()));
 		}
 	}
 }
