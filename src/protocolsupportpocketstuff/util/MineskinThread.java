@@ -40,18 +40,34 @@ public class MineskinThread extends Thread {
 		System.out.println("Sending skin " + uniqueSkinId + " to MineSkin...");
 		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
-		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
-				.userAgent("ProtocolSupportPocketStuff");
-
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(skin, "png", os);
-			InputStream is = new ByteArrayInputStream(os.toByteArray());
-			httpRequest.part("file", "mcpe_skin.png", null, is);
+			InputStream inputStream = new ByteArrayInputStream(os.toByteArray());
 
-			JsonObject mineskinResponse = StuffUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
+			int tries = 0;
 
-			System.out.println(mineskinResponse);
+			JsonObject mineskinResponse = sendToMineSkin(inputStream, isSlim);
+
+			System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
+
+			while (mineskinResponse.has("error")) {
+				if (!connection.isConnected()) {
+					System.out.println("[#" + (tries + 1) + "] Failed again... but the client disconnected, so we are going to ignore the skin!");
+					return;
+				}
+				if (tries > 4) {
+					System.out.println("[#" + (tries + 1) + "] Too many fails, aborting... sorry... :(");
+					return;
+				}
+				System.out.println("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 1s...");
+				Thread.sleep(1000); // Throttle
+				inputStream = new ByteArrayInputStream(os.toByteArray());
+				mineskinResponse = sendToMineSkin(inputStream, isSlim);
+				System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
+				tries++;
+			}
+			inputStream.close();
 
 			JsonObject skinData = mineskinResponse.get("data").getAsJsonObject();
 			JsonObject skinTexture = skinData.get("texture").getAsJsonObject();
@@ -64,6 +80,13 @@ public class MineskinThread extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static JsonObject sendToMineSkin(InputStream inputStream, boolean isSlim) {
+		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
+				.userAgent("ProtocolSupportPocketStuff");
+		httpRequest.part("file", "mcpe_skin.png", null, inputStream);
+		return StuffUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
 	}
 
 	public void hackyStuff(Connection connection, String value, String signature) {
