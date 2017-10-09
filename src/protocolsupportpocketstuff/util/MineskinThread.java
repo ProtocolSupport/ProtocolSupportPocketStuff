@@ -23,12 +23,14 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 
 public class MineskinThread extends Thread {
+	ProtocolSupportPocketStuff plugin;
 	Connection connection;
 	String uniqueSkinId;
 	byte[] skinByteArray;
 	boolean isSlim;
 
-	public MineskinThread(Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
+	public MineskinThread(ProtocolSupportPocketStuff plugin, Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
+		this.plugin = plugin;
 		this.connection = connection;
 		this.uniqueSkinId = uniqueSkinId;
 		this.skinByteArray = skinByteArray;
@@ -38,7 +40,7 @@ public class MineskinThread extends Thread {
 	@Override
 	public void run() {
 		super.run();
-		System.out.println("Sending skin " + uniqueSkinId + " to MineSkin...");
+		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
 		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
 		try {
@@ -47,21 +49,22 @@ public class MineskinThread extends Thread {
 			ImageIO.write(skin, "png", os);
 			JsonObject mineskinResponse = sendToMineSkin(os, isSlim);
 
-			System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
+			plugin.debug("[#" + (tries + 1) + "] " + mineskinResponse);
 
 			while (mineskinResponse.has("error")) {
+				String error = mineskinResponse.get("error").getAsString();
 				if (!connection.isConnected()) {
-					System.out.println("[#" + (tries + 1) + "] Failed again... but the client disconnected, so we are going to ignore the skin!");
+					plugin.debug("[#" + (tries + 1) + "] Failed again... but the client disconnected, so we are going to ignore the skin!");
 					return;
 				}
 				if (tries > 4) {
-					System.out.println("[#" + (tries + 1) + "] Too many fails, aborting... sorry... :(");
+					plugin.pm("Failed to send skin to MineSkin after 5 tries (" + error + "), cancelling upload thread...");
 					return;
 				}
-				System.out.println("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 1s...");
+				plugin.debug("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 5s...");
 				Thread.sleep(5000); // Throttle
 				mineskinResponse = sendToMineSkin(os, isSlim);
-				System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
+				plugin.debug("[#" + (tries + 1) + "] " + mineskinResponse);
 				tries++;
 			}
 
@@ -70,7 +73,7 @@ public class MineskinThread extends Thread {
 			String signature = skinTexture.get("signature").getAsString();
 			String value = skinTexture.get("value").getAsString();
 
-			System.out.println("Storing skin on cache...");
+			plugin.debug("Storing skin on cache...");
 			Skins.INSTANCE.cachePcSkin(uniqueSkinId, new SkinUtils.SkinDataWrapper(value, signature, isSlim));
 			hackyStuff(connection, value, signature);
 		} catch (Exception e) {
@@ -105,7 +108,7 @@ public class MineskinThread extends Thread {
 			}
 		}
 
-		System.out.println("Player is logged in, applying skin...");
+		plugin.debug("Player is logged in, applying skin...");
 
 		Player player = connection.getPlayer();
 		CraftPlayer craftPlayer = ((CraftPlayer) player);

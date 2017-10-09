@@ -94,7 +94,7 @@ public class ClientLoginPacket extends PEPacket {
 			String uniqueSkinId = UUID.nameUUIDFromBytes(skinData.getBytes()).toString();
 
 			if (Skins.INSTANCE.hasPcSkin(uniqueSkinId)) {
-				System.out.println("Already cached skin, adding to the Connection's metadata...");
+				plugin.debug("Already cached skin, adding to the Connection's metadata...");
 				connection.addMetadata("applySkinOnJoin", Skins.INSTANCE.getPcSkin(uniqueSkinId));
 				return;
 			}
