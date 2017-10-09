@@ -100,7 +100,7 @@ public class ClientLoginPacket extends PEPacket {
 			}
 			byte[] skinByteArray = Base64.getDecoder().decode(skinData);
 
-			MineskinThread mineskinThread = new MineskinThread(connection, uniqueSkinId, skinByteArray, clientLoginPacket.clientPayload.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
+			MineskinThread mineskinThread = new MineskinThread(plugin, connection, uniqueSkinId, skinByteArray, clientLoginPacket.clientPayload.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
 			mineskinThread.start();
 		}
 	}

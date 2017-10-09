@@ -32,7 +32,7 @@ public class SkinListener implements Listener {
 		Connection con = e.getConnection();
 		if (PocketCon.isPocketConnection(con)) {
 			if (con.hasMetadata("applySkinOnJoin")) {
-				System.out.println("Applying cached for " + e.getConnection() + "...");
+				plugin.debug("Applying cached skin for " + e.getConnection() + "...");
 				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
 				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty("textures", skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
 				con.removeMetadata("applySkinOnJoin");
@@ -58,30 +58,30 @@ public class SkinListener implements Listener {
 	//TODO: Still causes bugs, but what the hack is wrong with reading this..?
 	@EventHandler
 	public void onSkinChange(PocketChangeSkinEvent e) {
-		plugin.pm("YAA: " + e.getUuid() + " changed skin to " + e.isSlim() + " width: " + e.getSkin().getWidth());
+		plugin.debug("YAA: " + e.getUuid() + " changed skin to " + e.isSlim() + " width: " + e.getSkin().getWidth());
 	}
 	
 	//:F
 	@EventHandler
 	public void onClientResponse(ModalResponseEvent e) {
-		plugin.pm("ClientResponseEvent received ~ " + e.getClass().getSimpleName() + " ~ JSON: " + e.getModalJSON());
+		plugin.debug("ClientResponseEvent received ~ " + e.getClass().getSimpleName() + " ~ JSON: " + e.getModalJSON());
 
 		PocketCon.handleModalResponse(e.getConnection(), e);
 	}
 
 	@EventHandler
 	public void onModalWindowResponse(ModalWindowResponseEvent e) {
-		plugin.pm("ModalWindowResponseEvent received ~ " + e.getResult());
+		plugin.debug("ModalWindowResponseEvent received ~ " + e.getResult());
 	}
 
 	@EventHandler
 	public void onSimpleFormResponse(SimpleFormResponseEvent e) {
-		plugin.pm("SimpleFormResponseEvent received ~ " + e.getClickedButton());
+		plugin.debug("SimpleFormResponseEvent received ~ " + e.getClickedButton());
 	}
 
 	@EventHandler
 	public void onComplexFormResponse(ComplexFormResponseEvent e) {
-		plugin.pm("ComplexFormResponseEvent received ~ " + e.getJsonArray());
+		plugin.debug("ComplexFormResponseEvent received ~ " + e.getJsonArray());
 	}
 	
 	//Somehow this seems to mess with a PE client that also has a PC skin.

@@ -18,7 +18,9 @@
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
 #
 # !Do not change the config-version unless you know what you are doing!
-
+logging:
+ disable-colors: false
+ enable-debug: false
 skins:
  PCtoPE: true
  PEtoPC: true

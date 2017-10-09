@@ -77,7 +77,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	 * @param msg
 	 */
 	public void pm(String msg) {
-		msg = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
+		msg = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] " + msg;
 		if (getConfig().getBoolean("logging.disable-colors", false)) {
 			msg = ChatColor.stripColor(msg);
 		}
@@ -89,7 +89,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	 * @param msg
 	 */
 	public void debug(String msg) {
-		if (!getConfig().getBoolean("logging.enable-debugging", false)) { return; }
+		if (!getConfig().getBoolean("logging.enable-debug", false)) { return; }
 		msg = "[" + ChatColor.RED + "PSPS" + ChatColor.RESET + "] " + msg;
 		if (getConfig().getBoolean("logging.disable-colors", false)) {
 			msg = ChatColor.stripColor(msg);
