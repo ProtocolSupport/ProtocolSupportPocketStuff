@@ -59,7 +59,7 @@ public class MineskinThread extends Thread {
 					return;
 				}
 				System.out.println("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 1s...");
-				Thread.sleep(1000); // Throttle
+				Thread.sleep(5000); // Throttle
 				mineskinResponse = sendToMineSkin(os, isSlim);
 				System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
 				tries++;
