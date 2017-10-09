@@ -19,11 +19,17 @@ import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
+	
 	private static ProtocolSupportPocketStuff INSTANCE;
 
+	public static ProtocolSupportPocketStuff getInstance() {
+		return INSTANCE;
+	}
+	
 	@Override
 	public void onEnable() {
-		this.INSTANCE = this;
+		INSTANCE = this;
+		
 		// = Config = \\
 		saveDefaultConfig();
 		
@@ -74,7 +80,4 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		getServer().getConsoleSender().sendMessage("[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] " + msg);
 	}
 
-	public static ProtocolSupportPocketStuff getInstance() {
-		return INSTANCE;
-	}
 }

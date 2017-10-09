@@ -41,16 +41,13 @@ public class ClientLoginPacket extends PEPacket {
 
 	}
 
+	@SuppressWarnings({ "resource", "unused", "serial" })
 	@Override
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		if (connection.getVersion().getProtocolType() != ProtocolType.PE)
-			return;
-
 		protocolVersion = clientData.readInt(); //protocol version
 
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
 		//decode chain
-		@SuppressWarnings("serial")
 		Map<String, List<String>> map = StuffUtils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
 				new TypeToken<Map<String, List<String>>>() {}.getType()
@@ -81,6 +78,15 @@ public class ClientLoginPacket extends PEPacket {
 
 	public class decodeHandler extends PEPacket.decodeHandler {
 
+		@Override
+		public void onRawPacketReceiving(RawPacketEvent e) {
+			if(connection.getVersion() == null || connection.getVersion().getProtocolType() != ProtocolType.PE) {
+				connection.removePacketListener(this);
+				return;
+			}
+			super.onRawPacketReceiving(e);
+		}
+		
 		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
 			super(plugin, connection);
 		}
