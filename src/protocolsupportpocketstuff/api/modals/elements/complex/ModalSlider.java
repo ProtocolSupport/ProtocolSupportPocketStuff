@@ -7,8 +7,9 @@ public class ModalSlider extends ModalComplexUIElement {
 	private float step;
 	private float defaultValue;
 
-	public ModalSlider() {
+	public ModalSlider(String text) {
 		super(ComplexElementType.SLIDER);
+		super.setText(text);
 	}
 
 	public ModalSlider setText(String text) {

@@ -3,6 +3,7 @@ package protocolsupportpocketstuff.api.modals;
 import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.complex.ModalComplexUIElement;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,10 @@ public class ComplexForm implements Modal {
 	private String title;
 	private List<ModalComplexUIElement> content = new ArrayList<>();
 	private ModalImage iconUrl; // Only for server settings ~ https://sel-utils.github.io/protocol/pocket134/play/server-settings-response
+
+	public ComplexForm(String title) {
+		this.title = title;
+	}
 
 	public ModalType getType() {
 		return modalType;
@@ -58,12 +63,12 @@ public class ComplexForm implements Modal {
 	}
 
 	public String toJSON() {
-		Gson gson = new Gson();
+		Gson gson = StuffUtils.GSON;
 		return gson.toJson(this);
 	}
 	
 	public static ComplexForm fromJson(String JSON) {
-		Gson gson = new Gson(); 
+		Gson gson = StuffUtils.GSON;
 		return gson.fromJson(JSON, ComplexForm.class);
 	}
 	

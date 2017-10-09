@@ -1,0 +1,32 @@
+# = ProtocolSupportPocketStuff =
+#  Enable / Disable / Configure
+#   pocket-assisting features
+#
+# = Skins =
+# PCtoPE      - Enables the caching and sending of Java edition skins to bedrock players.
+# PEtoPC      - Enables the uploading of skins to mineskin.net to fake PE skins for PC players.
+# cache-size  - Determines the maximum cachesize. The cache is needed for skins but can impact memory.
+#               It is best to set it to roughly the size of your regular playerbase.
+#               Unless skins are disabled do not set the size to 0!
+# cache-rate  - Determines how long skins are cached. This will not impact skin change,
+#               but determines how fast (in hours) the skins in the cache are cleaned 
+#               and thus also need to be redownloaded if they are to be used again.
+#               Unless skins are disabled do not set the rate to 0!
+#
+# = Hacks =
+# dimensions  - Enables using bukkit to fake dimension switching for pocket players.
+# itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
+#
+# !Do not change the config-version unless you know what you are doing!
+
+skins:
+ PCtoPE: true
+ PEtoPC: true
+ cache-size: 250
+ cache-rate: 24
+
+hacks: 
+ dimensions: true
+ itemframes: false
+ 
+config-version: 1
