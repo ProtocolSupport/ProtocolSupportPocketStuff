@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 
@@ -41,13 +42,10 @@ public class MineskinThread extends Thread {
 		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
 		try {
+			int tries = 0;
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(skin, "png", os);
-			InputStream inputStream = new ByteArrayInputStream(os.toByteArray());
-
-			int tries = 0;
-
-			JsonObject mineskinResponse = sendToMineSkin(inputStream, isSlim);
+			JsonObject mineskinResponse = sendToMineSkin(os, isSlim);
 
 			System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
 
@@ -62,12 +60,10 @@ public class MineskinThread extends Thread {
 				}
 				System.out.println("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 1s...");
 				Thread.sleep(1000); // Throttle
-				inputStream = new ByteArrayInputStream(os.toByteArray());
-				mineskinResponse = sendToMineSkin(inputStream, isSlim);
+				mineskinResponse = sendToMineSkin(os, isSlim);
 				System.out.println("[#" + (tries + 1) + "] " + mineskinResponse);
 				tries++;
 			}
-			inputStream.close();
 
 			JsonObject skinData = mineskinResponse.get("data").getAsJsonObject();
 			JsonObject skinTexture = skinData.get("texture").getAsJsonObject();
@@ -80,6 +76,13 @@ public class MineskinThread extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static JsonObject sendToMineSkin(ByteArrayOutputStream byteArrayOutputStream, boolean isSlim) throws IOException {
+		InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+		JsonObject mineskinResponse = sendToMineSkin(inputStream, isSlim);
+		inputStream.close();
+		return mineskinResponse;
 	}
 
 	public static JsonObject sendToMineSkin(InputStream inputStream, boolean isSlim) {
