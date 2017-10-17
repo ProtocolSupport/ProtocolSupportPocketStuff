@@ -2,9 +2,9 @@
 Does stuff for ProtocolSupport pocket, I guess.
 
 This plugin
-* Downloads & caches pc skins and sends them to pe.
-* Receives & hacks & caches pe skins and applies them in pc.
-* Uses bukkit to fake dimension switch for pe.
+* Downloads & caches PC skins and sends them to PE.
+* Receives & hacks & caches PE skins and applies them in PC.
+* Uses bukkit to fake dimension switch for PE.
 * Provides API for serveral pocket-only features.
 * Enables you to easily build modals and listen to their response.
 
