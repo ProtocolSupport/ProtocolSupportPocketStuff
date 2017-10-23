@@ -17,6 +17,7 @@ import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.ResourcePackListener;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	
@@ -62,6 +63,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
+			con.addPacketListener(new ResourcePackListener(this, con));
 			if(getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			
 		}
