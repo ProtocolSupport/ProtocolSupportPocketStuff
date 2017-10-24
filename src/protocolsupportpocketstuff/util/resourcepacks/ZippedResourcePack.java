@@ -50,7 +50,9 @@ public class ZippedResourcePack implements ResourcePack {
 				IOUtils.copy(stream, writer, "UTF-8");
 				String manifestText = writer.toString();
 				manifest = StuffUtils.JSON_PARSER.parse(manifestText).getAsJsonObject();
+				writer.close();
 				stream.close();
+				zipFile.close();
 				break;
 			}
 		} catch (IOException e) {
@@ -135,7 +137,7 @@ public class ZippedResourcePack implements ResourcePack {
 
 			raf.seek(offset);
 			raf.read(array, 0, arraySize);
-
+			raf.close();
 			return array;
 		} catch (IOException e) {
 			e.printStackTrace();
