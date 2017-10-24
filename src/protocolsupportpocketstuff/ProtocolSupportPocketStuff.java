@@ -9,7 +9,9 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
+import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
+import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
@@ -18,22 +20,33 @@ import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.ResourcePackListener;
+import protocolsupportpocketstuff.util.resourcepacks.ResourcePackManager;
+
+import java.io.File;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
-	
+	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
 	private static ProtocolSupportPocketStuff INSTANCE;
 
 	public static ProtocolSupportPocketStuff getInstance() {
 		return INSTANCE;
 	}
-	
+
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
-		
+
+		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
 		// = Config = \\
 		saveDefaultConfig();
-		
+
+		new File(this.getDataFolder(), "behavior_packs/").mkdirs();
+		new File(this.getDataFolder(), "resource_packs/").mkdirs();
+
+		ResourcePackManager resourcePackManager = new ResourcePackManager(this);
+		resourcePackManager.reloadPacks();
+		PocketStuffAPI.setResourcePackManager(resourcePackManager);
+
 		// = Events = \\
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);

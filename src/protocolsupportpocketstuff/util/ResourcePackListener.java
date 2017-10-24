@@ -1,7 +1,6 @@
 package protocolsupportpocketstuff.util;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -9,15 +8,18 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.api.PocketStuffAPI;
+import protocolsupportpocketstuff.api.util.PocketCon;
+import protocolsupportpocketstuff.packet.play.DisconnectPacket;
+import protocolsupportpocketstuff.packet.play.ResourcePackChunkDataPacket;
+import protocolsupportpocketstuff.packet.play.ResourcePackDataInfoPacket;
+import protocolsupportpocketstuff.packet.play.ResourcePackStackPacket;
+import protocolsupportpocketstuff.packet.play.ResourcesPackInfoPacket;
+import protocolsupportpocketstuff.util.resourcepacks.ResourcePack;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ResourcePackListener extends Connection.PacketListener {
 	private ProtocolSupportPocketStuff plugin;
@@ -28,7 +30,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 	private int COMPLETED = 4;
 	private boolean startThrottle = false;
 	private boolean downloadedAllPacks = false;
-	private ArrayList<ByteBuf> throttledPackets = new ArrayList<ByteBuf>(); // TODO: Is this really necessary? idk
+	private ArrayList<ByteBuf> throttledPackets = new ArrayList<ByteBuf>();
 
 	public ResourcePackListener(ProtocolSupportPocketStuff plugin, Connection connection) {
 		this.plugin = plugin;
@@ -38,38 +40,21 @@ public class ResourcePackListener extends Connection.PacketListener {
 	@Override
 	public void onRawPacketSending(RawPacketEvent event) {
 		super.onRawPacketSending(event);
-
 		int packetId = VarNumberSerializer.readVarInt(event.getData());
 
 		if (packetId == PEPacketIDs.RESOURCE_PACK) {
 			startThrottle = true;
-			// We don't care about the previous data
-			ByteBuf serializer = Unpooled.buffer();
-			// header
-			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.RESOURCE_PACK);
-			serializer.writeByte(0);
-			serializer.writeByte(0);
-			// body
-			serializer.writeBoolean(plugin.getConfig().getBoolean("resource-behavior-packs.force-resources", false));
-			serializer.writeShortLE(0); // beh pack count
-			serializer.writeShortLE(1); // res pack count
-			StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, "53644fac-a276-42e5-843f-a3c6f169a9ab"); // from the manifest.json file -> header.uuid
-			StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, "3.2.0"); // TODO: the version is an array in the manifest.json
-			File file = new File("D:\\Minecraft Servers\\PocketDreams v2\\PocketDreams Survival\\plugins\\ProtocolSupportPocketStuff\\resource_packs\\test.mcpack");
-			long size = file.length();
-			System.out.println("Resource Pack size: " + size);
-			serializer.writeLongLE(size);
-			StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, ""); // ???
-			StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, ""); // ???
 
-			event.setData(serializer);
+			boolean forceResources = PocketStuffAPI.getResourcePackManager().resourcePacksRequired();
+			ResourcesPackInfoPacket infoPacket = new ResourcesPackInfoPacket(forceResources, PocketStuffAPI.getResourcePackManager().getBehaviorPacks(), PocketStuffAPI.getResourcePackManager().getResourcePacks());
+			event.setData(infoPacket.encode(connection));
 
-			System.out.println("Replaced old data with new data...");
+			plugin.debug("Replaced old data with new data...");
 			return;
 		}
 		if (packetId == PEPacketIDs.RESOURCE_STACK && !downloadedAllPacks) {
 			event.setCancelled(true);
-			System.out.println("Cancelled stack data...");
+			plugin.debug("Cancelled stack data...");
 			return;
 		}
 
@@ -90,33 +75,27 @@ public class ResourcePackListener extends Connection.PacketListener {
 		if (packetId == 8) {
 			int status = buf.readByte();
 
-			System.out.println("Resource pack status: " + status);
+			plugin.debug("Resource pack status: " + status);
+
+			if (status == REFUSED) {
+				PocketCon.sendPocketPacket(connection, new DisconnectPacket(false, "You must accept resource packs to join this server."));
+				return;
+			}
+
+			ArrayList<String> missingPacks = new ArrayList<String>();
 			int entryCount = buf.readShortLE();
-			int idx = 0;
-			while (entryCount > idx) {
-				String packId = StringSerializer.readString(buf, ProtocolVersion.MINECRAFT_PE);
-				System.out.println(idx + ". " + packId);
-				idx++;
+			for (int idx = 0; entryCount > idx; idx++) {
+				missingPacks.add(StringSerializer.readString(buf, ProtocolVersion.MINECRAFT_PE));
 			}
 
 			if (status == HAVE_ALL_PACKS) {
-				System.out.println("So you already have every resource pack? nice! here, take this packet too.");
+				plugin.debug("So you already have every resource pack? nice! here, take this packet too.");
 				downloadedAllPacks = true;
-				startThrottle = true;
-				// We don't care about the previous data
-				ByteBuf serializer = Unpooled.buffer();
-				// header
-				VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.RESOURCE_STACK);
-				serializer.writeByte(0);
-				serializer.writeByte(0);
-				// body
-				serializer.writeBoolean(plugin.getConfig().getBoolean("resource-behavior-packs.force-resources", false));
-				VarNumberSerializer.writeVarInt(serializer, 0); // beh pack count
-				VarNumberSerializer.writeVarInt(serializer, 1); // res pack count
-				StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, "53644fac-a276-42e5-843f-a3c6f169a9ab"); // from the manifest.json file -> header.uuid
-				StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, "3.2.0"); // TODO: the version is an array in the manifest.json
-				StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, ""); // ???
-				connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
+				startThrottle = false;
+
+				boolean forceResources = PocketStuffAPI.getResourcePackManager().resourcePacksRequired();
+				ResourcePackStackPacket stackPacket = new ResourcePackStackPacket(forceResources, PocketStuffAPI.getResourcePackManager().getBehaviorPacks(), PocketStuffAPI.getResourcePackManager().getResourcePacks());
+				PocketCon.sendPocketPacket(connection, stackPacket);
 
 				for (ByteBuf throttled : throttledPackets) {
 					connection.sendRawPacket(MiscSerializer.readAllBytes(throttled));
@@ -126,101 +105,40 @@ public class ResourcePackListener extends Connection.PacketListener {
 				return;
 			}
 			if (status == SEND_PACKS) {
-				System.out.println("so... uhh... do you want some resource packs?");
+				plugin.debug("so... uhh... do you want some resource packs?");
+
 				// so... uhh... do you want some resource packs?
 				// We don't care about the previous data
-				ByteBuf serializer = Unpooled.buffer();
-				// header
-				VarNumberSerializer.writeVarInt(serializer, 82);
-				serializer.writeByte(0);
-				serializer.writeByte(0);
-				StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, "53644fac-a276-42e5-843f-a3c6f169a9ab");
-				serializer.writeIntLE(1048576); // max chunk size 1MB
+				ArrayList<ResourcePack> packs = new ArrayList<ResourcePack>();
+				packs.addAll(PocketStuffAPI.getResourcePackManager().getBehaviorPacks().stream().filter( it -> missingPacks.contains(it.getPackId())).collect(Collectors.toList()));
+				packs.addAll(PocketStuffAPI.getResourcePackManager().getResourcePacks().stream().filter( it -> missingPacks.contains(it.getPackId())).collect(Collectors.toList()));
 
-				File file = new File("D:\\Minecraft Servers\\PocketDreams v2\\PocketDreams Survival\\plugins\\ProtocolSupportPocketStuff\\resource_packs\\test.mcpack");
-				long size = file.length();
-
-				System.out.println("Chunk Count: " + ((int) size / 1048576));
-				serializer.writeIntLE((int) size / 1048576); // chunk count
-				serializer.writeLongLE(size); // res pack size
-
-				try {
-					byte[] buffer= new byte[8192];
-					int count;
-					MessageDigest digest = MessageDigest.getInstance("SHA-256");
-					BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-					while ((count = bis.read(buffer)) > 0) {
-						digest.update(buffer, 0, count);
-					}
-					byte[] hash = digest.digest();
-
-					VarNumberSerializer.writeVarInt(serializer, hash.length);
-					for (byte b : hash) {
-						serializer.writeByte(b);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				for (ResourcePack pack : packs) {
+					PocketCon.sendPocketPacket(connection, new ResourcePackDataInfoPacket(pack));
 				}
-
-				connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 				return;
 			}
 		}
 
 		if (packetId == 84) {
 			String packId = StringSerializer.readString(buf, ProtocolVersion.MINECRAFT_PE);
-			long chunkIdx = buf.readUnsignedIntLE();
+			int chunkIdx = (int) buf.readUnsignedIntLE();
 
-			System.out.println("Hey server, can you give me the part " + chunkIdx + " of the " + packId + " res/beh pack? thx");
+			plugin.debug("Sending part " + chunkIdx + " of the " + packId + " res/beh pack");
 
-			ByteBuf payload = sendPackChunk(packId, chunkIdx);
-			connection.sendRawPacket(MiscSerializer.readAllBytes(payload));
-		}
-	}
+			ArrayList<ResourcePack> packs = new ArrayList<ResourcePack>();
+			packs.addAll(PocketStuffAPI.getResourcePackManager().getBehaviorPacks());
+			packs.addAll(PocketStuffAPI.getResourcePackManager().getResourcePacks());
 
-	public ByteBuf sendPackChunk(String id, long chunkIdx) {
-		// We don't care about the previous data
-		ByteBuf serializer = Unpooled.buffer();
-		// header
-		VarNumberSerializer.writeVarInt(serializer, 83);
-		serializer.writeByte(0);
-		serializer.writeByte(0);
-		StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, id);
-		serializer.writeIntLE((int) chunkIdx);
-		serializer.writeLongLE(1048576 * chunkIdx);
-		byte[] array = getPackChunk(chunkIdx);
-		serializer.writeIntLE(array.length);
-		serializer.writeBytes(array);
-		return serializer;
-	}
+			Optional<ResourcePack> pack = packs.stream().filter(it -> it.getPackId().equals(packId)).findFirst();
 
-	public byte[] getPackChunk(long chunkIdx) {
-		File file = new File("D:\\Minecraft Servers\\PocketDreams v2\\PocketDreams Survival\\plugins\\ProtocolSupportPocketStuff\\resource_packs\\test.mcpack");
-
-		try {
-			RandomAccessFile raf = new RandomAccessFile(file, "r");
-			int arraySize = 1048576;
-			int offset = 1048576 * (int) chunkIdx;
-
-			int distanceToTheEnd = (int) raf.length() - offset;
-
-			System.out.println("Remaining bytes: " + distanceToTheEnd);
-
-			if (arraySize > distanceToTheEnd) {
-				arraySize = distanceToTheEnd;
+			if (!pack.isPresent()) {
+				plugin.debug("Client requested pack " + packId + ", however I don't have it!");
+				PocketCon.sendPocketPacket(connection, new DisconnectPacket(false, "Got a resource pack chunk request for unknown pack with UUID " + packId));
+				return;
 			}
 
-			byte[] array = new byte[arraySize];
-
-			raf.seek(offset);
-			raf.read(array, 0, arraySize);
-
-			return array;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			PocketCon.sendPocketPacket(connection, new ResourcePackChunkDataPacket(packId, chunkIdx, pack.get().getPackChunk(chunkIdx)));
 		}
-		throw new RuntimeException("something went very wrong");
 	}
 }
