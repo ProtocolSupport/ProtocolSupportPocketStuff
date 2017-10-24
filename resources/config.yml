@@ -26,7 +26,10 @@ skins:
  PEtoPC: true
  cache-size: 250
  cache-rate: 24
-
+resource-and-behavior-packs:
+ force-resources: false
+ behavior-packs: []
+ resource-packs: []
 hacks: 
  dimensions: true
  itemframes: false
