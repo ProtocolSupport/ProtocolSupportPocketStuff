@@ -3,3 +3,8 @@ main: protocolsupportpocketstuff.ProtocolSupportPocketStuff
 depend: [ProtocolSupport]
 version: 0.01-dev
 author: ProtocolSupportTeam
+commands:
+  protocolsupportpocketstuff:
+    description: All ProtocolSupportPocketStuff commands
+    aliases: psps
+    usage: '/protocolsupportpocketstuff help'

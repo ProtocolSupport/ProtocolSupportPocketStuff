@@ -13,6 +13,16 @@
 #               and thus also need to be redownloaded if they are to be used again.
 #               Unless skins are disabled do not set the rate to 0!
 #
+# = Pocket Packs (Behavior Packs and Resource Packs) =
+# force-resources - Forces packs to the client, if the client rejects the resource pack, it will be kicked
+# behavior-packs  - List with the file names of the resource packs
+# resource-packs  - List with the file names of the resource packs
+#
+# Note: The packs are applied from the bottom to the top (in the same way PC/PE resource packs are applied).
+# The last pack is applied first, then the next one, then the next one, and so on.
+# This means the first pack in the list will override all changes from the subsequent packs
+#
+# Packs must be added to ./plugins/ProtocolSupportPocketStuff/pocketpacks
 # = Hacks =
 # dimensions  - Enables using bukkit to fake dimension switching for pocket players.
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
@@ -26,7 +36,10 @@ skins:
  PEtoPC: true
  cache-size: 250
  cache-rate: 24
-
+pocketpacks:
+ force-resources: false
+ behavior-packs: []
+ resource-packs: []
 hacks: 
  dimensions: true
  itemframes: false

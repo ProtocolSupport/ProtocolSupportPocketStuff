@@ -9,30 +9,44 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
+import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
+import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
+import protocolsupportpocketstuff.resourcepacks.ResourcePackManager;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.ResourcePackListener;
+
+import java.io.File;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
-	
+	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
 	private static ProtocolSupportPocketStuff INSTANCE;
 
 	public static ProtocolSupportPocketStuff getInstance() {
 		return INSTANCE;
 	}
-	
+
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
-		
+
+		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
+
 		// = Config = \\
 		saveDefaultConfig();
-		
+
+		new File(this.getDataFolder(), ResourcePackManager.FOLDER_NAME + "/").mkdirs();
+
+		ResourcePackManager resourcePackManager = new ResourcePackManager(this);
+		resourcePackManager.reloadPacks();
+		PocketStuffAPI.setResourcePackManager(resourcePackManager);
+
 		// = Events = \\
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
@@ -62,6 +76,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
+			con.addPacketListener(new ResourcePackListener(this, con));
 			if(getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			
 		}
