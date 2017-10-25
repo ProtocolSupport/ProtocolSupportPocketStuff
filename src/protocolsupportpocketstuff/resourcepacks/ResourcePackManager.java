@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.util.resourcepacks;
+package protocolsupportpocketstuff.resourcepacks;
 
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 
@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResourcePackManager {
+	public static final String FOLDER_NAME = "pocketpacks";
+
 	ProtocolSupportPocketStuff plugin;
 
 	public ResourcePackManager(ProtocolSupportPocketStuff plugin) {
 		this.plugin = plugin;
-		forceResources = plugin.getConfig().getBoolean("resource-and-behavior-packs.force-resources", false);
+		forceResources = plugin.getConfig().getBoolean("pocketpacks.force-resources", false);
 	}
 
 	private boolean forceResources;
@@ -36,11 +38,11 @@ public class ResourcePackManager {
 	}
 
 	public void reloadBehaviorPacks() {
-		List<String> fileNames = plugin.getConfig().getStringList("resource-and-behavior-packs.behavior-packs");
+		List<String> fileNames = plugin.getConfig().getStringList("pocketpacks.behavior-packs");
 		ArrayList<ResourcePack> behaviorPacks = new ArrayList<ResourcePack>();
 
 		for (String fileName : fileNames) {
-			File file = new File(plugin.getDataFolder(), "behavior_packs/" + fileName);
+			File file = new File(plugin.getDataFolder(), FOLDER_NAME + "/" + fileName);
 			ResourcePack pack = new ZippedResourcePack(file);
 			behaviorPacks.add(pack);
 		}
@@ -48,11 +50,11 @@ public class ResourcePackManager {
 	}
 
 	public void reloadResourcePacks() {
-		List<String> fileNames = plugin.getConfig().getStringList("resource-and-behavior-packs.resource-packs");
+		List<String> fileNames = plugin.getConfig().getStringList("pocketpacks.resource-packs");
 		ArrayList<ResourcePack> resourcePacks = new ArrayList<ResourcePack>();
 
 		for (String fileName : fileNames) {
-			File file = new File(plugin.getDataFolder(), "resource_packs/" + fileName);
+			File file = new File(plugin.getDataFolder(), FOLDER_NAME + "/" + fileName);
 			ResourcePack pack = new ZippedResourcePack(file);
 			resourcePacks.add(pack);
 		}

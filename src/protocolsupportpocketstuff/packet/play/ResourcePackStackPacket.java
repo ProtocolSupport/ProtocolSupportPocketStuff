@@ -5,7 +5,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.resourcepacks.ResourcePack;
+import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.util.serializer.ResourcePackSerializer;
 
 import java.util.List;

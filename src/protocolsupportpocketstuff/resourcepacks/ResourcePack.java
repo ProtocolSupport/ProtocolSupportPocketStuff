@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.util.resourcepacks;
+package protocolsupportpocketstuff.resourcepacks;
 
 public interface ResourcePack {
 	String getName();

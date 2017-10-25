@@ -3,7 +3,7 @@ package protocolsupportpocketstuff.util.serializer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupportpocketstuff.util.resourcepacks.ResourcePack;
+import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 
 public class ResourcePackSerializer {
 	public static void writePackInfo(ByteBuf serializer, ResourcePack pack) {

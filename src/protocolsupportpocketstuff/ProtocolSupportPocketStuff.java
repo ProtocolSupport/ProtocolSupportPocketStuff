@@ -16,11 +16,11 @@ import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
+import protocolsupportpocketstuff.resourcepacks.ResourcePackManager;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.ResourcePackListener;
-import protocolsupportpocketstuff.util.resourcepacks.ResourcePackManager;
 
 import java.io.File;
 
@@ -37,11 +37,11 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		INSTANCE = this;
 
 		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
+
 		// = Config = \\
 		saveDefaultConfig();
 
-		new File(this.getDataFolder(), "behavior_packs/").mkdirs();
-		new File(this.getDataFolder(), "resource_packs/").mkdirs();
+		new File(this.getDataFolder(), ResourcePackManager.FOLDER_NAME + "/").mkdirs();
 
 		ResourcePackManager resourcePackManager = new ResourcePackManager(this);
 		resourcePackManager.reloadPacks();

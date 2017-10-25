@@ -15,7 +15,7 @@ import protocolsupportpocketstuff.packet.play.ResourcePackChunkDataPacket;
 import protocolsupportpocketstuff.packet.play.ResourcePackDataInfoPacket;
 import protocolsupportpocketstuff.packet.play.ResourcePackStackPacket;
 import protocolsupportpocketstuff.packet.play.ResourcesPackInfoPacket;
-import protocolsupportpocketstuff.util.resourcepacks.ResourcePack;
+import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 
 import java.util.ArrayList;
 import java.util.Optional;

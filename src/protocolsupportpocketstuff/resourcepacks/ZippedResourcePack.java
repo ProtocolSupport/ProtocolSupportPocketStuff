@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.util.resourcepacks;
+package protocolsupportpocketstuff.resourcepacks;
 
 import org.apache.commons.io.IOUtils;
 import protocolsupport.libs.com.google.gson.JsonArray;

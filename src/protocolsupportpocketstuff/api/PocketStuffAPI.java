@@ -1,12 +1,12 @@
 package protocolsupportpocketstuff.api;
 
-import protocolsupportpocketstuff.util.resourcepacks.ResourcePackManager;
+import protocolsupportpocketstuff.resourcepacks.ResourcePackManager;
 
 import java.math.BigInteger;
 
 public class PocketStuffAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(4);
+	private static final BigInteger apiversion = BigInteger.valueOf(5);
 	private static ResourcePackManager resourcePackManager;
 
 	/***
