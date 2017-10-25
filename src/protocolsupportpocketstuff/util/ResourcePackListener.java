@@ -72,7 +72,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 		buf.readByte();
 		buf.readByte();
 
-		if (packetId == 8) {
+		if (packetId == PEPacketIDs.RESOURCE_RESPONSE) {
 			int status = buf.readByte();
 
 			plugin.debug("Resource pack status: " + status);
@@ -120,7 +120,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 			}
 		}
 
-		if (packetId == 84) {
+		if (packetId == PEPacketIDs.RESOURCE_REQUEST) {
 			String packId = StringSerializer.readString(buf, ProtocolVersion.MINECRAFT_PE);
 			int chunkIdx = (int) buf.readUnsignedIntLE();
 

@@ -5,6 +5,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.util.resourcepacks.ResourcePack;
 
@@ -17,7 +18,7 @@ public class ResourcePackDataInfoPacket extends PEPacket {
 
 	@Override
 	public int getPacketId() {
-		return 82;
+		return PEPacketIDs.RESOURCE_INFO;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class ResourcePackChunkDataPacket extends PEPacket {
@@ -19,7 +20,7 @@ public class ResourcePackChunkDataPacket extends PEPacket {
 
 	@Override
 	public int getPacketId() {
-		return 83;
+		return PEPacketIDs.RESOURCE_DATA;
 	}
 
 	@Override
