@@ -1,7 +1,6 @@
 package protocolsupportpocketstuff.skin;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
@@ -34,7 +33,7 @@ public class SkinListener implements Listener {
 			if (con.hasMetadata("applySkinOnJoin")) {
 				plugin.debug("Applying cached skin for " + e.getConnection() + "...");
 				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
-				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty("textures", skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty(SkinUtils.SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
 				con.removeMetadata("applySkinOnJoin");
 			}
 		}
@@ -83,14 +82,4 @@ public class SkinListener implements Listener {
 	public void onComplexFormResponse(ComplexFormResponseEvent e) {
 		plugin.debug("ComplexFormResponseEvent received ~ " + e.getJsonArray());
 	}
-	
-	//Somehow this seems to mess with a PE client that also has a PC skin.
-	//Since we will do PE -> PC skins in the future I do not really care(tm).
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void propertyResolve(PlayerPropertiesResolveEvent e) {
-		if(e.hasProperty(SkinUtils.skinPropertyName) && PocketCon.isPocketConnection(e.getConnection())) {
-			e.removeProperty(SkinUtils.skinPropertyName);
-		}
-	}
-	
 }

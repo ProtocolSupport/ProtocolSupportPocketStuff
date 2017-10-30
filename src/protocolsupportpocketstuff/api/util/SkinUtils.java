@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 public class SkinUtils {
 
 	//TODO: Why here? :S
-	public static String skinPropertyName = "textures";
+	public static final String SKIN_PROPERTY_NAME = "textures";
 
 	public static BufferedImage fromData(byte[] data) {
 		System.out.println(data.length);
