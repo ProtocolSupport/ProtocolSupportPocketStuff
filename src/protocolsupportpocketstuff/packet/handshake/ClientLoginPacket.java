@@ -1,6 +1,5 @@
 package protocolsupportpocketstuff.packet.handshake;
 
-import com.google.common.reflect.TypeToken;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
@@ -21,8 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class ClientLoginPacket extends PEPacket {
@@ -47,11 +44,9 @@ public class ClientLoginPacket extends PEPacket {
 		protocolVersion = clientData.readInt(); //protocol version
 
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
-		//decode chain
-		Map<String, List<String>> map = StuffUtils.GSON.fromJson(
-				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
-				new TypeToken<Map<String, List<String>>>() {}.getType()
-		);
+
+		// skip chain data
+		logindata.skipBytes(logindata.readIntLE());
 
 		// decode skin data
 		try {
@@ -102,13 +97,13 @@ public class ClientLoginPacket extends PEPacket {
 			String uniqueSkinId = UUID.nameUUIDFromBytes(skinData.getBytes()).toString();
 
 			if (Skins.INSTANCE.hasPcSkin(uniqueSkinId)) {
-				System.out.println("Already cached skin, adding to the Connection's metadata...");
+				plugin.debug("Already cached skin, adding to the Connection's metadata...");
 				connection.addMetadata("applySkinOnJoin", Skins.INSTANCE.getPcSkin(uniqueSkinId));
 				return;
 			}
 			byte[] skinByteArray = Base64.getDecoder().decode(skinData);
 
-			MineskinThread mineskinThread = new MineskinThread(connection, uniqueSkinId, skinByteArray, clientLoginPacket.clientPayload.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
+			MineskinThread mineskinThread = new MineskinThread(plugin, connection, uniqueSkinId, skinByteArray, clientLoginPacket.clientPayload.get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim"));
 			mineskinThread.start();
 		}
 	}

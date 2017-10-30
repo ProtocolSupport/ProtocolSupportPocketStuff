@@ -18,16 +18,19 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 
 public class MineskinThread extends Thread {
+	ProtocolSupportPocketStuff plugin;
 	Connection connection;
 	String uniqueSkinId;
 	byte[] skinByteArray;
 	boolean isSlim;
 
-	public MineskinThread(Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
+	public MineskinThread(ProtocolSupportPocketStuff plugin, Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
+		this.plugin = plugin;
 		this.connection = connection;
 		this.uniqueSkinId = uniqueSkinId;
 		this.skinByteArray = skinByteArray;
@@ -37,33 +40,59 @@ public class MineskinThread extends Thread {
 	@Override
 	public void run() {
 		super.run();
-		System.out.println("Sending skin " + uniqueSkinId + " to MineSkin...");
+		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
 		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
-		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
-				.userAgent("ProtocolSupportPocketStuff");
-
 		try {
+			int tries = 0;
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(skin, "png", os);
-			InputStream is = new ByteArrayInputStream(os.toByteArray());
-			httpRequest.part("file", "mcpe_skin.png", null, is);
+			JsonObject mineskinResponse = sendToMineSkin(os, isSlim);
 
-			JsonObject mineskinResponse = StuffUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
+			plugin.debug("[#" + (tries + 1) + "] " + mineskinResponse);
 
-			System.out.println(mineskinResponse);
+			while (mineskinResponse.has("error")) {
+				String error = mineskinResponse.get("error").getAsString();
+				if (!connection.isConnected()) {
+					plugin.debug("[#" + (tries + 1) + "] Failed again... but the client disconnected, so we are going to ignore the skin!");
+					return;
+				}
+				if (tries > 4) {
+					plugin.pm("Failed to send skin to MineSkin after 5 tries (" + error + "), cancelling upload thread...");
+					return;
+				}
+				plugin.debug("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 5s...");
+				Thread.sleep(5000); // Throttle
+				mineskinResponse = sendToMineSkin(os, isSlim);
+				plugin.debug("[#" + (tries + 1) + "] " + mineskinResponse);
+				tries++;
+			}
 
 			JsonObject skinData = mineskinResponse.get("data").getAsJsonObject();
 			JsonObject skinTexture = skinData.get("texture").getAsJsonObject();
 			String signature = skinTexture.get("signature").getAsString();
 			String value = skinTexture.get("value").getAsString();
 
-			System.out.println("Storing skin on cache...");
+			plugin.debug("Storing skin on cache...");
 			Skins.INSTANCE.cachePcSkin(uniqueSkinId, new SkinUtils.SkinDataWrapper(value, signature, isSlim));
 			hackyStuff(connection, value, signature);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static JsonObject sendToMineSkin(ByteArrayOutputStream byteArrayOutputStream, boolean isSlim) throws IOException {
+		InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+		JsonObject mineskinResponse = sendToMineSkin(inputStream, isSlim);
+		inputStream.close();
+		return mineskinResponse;
+	}
+
+	public static JsonObject sendToMineSkin(InputStream inputStream, boolean isSlim) {
+		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
+				.userAgent("ProtocolSupportPocketStuff");
+		httpRequest.part("file", "mcpe_skin.png", null, inputStream);
+		return StuffUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
 	}
 
 	public void hackyStuff(Connection connection, String value, String signature) {
@@ -79,7 +108,7 @@ public class MineskinThread extends Thread {
 			}
 		}
 
-		System.out.println("Player is logged in, applying skin...");
+		plugin.debug("Player is logged in, applying skin...");
 
 		Player player = connection.getPlayer();
 		CraftPlayer craftPlayer = ((CraftPlayer) player);
