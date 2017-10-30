@@ -23,6 +23,7 @@ import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.packet.play.DimensionPacket;
 import protocolsupportpocketstuff.packet.play.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
+import protocolsupportpocketstuff.packet.play.TransferPacket;
 import protocolsupportpocketstuff.storage.Modals;
 import protocolsupportpocketstuff.util.StuffUtils;
 
@@ -174,7 +175,17 @@ public class PocketCon {
 	public static void sendDimensionChange(Connection connection, Environment environment, Vector location) {
 		sendPocketPacket(connection, new DimensionPacket(environment, location));
 	}
-	
+
+	/***
+	 * Transfers a player to another server
+	 * @param connection
+	 * @param address
+	 * @param port
+	 */
+	public static void transfer(Connection connection, String address, short port) {
+		sendPocketPacket(connection, new TransferPacket(address, port));
+	}
+
 	/***
 	 * Sends a packet to pocket.
 	 * @param connection
