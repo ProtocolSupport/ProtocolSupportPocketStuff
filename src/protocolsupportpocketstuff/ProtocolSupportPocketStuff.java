@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.api.Connection;
+import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
@@ -29,7 +30,7 @@ import java.io.File;
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
 	private static ProtocolSupportPocketStuff INSTANCE;
-
+	public static ServerPlatformIdentifier platform = ServerPlatformIdentifier.SPIGOT; // TODO: Add platform checker
 	public static ProtocolSupportPocketStuff getInstance() {
 		return INSTANCE;
 	}

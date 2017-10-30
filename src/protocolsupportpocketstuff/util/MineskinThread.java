@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.Connection;
+import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.SkinUtils;
@@ -111,18 +112,21 @@ public class MineskinThread extends Thread {
 		plugin.debug("Player is logged in, applying skin...");
 
 		Player player = connection.getPlayer();
-		CraftPlayer craftPlayer = ((CraftPlayer) player);
-		EntityHuman entityHuman = craftPlayer.getHandle();
 
-		try {
-			Field gp2 = entityHuman.getClass().getSuperclass().getDeclaredField("g");
-			gp2.setAccessible(true);
-			GameProfile profile = (GameProfile) gp2.get(entityHuman);
-			profile.getProperties().put("textures", new Property("textures", value, signature));
-			gp2.set(entityHuman, profile);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+		if (ProtocolSupportPocketStuff.platform == ServerPlatformIdentifier.SPIGOT) {
+			CraftPlayer craftPlayer = ((CraftPlayer) player);
+			EntityHuman entityHuman = craftPlayer.getHandle();
+
+			try {
+				Field gp2 = entityHuman.getClass().getSuperclass().getDeclaredField("g");
+				gp2.setAccessible(true);
+				GameProfile profile = (GameProfile) gp2.get(entityHuman);
+				profile.getProperties().put("textures", new Property("textures", value, signature));
+				gp2.set(entityHuman, profile);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
 		}
 
 		//triggers an update for others player to see the new skin
