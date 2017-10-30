@@ -12,10 +12,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PocketUtils {
 	private static final ConcurrentHashMap<Integer, Float> entityScales = new ConcurrentHashMap<>();
 
+	/***
+	 * Sets the scale of an entity
+	 * @param entity
+	 * @param scale
+	 */
 	public static void setScale(Entity entity, float scale) {
 		setScale(entity.getEntityId(), scale);
 	}
 
+	/***
+	 * Sets the scale of an entity ID
+	 * @param entityId
+	 * @param scale
+	 */
 	public static void setScale(int entityId, float scale) {
 		if (scale == 1) {
 			entityScales.remove(entityId);
@@ -31,10 +41,20 @@ public class PocketUtils {
 		}
 	}
 
+	/***
+	 * Returns if an entityId has an custom scale set
+	 * @param entityId
+	 * @return if the entityId has an custom scale set
+	 */
 	public static boolean hasCustomScale(int entityId) {
 		return entityScales.containsKey(entityId);
 	}
 
+	/***
+	 * Gets the entityId custom scale
+	 * @param entityId
+	 * @return the entityId custom scale
+	 */
 	public static float getCustomScale(int entityId) {
 		return entityScales.get(entityId);
 	}
