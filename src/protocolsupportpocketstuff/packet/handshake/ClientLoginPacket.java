@@ -77,18 +77,21 @@ public class ClientLoginPacket extends PEPacket {
 	}
 
 	public class decodeHandler extends PEPacket.decodeHandler {
-
+		
+		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
+			super(plugin, connection);
+		}
+		
 		@Override
 		public void onRawPacketReceiving(RawPacketEvent e) {
-			if(connection.getVersion() == null || connection.getVersion().getProtocolType() != ProtocolType.PE) {
+			//Custom prevention logic because we couldn't get the version yet.
+			if(connection.getVersion() == null) {
+				return;
+			} else if(connection.getVersion().getProtocolType() != ProtocolType.PE) {
 				connection.removePacketListener(this);
 				return;
 			}
 			super.onRawPacketReceiving(e);
-		}
-		
-		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
-			super(plugin, connection);
 		}
 
 		@Override
