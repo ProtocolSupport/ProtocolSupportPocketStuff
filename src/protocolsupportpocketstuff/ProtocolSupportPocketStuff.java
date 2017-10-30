@@ -8,11 +8,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
+import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
+import protocolsupportpocketstuff.metadata.MetadataProvider;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
@@ -55,7 +57,8 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		
 		// = SPI = \\
 		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider(this)); }
-		
+		PEMetaProviderSPI.setProvider(new MetadataProvider());
+
 		// = Cache = \\
 		Skins.INSTANCE.buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
 		
