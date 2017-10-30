@@ -31,10 +31,7 @@ public class ZippedResourcePack implements ResourcePack {
 		JsonObject manifest = null;
 
 		// Read manifest from ZIP
-		try {
-			ZipFile zipFile;
-			zipFile = new ZipFile(file);
-
+		try (ZipFile zipFile = new ZipFile(file)) {
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
 			while(entries.hasMoreElements()){
@@ -85,11 +82,12 @@ public class ZippedResourcePack implements ResourcePack {
 			byte[] buffer = new byte[8192];
 			int count;
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-			while ((count = bis.read(buffer)) > 0) {
-				digest.update(buffer, 0, count);
+			try (FileInputStream fis = new FileInputStream(file); BufferedInputStream bis = new BufferedInputStream(fis)) {
+				while ((count = bis.read(buffer)) > 0) {
+					digest.update(buffer, 0, count);
+				}
+				this.hash = digest.digest();
 			}
-			this.hash = digest.digest();
 		} catch (Exception e) {
 			throw new InvalidResourcePackException("Couldn't get the SHA256 from archive");
 		}
@@ -124,8 +122,8 @@ public class ZippedResourcePack implements ResourcePack {
 	public byte[] getPackChunk(int chunkIdx) {
 		try {
 			RandomAccessFile raf = new RandomAccessFile(file, "r");
-			int arraySize = 1048576;
-			int offset = 1048576 * chunkIdx;
+			int arraySize = StuffUtils.CHUNK_SIZE;
+			int offset = StuffUtils.CHUNK_SIZE * chunkIdx;
 
 			int distanceToTheEnd = (int) raf.length() - offset;
 

@@ -17,6 +17,7 @@ import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class SkinListener implements Listener {
 	
@@ -30,11 +31,11 @@ public class SkinListener implements Listener {
 	public void onPlayerPropertiesResolve(PlayerPropertiesResolveEvent e) {
 		Connection con = e.getConnection();
 		if (PocketCon.isPocketConnection(con)) {
-			if (con.hasMetadata("applySkinOnJoin")) {
+			if (con.hasMetadata(StuffUtils.APPLY_SKIN_ON_JOIN_KEY)) {
 				plugin.debug("Applying cached skin for " + e.getConnection() + "...");
-				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata("applySkinOnJoin");
-				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty(SkinUtils.SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
-				con.removeMetadata("applySkinOnJoin");
+				SkinUtils.SkinDataWrapper skinDataWrapper = (SkinUtils.SkinDataWrapper) con.getMetadata(StuffUtils.APPLY_SKIN_ON_JOIN_KEY);
+				e.addProperty(new PlayerPropertiesResolveEvent.ProfileProperty(StuffUtils.SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+				con.removeMetadata(StuffUtils.APPLY_SKIN_ON_JOIN_KEY);
 			}
 		}
 	}

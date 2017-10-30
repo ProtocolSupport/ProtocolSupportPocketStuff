@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.resourcepacks.ResourcePack;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class ResourcePackDataInfoPacket extends PEPacket {
 	private ResourcePack pack;
@@ -24,8 +25,8 @@ public class ResourcePackDataInfoPacket extends PEPacket {
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
 		StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, pack.getPackId());
-		serializer.writeIntLE(1048576); // max chunk size 1MB
-		serializer.writeIntLE(pack.getPackSize() / 1048576); // chunk count
+		serializer.writeIntLE(StuffUtils.CHUNK_SIZE); // max chunk size 1MB
+		serializer.writeIntLE(pack.getPackSize() / StuffUtils.CHUNK_SIZE); // chunk count
 		serializer.writeLongLE(pack.getPackSize()); // res pack size
 
 		byte[] hash = pack.getSha256();

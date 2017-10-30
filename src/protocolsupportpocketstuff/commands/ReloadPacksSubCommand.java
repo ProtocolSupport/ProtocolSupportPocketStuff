@@ -22,14 +22,14 @@ public class ReloadPacksSubCommand implements SubCommand {
 		StringBuilder enabledResPacks = new StringBuilder();
 		for (int i = 0; PocketStuffAPI.getResourcePackManager().getBehaviorPacks().size() > i; i++) {
 			ResourcePack pack = PocketStuffAPI.getResourcePackManager().getBehaviorPacks().get(i);
-			enabledBehPacks.append("§e" + ChatColor.stripColor(pack.getName()) + " " + pack.getPackVersion());
+			enabledBehPacks.append("§e").append(ChatColor.stripColor(pack.getName())).append(" ").append(pack.getPackVersion());
 			if (PocketStuffAPI.getResourcePackManager().getBehaviorPacks().size() - 1 != i) {
 				enabledBehPacks.append("§7, ");
 			}
 		}
 		for (int i = 0; PocketStuffAPI.getResourcePackManager().getResourcePacks().size() > i; i++) {
 			ResourcePack pack = PocketStuffAPI.getResourcePackManager().getResourcePacks().get(i);
-			enabledResPacks.append("§e" + ChatColor.stripColor(pack.getName()) + " " + pack.getPackVersion());
+			enabledResPacks.append("§e").append(ChatColor.stripColor(pack.getName())).append(" ").append(pack.getPackVersion());
 			if (PocketStuffAPI.getResourcePackManager().getResourcePacks().size() - 1 != i) {
 				enabledResPacks.append("§7, ");
 			}

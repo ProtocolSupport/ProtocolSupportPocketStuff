@@ -115,8 +115,7 @@ public class PocketCon {
 		System.out.println(modalJSON);
 		JsonObject jsonParser = StuffUtils.JSON_PARSER.parse(modalJSON).getAsJsonObject();
 		String pocketType = jsonParser.get("type").getAsString();
-		ModalType type = ModalType.getByPeName(pocketType);
-		return type;
+		return ModalType.getByPeName(pocketType);
 	}
 
 	public static void addCallback(Connection connection, int id, ModalCallback callback) {

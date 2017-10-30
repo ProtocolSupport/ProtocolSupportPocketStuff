@@ -4,14 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupportpocketstuff.api.modals.Modal;
 import protocolsupportpocketstuff.api.modals.callback.ModalCallback;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.packet.play.TransferPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 import java.util.Collection;

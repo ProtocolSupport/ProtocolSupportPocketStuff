@@ -2,12 +2,12 @@ package protocolsupportpocketstuff.api.modals;
 
 public interface Modal {
 	
-	public ModalType getType();
+	ModalType getType();
 	
-	public String getPeType();
+	String getPeType();
 	
-	public String toJSON();
+	String toJSON();
 	
-	public static Modal fromJson(String json) { return null; }
+	static Modal fromJson(String json) { return null; }
 	
 }

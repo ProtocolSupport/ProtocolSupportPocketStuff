@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
+import protocolsupportpocketstuff.util.StuffUtils;
 
 public class ResourcePackChunkDataPacket extends PEPacket {
 	private String packId;
@@ -27,7 +28,7 @@ public class ResourcePackChunkDataPacket extends PEPacket {
 	public void toData(Connection connection, ByteBuf serializer) {
 		StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, packId);
 		serializer.writeIntLE(chunkIdx);
-		serializer.writeLongLE(1048576 * chunkIdx);
+		serializer.writeLongLE(StuffUtils.CHUNK_SIZE * chunkIdx);
 		serializer.writeIntLE(packChunk.length);
 		serializer.writeBytes(packChunk);
 	}

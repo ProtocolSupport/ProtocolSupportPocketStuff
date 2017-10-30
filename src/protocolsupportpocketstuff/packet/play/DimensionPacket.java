@@ -50,7 +50,7 @@ public class DimensionPacket extends PEPacket {
 				return 0;
 			}
 			default: {
-				throw new IllegalArgumentException(String.format("Uknown dim id {0}", dimId));
+				throw new IllegalArgumentException(String.format("Unknown dim id %s", dimId));
 			}
 		}
 	}
