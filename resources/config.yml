@@ -26,7 +26,7 @@
 # = Hacks =
 # dimensions  - Enables using bukkit to fake dimension switching for pocket players.
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
-#
+# teams       - Enables experimental caching and mucking with packets to support team prefix/suffixes for PE players.
 # !Do not change the config-version unless you know what you are doing!
 logging:
  disable-colors: false
@@ -43,5 +43,5 @@ pocketpacks:
 hacks: 
  dimensions: true
  itemframes: false
- 
+ teams: false
 config-version: 1
