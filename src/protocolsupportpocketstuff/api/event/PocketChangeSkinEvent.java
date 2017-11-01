@@ -14,12 +14,14 @@ public class PocketChangeSkinEvent extends Event implements Cancellable {
 	static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
 	private Connection connection;
+	private String skinStorageId;
 	private UUID uuid;
 	private BufferedImage skin;
 	private boolean isSlim;
 	
-	public PocketChangeSkinEvent(Connection connection, UUID uuid, BufferedImage skin, boolean isSlim) {
+	public PocketChangeSkinEvent(Connection connection, String skinStorageId, UUID uuid, BufferedImage skin, boolean isSlim) {
 		this.connection = connection;
+		this.skinStorageId = skinStorageId;
 		this.uuid = uuid;
 		this.skin = skin;
 		this.isSlim = isSlim;
@@ -52,6 +54,8 @@ public class PocketChangeSkinEvent extends Event implements Cancellable {
 	public void setSlim(boolean isSlim) {
 		this.isSlim = isSlim;
 	}
+
+	public String getSkinStorageId(String skinStorageId) { return skinStorageId; }
 
 	@Override
 	public boolean isCancelled() {

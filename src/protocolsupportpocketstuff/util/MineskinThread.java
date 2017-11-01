@@ -27,14 +27,22 @@ public class MineskinThread extends Thread {
 	ProtocolSupportPocketStuff plugin;
 	Connection connection;
 	String uniqueSkinId;
-	byte[] skinByteArray;
+	BufferedImage skin;
 	boolean isSlim;
 
 	public MineskinThread(ProtocolSupportPocketStuff plugin, Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
 		this.plugin = plugin;
 		this.connection = connection;
 		this.uniqueSkinId = uniqueSkinId;
-		this.skinByteArray = skinByteArray;
+		this.skin = SkinUtils.fromData(skinByteArray);
+		this.isSlim = isSlim;
+	}
+
+	public MineskinThread(ProtocolSupportPocketStuff plugin, Connection connection, String uniqueSkinId, BufferedImage skin, boolean isSlim) {
+		this.plugin = plugin;
+		this.connection = connection;
+		this.uniqueSkinId = uniqueSkinId;
+		this.skin = skin;
 		this.isSlim = isSlim;
 	}
 
@@ -42,7 +50,6 @@ public class MineskinThread extends Thread {
 	public void run() {
 		super.run();
 		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
-		BufferedImage skin = SkinUtils.fromData(skinByteArray);
 
 		try {
 			int tries = 0;

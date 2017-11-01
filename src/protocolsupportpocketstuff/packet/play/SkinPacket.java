@@ -12,6 +12,7 @@ import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
 import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
 
+import java.util.Base64;
 import java.util.UUID;
 
 public class SkinPacket extends PEPacket {
@@ -110,8 +111,11 @@ public class SkinPacket extends PEPacket {
 		@Override
 		public void handle() {
 			SkinPacket parent = SkinPacket.this;
-			pm.callEvent(new PocketChangeSkinEvent(connection, 
-					parent.getUUID(), SkinUtils.fromData(parent.getSkinData()), parent.getSkinName().equals("skin.Standard.CustomSlim")));
+			byte[] skinData = parent.getSkinData();
+			String dataAsBase64 = new String(Base64.getEncoder().encode(skinData));
+			String skinStorageId = UUID.nameUUIDFromBytes(dataAsBase64.getBytes()).toString();
+			pm.callEvent(new PocketChangeSkinEvent(connection,
+					skinStorageId, parent.getUUID(), SkinUtils.fromData(parent.getSkinData()), parent.getSkinName().equals("skin.Standard.CustomSlim")));
 		}
 		
 	}

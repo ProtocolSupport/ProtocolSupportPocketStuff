@@ -17,6 +17,7 @@ import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.util.MineskinThread;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 public class SkinListener implements Listener {
@@ -54,11 +55,11 @@ public class SkinListener implements Listener {
 			}
 		}
 	}
-	
-	//TODO: Still causes bugs, but what the hack is wrong with reading this..?
+
 	@EventHandler
 	public void onSkinChange(PocketChangeSkinEvent e) {
-		plugin.debug("YAA: " + e.getUuid() + " changed skin to " + e.isSlim() + " width: " + e.getSkin().getWidth());
+		plugin.debug(e.getPlayer().getName() + " changed skin in-game: Slim Skin? " + e.isSlim() + " Width: " + e.getSkin().getWidth());
+		new MineskinThread(plugin, e.getConnection(), e.getUuid().toString(), e.getSkin(), e.isSlim()).start();
 	}
 	
 	//:F

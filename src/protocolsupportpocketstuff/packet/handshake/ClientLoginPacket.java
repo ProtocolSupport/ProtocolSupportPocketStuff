@@ -97,7 +97,7 @@ public class ClientLoginPacket extends PEPacket {
 
 			HashMap<String, Object> clientInfo = new HashMap<>();
 			clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
-			clientInfo.put("DeviceModel", clientPayload.get("CurrentInputMode").getAsString());
+			clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
 			clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
 			clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
 			connection.addMetadata(StuffUtils.CLIENT_INFO_KEY, clientInfo);
