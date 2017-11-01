@@ -121,6 +121,7 @@ public class MineskinThread extends Thread {
 				Field gp2 = entityHuman.getClass().getSuperclass().getDeclaredField("g");
 				gp2.setAccessible(true);
 				GameProfile profile = (GameProfile) gp2.get(entityHuman);
+				profile.getProperties().removeAll("textures");
 				profile.getProperties().put("textures", new Property("textures", value, signature));
 				gp2.set(entityHuman, profile);
 			} catch (Exception e) {
