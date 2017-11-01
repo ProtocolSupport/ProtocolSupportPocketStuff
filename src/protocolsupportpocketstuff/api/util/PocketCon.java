@@ -28,6 +28,7 @@ import protocolsupportpocketstuff.storage.Modals;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -183,6 +184,46 @@ public class PocketCon {
 	 */
 	public static void transfer(Connection connection, String address, short port) {
 		sendPocketPacket(connection, new TransferPacket(address, port));
+	}
+
+	/***
+	 * Gets the client random ID assigned upon install to the user. This can be edited by the client, so beware!
+	 * @param connection
+	 * @return client's random id
+	 */
+	public static long getClientRandomId(Connection connection) {
+		return (Long) getClientInformationMap(connection).get("ClientRandomId");
+	}
+
+	/***
+	 * Gets the client device model
+	 * @param connection
+	 * @return client's device model
+	 */
+	public static String getDeviceModel(Connection connection) {
+		return (String) getClientInformationMap(connection).get("DeviceModel");
+	}
+
+	/***
+	 * Gets the client operating system
+	 * @param connection
+	 * @return client's operating system
+	 */
+	public static DeviceOperatingSystem getOperatingSystem(Connection connection) {
+		return DeviceOperatingSystem.getOperatingSystemById((int) getClientInformationMap(connection).get("DeviceOS"));
+	}
+
+	/***
+	 * Gets the client version
+	 * @param connection
+	 * @return client version
+	 */
+	public static String getClientVersion(Connection connection) {
+		return (String) getClientInformationMap(connection).get("GameVersion");
+	}
+
+	private static HashMap<String, Object> getClientInformationMap(Connection connection) {
+		return (HashMap<String, Object>) connection.getMetadata(StuffUtils.CLIENT_INFO_KEY);
 	}
 
 	/***

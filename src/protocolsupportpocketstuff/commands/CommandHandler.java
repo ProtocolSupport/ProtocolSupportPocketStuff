@@ -17,6 +17,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	private final Map<String, SubCommand> subcommands = new LinkedHashMap<>();
 	{
 		subcommands.put("reloadpacks", new ReloadPacksSubCommand());
+		subcommands.put("pocketinfo", new ReloadPacksSubCommand());
 	}
 
 	@Override

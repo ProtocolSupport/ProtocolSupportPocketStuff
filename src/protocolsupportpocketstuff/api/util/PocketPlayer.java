@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupportpocketstuff.api.modals.Modal;
@@ -135,6 +136,42 @@ public class PocketPlayer {
 	 */
 	public static void transfer(Player player, String address, short port) {
 		PocketCon.transfer(ProtocolSupportAPI.getConnection(player), address, port);
+	}
+
+	/***
+	 * Gets the client random ID assigned upon install to the user. This can be edited by the client, so beware!
+	 * @param player
+	 * @return client's random id
+	 */
+	public static long getClientRandomId(Player player) {
+		return PocketCon.getClientRandomId(ProtocolSupportAPI.getConnection(player));
+	}
+
+	/***
+	 * Gets the client device model
+	 * @param player
+	 * @return client's device model
+	 */
+	public static String getDeviceModel(Player player) {
+		return PocketCon.getDeviceModel(ProtocolSupportAPI.getConnection(player));
+	}
+
+	/***
+	 * Gets the client operating system
+	 * @param player
+	 * @return client's operating system
+	 */
+	public static DeviceOperatingSystem getOperatingSystem(Player player) {
+		return PocketCon.getOperatingSystem(ProtocolSupportAPI.getConnection(player));
+	}
+
+	/***
+	 * Gets the client version
+	 * @param player
+	 * @return client version
+	 */
+	public static String getClientVersion(Player player) {
+		return PocketCon.getClientVersion(ProtocolSupportAPI.getConnection(player));
 	}
 
 	/***
