@@ -35,7 +35,7 @@ public class TileDataUpdatePacket extends PEPacket {
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
 		PositionSerializer.writePEPosition(serializer, new Position(x, y, z));
-		ItemStackSerializer.writeTag(serializer, true, connection.getVersion(), TileNBTRemapper.remap(connection.getVersion(), tag));
+		ItemStackSerializer.writeTag(serializer, true, connection.getVersion(), tag);
 	}
 
 	@Override
