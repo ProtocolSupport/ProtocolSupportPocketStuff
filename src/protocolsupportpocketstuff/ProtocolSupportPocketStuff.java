@@ -15,6 +15,7 @@ import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
+import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.teams.TeamsPacketListener;
 import protocolsupportpocketstuff.metadata.MetadataProvider;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
@@ -86,6 +87,9 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
 				if (getConfig().getBoolean("hacks.teams")) {
 					con.addPacketListener(new TeamsPacketListener(this, e.getConnection()));
+				}
+				if (getConfig().getBoolean("hacks.itemframes")) {
+					con.addPacketListener(new ItemFramesPacketListener(this, e.getConnection()));
 				}
 			}
 		}
