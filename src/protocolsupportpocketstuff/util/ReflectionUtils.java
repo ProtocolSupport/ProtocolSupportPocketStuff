@@ -49,4 +49,13 @@ public class ReflectionUtils {
 		}
 		throw new RuntimeException("Error while getting field \"" + field.getName() + "\" from " + source + "!");
 	}
+
+	public static float getFloat(Field field, Object source) {
+		try {
+			return field.getFloat(source);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		throw new RuntimeException("Error while getting field \"" + field.getName() + "\" from " + source + "!");
+	}
 }

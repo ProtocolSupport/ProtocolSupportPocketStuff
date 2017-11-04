@@ -14,6 +14,7 @@ import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
+import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
@@ -88,10 +89,13 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(this, con)); }
 			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
 				if (getConfig().getBoolean("hacks.teams")) {
-					con.addPacketListener(new TeamsPacketListener(this, e.getConnection()));
+					con.addPacketListener(new TeamsPacketListener(this, con));
 				}
 				if (getConfig().getBoolean("hacks.itemframes")) {
-					con.addPacketListener(new ItemFramesPacketListener(this, e.getConnection()));
+					con.addPacketListener(new ItemFramesPacketListener(this, con));
+				}
+				if (getConfig().getBoolean("hacks.bossbars")) {
+					con.addPacketListener(new BossBarPacketListener(this, con));
 				}
 			}
 		}

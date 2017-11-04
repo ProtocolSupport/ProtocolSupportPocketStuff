@@ -1,11 +1,9 @@
 package protocolsupportpocketstuff.hacks.holograms;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -18,9 +16,12 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.utils.CollectionsUtils;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.EntityDestroyPacket;
 import protocolsupportpocketstuff.packet.play.PlayerMovePacket;
+import protocolsupportpocketstuff.packet.play.SpawnPlayerPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -249,61 +250,24 @@ public class HologramsPacketListener extends Connection.PacketListener {
 
 		public void spawnHologram(long entityId, HologramsPacketListener listener) {
 			isSpawned = true;
-			ByteBuf serializer = Unpooled.buffer();
-			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.SPAWN_PLAYER);
-			serializer.writeByte(0);
-			serializer.writeByte(0);
-			MiscSerializer.writeUUID(serializer, UUID.randomUUID()); // random UUID boi
-			StringSerializer.writeString(serializer, listener.con.getVersion(), nametag);
-			VarNumberSerializer.writeSVarLong(serializer, entityId); // entity ID
-			VarNumberSerializer.writeVarLong(serializer, entityId); // runtime ID
-			MiscSerializer.writeLFloat(serializer, x);
-			MiscSerializer.writeLFloat(serializer, y);
-			MiscSerializer.writeLFloat(serializer, z);
-			MiscSerializer.writeLFloat(serializer, 0); // motx
-			MiscSerializer.writeLFloat(serializer, 0); // moty
-			MiscSerializer.writeLFloat(serializer, 0); // motz
-			MiscSerializer.writeLFloat(serializer, 0); // pitch
-			MiscSerializer.writeLFloat(serializer, 0); // head yaw
-			MiscSerializer.writeLFloat(serializer, 0); // yaw
-			VarNumberSerializer.writeSVarInt(serializer, 0); // held item stack
-			// Metadata:tm:
-			// Write the length first...
-			VarNumberSerializer.writeVarInt(serializer, 4);
 
-			// NAMETAG
-			VarNumberSerializer.writeVarInt(serializer, 4); // key
-			VarNumberSerializer.writeVarInt(serializer, 4); // type
-			StringSerializer.writeString(serializer, listener.con.getVersion(), nametag);
+			CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(76);
+			metadata.put(4, new DataWatcherObjectString(nametag));
+			metadata.put(39, new DataWatcherObjectFloatLe(0.001f)); // scale
+			metadata.put(54, new DataWatcherObjectFloatLe(0.001f)); // bb width
+			metadata.put(55, new DataWatcherObjectFloatLe(0.001f)); // bb height
 
-			// SCALE
-			VarNumberSerializer.writeVarInt(serializer, 39); // key
-			VarNumberSerializer.writeVarInt(serializer, 3); // type
-			MiscSerializer.writeLFloat(serializer, 0.001F);
+			SpawnPlayerPacket packet = new SpawnPlayerPacket(
+					UUID.randomUUID(),
+					nametag,
+					entityId,
+					x, y, z, // coordinates
+					0, 0, 0, // motion
+					0, 0, 0, // pitch, head yaw & yaw
+					metadata
+			);
 
-			// BOUNDING BOX WIDTH
-			VarNumberSerializer.writeVarInt(serializer, 54); // key
-			VarNumberSerializer.writeVarInt(serializer, 3); // type
-			MiscSerializer.writeLFloat(serializer, 0.001F);
-
-			// BOUNDING BOX HEIGHT
-			VarNumberSerializer.writeVarInt(serializer, 55); // key
-			VarNumberSerializer.writeVarInt(serializer, 3); // type
-			MiscSerializer.writeLFloat(serializer, 0.001F);
-
-			//adventure settings
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-
-			serializer.writeLongLE(0); //?
-
-			//entity links
-			//TODO: Implement entity links
-			VarNumberSerializer.writeSVarInt(serializer, 0);
-			listener.con.sendRawPacket(MiscSerializer.readAllBytes(serializer));
+			PocketCon.sendPocketPacket(listener.con, packet);
 		}
 	}
 }
