@@ -4,10 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 

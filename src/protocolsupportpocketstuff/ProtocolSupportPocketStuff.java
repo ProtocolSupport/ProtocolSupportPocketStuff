@@ -15,6 +15,7 @@ import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
+import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.teams.TeamsPacketListener;
 import protocolsupportpocketstuff.metadata.MetadataProvider;
@@ -83,7 +84,8 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
 			con.addPacketListener(new ResourcePackListener(this, con));
-			if(getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
+			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
+			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(this, con)); }
 			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
 				if (getConfig().getBoolean("hacks.teams")) {
 					con.addPacketListener(new TeamsPacketListener(this, e.getConnection()));
