@@ -7,6 +7,7 @@ import protocolsupportpocketstuff.storage.Skins;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class PcToPeProvider extends PESkinsProvider {
@@ -27,7 +28,7 @@ public class PcToPeProvider extends PESkinsProvider {
 	}
 
 	@Override
-	public void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback) {
+	public void scheduleGetSkinData(String url, UUID uuid, Consumer<byte[]> skindataApplyCallback) {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 			try {
 				if (skinCache.hasPeSkin(url)) {
@@ -35,6 +36,7 @@ public class PcToPeProvider extends PESkinsProvider {
 				} else {
 					byte[] skin = toData(ImageIO.read(new URL(url)));
 					skinCache.cachePeSkin(url, skin);
+					skinCache.cacheUUIDUrl(uuid, url);
 					skindataApplyCallback.accept(skin);
 				}
 			} catch (IOException e) { }
