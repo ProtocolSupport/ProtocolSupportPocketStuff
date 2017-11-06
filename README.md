@@ -1,14 +1,21 @@
 # ProtocolSupportPocketStuff
 Does stuff for ProtocolSupport pocket, I guess.
 
-This plugin
+This plugin provides serveral differing features (or stuff) exclusively for minecraft PE on ProtocolSupport servers.
+###Features
 * Downloads & caches PC skins and sends them to PE.
-* Receives & hacks & caches PE skins and applies them in PC.
-* Uses bukkit to fake dimension switch for PE.
-* Provides API for serveral pocket-only features.
+* Uploads & caches PE skins and sends them to Mineskin to fake in PC.
+* Allow for resource- & behaviourpacks in PE.
+* Bukkit-driven dimensionswitch for PE.
+* Hacks itemframes & player skulls for PE.
+_All features can be disabled in the config.yml_
+###API
+* Enables you to easily check for PE players and get PE connections.
 * Enables you to easily build modals and listen to their response.
-
-All features can be disabled in the config.yml
+* Enables you to easily send custom PE packets.
+* Enables you to extend and write custom listeners for PE packets.
+* Enables you to send custom skins and custom JSON geometry.
+* Enables you to get device information such as the OS or phone model.
 
 ## *_WORK IN PROGRESS (OBVIOUSLY)_*
 
