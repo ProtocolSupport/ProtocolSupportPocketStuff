@@ -2,14 +2,15 @@
 Does stuff for ProtocolSupport pocket, I guess.
 
 This plugin provides serveral differing features (or stuff) exclusively for minecraft PE on ProtocolSupport servers.
-###Features
+### Features
 * Downloads & caches PC skins and sends them to PE.
 * Uploads & caches PE skins and sends them to Mineskin to fake in PC.
 * Allow for resource- & behaviourpacks in PE.
 * Bukkit-driven dimensionswitch for PE.
 * Hacks itemframes & player skulls for PE.
+
 _All features can be disabled in the config.yml_
-###API
+### API
 * Enables you to easily check for PE players and get PE connections.
 * Enables you to easily build modals and listen to their response.
 * Enables you to easily send custom PE packets.
