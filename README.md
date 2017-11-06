@@ -6,8 +6,10 @@ This plugin provides serveral differing features (or stuff) exclusively for mine
 * Downloads & caches PC skins and sends them to PE.
 * Uploads & caches PE skins and sends them to Mineskin to fake in PC.
 * Allow for resource- & behaviourpacks in PE.
-* Bukkit-driven dimensionswitch for PE.
+* Hacks Bukkit-driven dimensionswitch for PE.
 * Hacks itemframes & player skulls for PE.
+* Hacks teams (Player prefix & suffix) for PE.
+* Hacks bossbar into existance for PE.
 
 _All features can be disabled in the config.yml_
 ### API
