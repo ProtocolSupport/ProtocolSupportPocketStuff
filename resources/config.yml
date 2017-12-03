@@ -26,6 +26,7 @@
 #
 # = Hacks =
 # dimensions  - Enables using bukkit to fake dimension switching for pocket players.
+# middleclick - Enables using bukkit to fake middle click / blocks and entities pick.
 # holograms   - Enables experimental caching and "armor stand to player" replacement to support holograms for PE players.
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
 # teams       - Enables experimental caching and mucking with packets to support team prefix/suffixes for PE players.
@@ -47,8 +48,9 @@ pocketpacks:
  resource-packs: []
 hacks: 
  dimensions: true
+ middleclick: true
  holograms: true
  itemframes: false
  teams: false
  bossbars: false
-config-version: 1
+config-version: 3

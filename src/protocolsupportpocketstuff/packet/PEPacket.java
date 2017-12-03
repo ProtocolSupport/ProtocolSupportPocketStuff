@@ -14,7 +14,7 @@ public abstract class PEPacket {
 	
 	public abstract void toData(Connection connection, ByteBuf serializer);
 	
-	public abstract void readFromClientData(Connection connection, ByteBuf clientData);
+	public abstract void readFromClientData(Connection connection, ByteBuf clientdata);
 		
 	public ByteBuf encode(Connection connection) {
 		ByteBuf serializer = Unpooled.buffer();

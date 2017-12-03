@@ -5,8 +5,14 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupportpocketstuff.api.util.PocketUtils;
 
 public class MetadataProvider extends PEMetaProvider {
+	
 	@Override
 	public float getEntitySize(NetworkEntity networkEntity) {
 		return PocketUtils.hasCustomScale(networkEntity.getId()) ? PocketUtils.getCustomScale(networkEntity.getId()) : 1;
+	}
+
+	@Override
+	public String getInteractText(NetworkEntity entity) {
+		return "Interact";
 	}
 }

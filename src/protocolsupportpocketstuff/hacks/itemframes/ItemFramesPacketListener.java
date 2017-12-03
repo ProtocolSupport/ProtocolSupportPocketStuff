@@ -467,7 +467,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 						}
 						break;
 					case 7: // Set item rotation inside Item Frame
-						int itemRotation = (int) dw.b();
+						int itemRotation = (Integer) dw.b();
 						tag.setByte("ItemRotation", itemRotation);
 						break;
 					default:
