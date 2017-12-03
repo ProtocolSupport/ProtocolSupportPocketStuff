@@ -222,7 +222,13 @@ public class PocketCon {
 		return (String) getClientInformationMap(connection).get("GameVersion");
 	}
 
-	private static HashMap<String, Object> getClientInformationMap(Connection connection) {
+	/***
+	 * Gets the client's information map.
+	 * @param connection
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static HashMap<String, Object> getClientInformationMap(Connection connection) {
 		return (HashMap<String, Object>) connection.getMetadata(StuffUtils.CLIENT_INFO_KEY);
 	}
 

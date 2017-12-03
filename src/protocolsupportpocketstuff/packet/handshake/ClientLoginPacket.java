@@ -39,7 +39,7 @@ public class ClientLoginPacket extends PEPacket {
 
 	}
 
-	@SuppressWarnings({ "resource", "unused", "serial" })
+	@SuppressWarnings("resource")
 	@Override
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
 		protocolVersion = clientData.readInt(); //protocol version

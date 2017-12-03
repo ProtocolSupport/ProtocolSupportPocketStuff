@@ -86,7 +86,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
 			con.addPacketListener(new ResourcePackListener(this, con));
 			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
-			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(this, con)); }
+			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
 			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
 				if (getConfig().getBoolean("hacks.teams")) {
 					con.addPacketListener(new TeamsPacketListener(this, con));
@@ -95,7 +95,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 					con.addPacketListener(new ItemFramesPacketListener(this, con));
 				}
 				if (getConfig().getBoolean("hacks.bossbars")) {
-					con.addPacketListener(new BossBarPacketListener(this, con));
+					con.addPacketListener(new BossBarPacketListener(con));
 				}
 			}
 		}

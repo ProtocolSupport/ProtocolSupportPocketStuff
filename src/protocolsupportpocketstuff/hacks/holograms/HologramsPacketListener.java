@@ -7,6 +7,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
@@ -17,7 +18,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.EntityDestroyPacket;
 import protocolsupportpocketstuff.packet.play.PlayerMovePacket;
@@ -28,10 +28,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HologramsPacketListener extends Connection.PacketListener {
-	private ProtocolSupportPocketStuff plugin;
 	private Connection con;
 	private HashMap<Long, CachedArmorStand> cachedArmorStands = new HashMap<Long, CachedArmorStand>();
-	private static final HashMap<Integer, DataWatcherObject> DATA_WATCHERS = new HashMap<Integer, DataWatcherObject>();
+	private static final HashMap<Integer, ReadableDataWatcherObject<?>> DATA_WATCHERS = new HashMap<Integer, ReadableDataWatcherObject<?>>();
 	private static final int ARMOR_STAND_ID = 61;
 	private static final double Y_OFFSET = 1.6200000047683716D;
 	private boolean isSpawned = false;
@@ -48,8 +47,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 		DATA_WATCHERS.put(8, new DataWatcherObjectPosition());
 	}
 
-	public HologramsPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
-		this.plugin = plugin;
+	public HologramsPacketListener(Connection con) {
 		this.con = con;
 	}
 
@@ -196,8 +194,8 @@ public class HologramsPacketListener extends Connection.PacketListener {
 		boolean hasCustomName = false;
 		boolean isInvisible = false;
 		boolean showNametag = false;
-		boolean alwaysShowNametag = false;
-		boolean showBase = false;
+		//boolean alwaysShowNametag = false;
+		//boolean showBase = false;
 		String nametag = null;
 
 		int length = VarNumberSerializer.readVarInt(data);
@@ -206,7 +204,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			int metaType = VarNumberSerializer.readVarInt(data);
 			int metaKey = VarNumberSerializer.readVarInt(data);
 
-			DataWatcherObject dw = DATA_WATCHERS.get(metaKey);
+			ReadableDataWatcherObject<?> dw = DATA_WATCHERS.get(metaKey);
 
 			dw.readFromStream(data, con.getVersion(), I18NData.DEFAULT_LOCALE);
 
@@ -220,7 +218,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 
 				isInvisible = ((peBaseFlags & (1 << (7 - 1))) != 0);
 				showNametag = ((peBaseFlags & (1 << (15 - 1))) != 0);
-				alwaysShowNametag = ((peBaseFlags & (1 << (16 - 1))) != 0);
+				//alwaysShowNametag = ((peBaseFlags & (1 << (16 - 1))) != 0);
 				// showBase = ((peBaseFlags & (1 << (16 - 1))) != 0);
 			}
 		}

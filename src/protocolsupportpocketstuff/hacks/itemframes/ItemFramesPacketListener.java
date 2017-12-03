@@ -24,7 +24,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.packet.TileDataUpdatePacket;
+import protocolsupportpocketstuff.packet.play.TileDataUpdatePacket;
 import protocolsupportpocketstuff.packet.play.UpdateBlockPacket;
 import protocolsupportpocketstuff.util.ReflectionUtils;
 
@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemFramesPacketListener extends Connection.PacketListener {
-	private ProtocolSupportPocketStuff plugin;
 	private Connection con;
 	private HashMap<Integer, CachedItemFrame> cachedItemFrames = new HashMap<>();
 	private boolean isSpawned = false;
@@ -51,7 +50,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static Field METADATA_ENTITY_ID = null;
 	private static Field METADATA_DATA_WATCHERS = null;
 	private static Field DESTROY_ENTITY_ARRAY = null;
-	private static Constructor INIT_SPIGOT_ITEMSTACKWRAPPER = null;
+	private static Constructor<?> INIT_SPIGOT_ITEMSTACKWRAPPER = null;
 	private static Field USE_ENTITY_ID = null;
 	private static Field USE_ENTITY_ACTION = null;
 	private static Field USE_ENTITY_HAND = null;
@@ -62,7 +61,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static final int ITEM_FRAME_BLOCK_ID = 199;
 
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
-		this.plugin = plugin;
 		this.con = con;
 	}
 
@@ -174,6 +172,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			int entityId = ReflectionUtils.getInt(METADATA_ENTITY_ID, packet);
 
 			if (cachedItemFrames.containsKey(entityId)) {
+				@SuppressWarnings("unchecked")
 				List<DataWatcher.Item<?>> dataWatchers = (List<DataWatcher.Item<?>>) ReflectionUtils.get(METADATA_DATA_WATCHERS, packet);
 
 				CachedItemFrame itemFrame = cachedItemFrames.get(entityId);
@@ -187,7 +186,12 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	@Override
 	public void onRawPacketReceiving(RawPacketEvent event) {
 		ByteBuf data = event.getData();
+		
 		int packetId = VarNumberSerializer.readVarInt(data);
+		data.readByte();
+		data.readByte();
+		
+		Position position = new Position(0, 0, 0);
 
 		if (packetId == PEPacketIDs.PLAYER_MOVE) {
 			if (isSpawned)
@@ -204,16 +208,13 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			return;
 		}
 		if (packetId == PEPacketIDs.PLAYER_ACTION) { // Used for when the player tries to hit a item frame when it doesn't have any item inside of it
-			data.readByte();
-			data.readByte();
-
 			VarNumberSerializer.readSVarLong(data); // entity ID
 			int action = VarNumberSerializer.readSVarInt(data);
 
 			if (action != 0) // We only care about "start break" packets
 				return;
 
-			Position position = PositionSerializer.readPEPosition(data);
+			PositionSerializer.readPEPosition(data);
 
 			Map.Entry<Integer, CachedItemFrame> entry = getItemFrameAt(position.getX(), position.getY(), position.getZ());
 
@@ -224,10 +225,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			return;
 		}
 		if (packetId == 71) { // Item Frame Drop Item
-			data.readByte();
-			data.readByte();
-
-			Position position = PositionSerializer.readPEPosition(data);
+			PositionSerializer.readPEPositionTo(data, position);
 
 			Map.Entry<Integer, CachedItemFrame> entry = getItemFrameAt(position.getX(), position.getY(), position.getZ());
 
@@ -237,9 +235,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			sendInteractEntityPacket(entry.getKey(), PacketPlayInUseEntity.EnumEntityUseAction.ATTACK);
 		}
 		if (packetId == PEPacketIDs.INVENTORY_TRANSACTION) { // GodPacket, now on ProtocolSupportPocketStuff!
-			data.readByte();
-			data.readByte();
-
 			int actionId = VarNumberSerializer.readVarInt(data);
 
 			if (actionId != ACTION_USE_ITEM)
@@ -261,7 +256,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			if (subTypeId != 0)
 				return;
 
-			Position position = PositionSerializer.readPEPosition(data);
+			PositionSerializer.readPEPositionTo(data, position);
 			VarNumberSerializer.readSVarInt(data); // face
 			VarNumberSerializer.readSVarInt(data); // slot
 			ItemStackSerializer.readItemStack(data, con.getVersion(), I18NData.DEFAULT_LOCALE, true); // itemstack
@@ -304,7 +299,8 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			return;
 		}
 		if (packetId == PEPacketIDs.UPDATE_BLOCK) {
-			Position position = PositionSerializer.readPEPosition(data);
+			Position position = new Position(0, 0, 0); 
+			PositionSerializer.readPEPositionTo(data, position);
 			int id = VarNumberSerializer.readVarInt(data);
 
 			Map.Entry<Integer, CachedItemFrame> entry = getItemFrameAt(position.getX(), position.getY(), position.getZ());
@@ -425,7 +421,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		public void updateMetadata(ItemFramesPacketListener listener, List<DataWatcher.Item<?>> dataWatchers) {
 			NBTTagCompoundWrapper tag = getSpawnTag();
 
-			for (DataWatcher.Item dw : dataWatchers) {
+			for (DataWatcher.Item<?> dw : dataWatchers) {
 				// Obfuscation Helper: dw.a().a() = DataWatcher ID
 				switch (dw.a().a()) {
 					case 6: // Set item inside Item Frame

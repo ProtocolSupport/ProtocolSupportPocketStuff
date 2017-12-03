@@ -10,7 +10,6 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.BossEventPacket;
 import protocolsupportpocketstuff.packet.play.EntityDataPacket;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class BossBarPacketListener extends Connection.PacketListener {
-	private ProtocolSupportPocketStuff plugin;
+	
 	private Connection con;
 	private HashMap<Long, CachedBossBar> cachedBossBars = new HashMap<>();
 	private boolean isSpawned = false;
@@ -56,8 +55,7 @@ public class BossBarPacketListener extends Connection.PacketListener {
 		}
 	}
 
-	public BossBarPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
-		this.plugin = plugin;
+	public BossBarPacketListener(Connection con) {
 		this.con = con;
 	}
 

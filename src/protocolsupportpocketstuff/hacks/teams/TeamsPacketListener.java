@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TeamsPacketListener extends Connection.PacketListener {
-	private ProtocolSupportPocketStuff plugin;
 	private Connection con;
 	private HashMap<String, Integer> cachedUsers = new HashMap<String, Integer>();
 	private HashMap<String, CachedTeam> cachedTeams = new HashMap<String, CachedTeam>();
@@ -32,7 +31,6 @@ public class TeamsPacketListener extends Connection.PacketListener {
 	private static Field TEAM_ENTITIES = null;
 
 	public TeamsPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
-		this.plugin = plugin;
 		this.con = con;
 	}
 
@@ -54,6 +52,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
 	@Override
 	public void onPacketSending(PacketEvent event) {
 		super.onPacketSending(event);

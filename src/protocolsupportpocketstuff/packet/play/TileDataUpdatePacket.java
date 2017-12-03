@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.packet;
+package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
@@ -7,6 +7,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupportpocketstuff.packet.PEPacket;
 
 public class TileDataUpdatePacket extends PEPacket {
 	private int x;

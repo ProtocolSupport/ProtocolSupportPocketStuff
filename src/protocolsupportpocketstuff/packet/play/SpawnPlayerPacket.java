@@ -52,7 +52,7 @@ public class SpawnPlayerPacket extends PEPacket {
 
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
-		MiscSerializer.writeUUID(serializer, uuid);
+		MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
 		StringSerializer.writeString(serializer, connection.getVersion(), name);
 		VarNumberSerializer.writeSVarLong(serializer, entityId); // entity ID
 		VarNumberSerializer.writeVarLong(serializer, entityId); // runtime ID

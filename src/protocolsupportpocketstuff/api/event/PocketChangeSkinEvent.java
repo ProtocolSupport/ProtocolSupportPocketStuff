@@ -55,7 +55,9 @@ public class PocketChangeSkinEvent extends Event implements Cancellable {
 		this.isSlim = isSlim;
 	}
 
-	public String getSkinStorageId(String skinStorageId) { return skinStorageId; }
+	public String getSkinStorageId() { 
+		return skinStorageId;
+	}
 
 	@Override
 	public boolean isCancelled() {

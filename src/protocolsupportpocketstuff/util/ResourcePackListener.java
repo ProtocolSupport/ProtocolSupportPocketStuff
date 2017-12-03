@@ -27,7 +27,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 	private int REFUSED = 1;
 	private int SEND_PACKS = 2;
 	private int HAVE_ALL_PACKS = 3;
-	private int COMPLETED = 4;
+	//private int COMPLETED = 4;
 	private boolean startThrottle = false;
 	private boolean downloadedAllPacks = false;
 	private ArrayList<ByteBuf> throttledPackets = new ArrayList<ByteBuf>();

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupportpocketstuff.api.modals.Modal;
@@ -13,6 +14,7 @@ import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Modals;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -171,6 +173,15 @@ public class PocketPlayer {
 	 */
 	public static String getClientVersion(Player player) {
 		return PocketCon.getClientVersion(ProtocolSupportAPI.getConnection(player));
+	}
+	
+	/***
+	 * Gets the client's information map.
+	 * @param connection
+	 * @return
+	 */
+	public static HashMap<String, Object> getClientInformationMap(Player player) {
+		return PocketCon.getClientInformationMap(ProtocolSupportAPI.getConnection(player));
 	}
 
 	/***
