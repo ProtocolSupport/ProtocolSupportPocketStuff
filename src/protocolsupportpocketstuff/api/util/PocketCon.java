@@ -233,6 +233,18 @@ public class PocketCon {
 	}
 
 	/***
+	 * Gets the client unique identifier
+	 * <br/><br/>
+	 * <b>This isn't the server unique identifier for the player</b>, this unique ID is sent by the client during login and
+	 * it is used for skin updates, player list updates and other misc stuff.
+	 * @param connection
+	 * @return the client unique identifier
+	 */
+	public static UUID getClientUniqueId(Connection connection) {
+		return (UUID) connection.getMetadata(StuffUtils.CLIENT_UUID_KEY);
+	}
+
+	/***
 	 * Sends a packet to pocket.
 	 * @param connection
 	 * @param packet
