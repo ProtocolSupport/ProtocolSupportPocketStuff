@@ -17,13 +17,13 @@ import protocolsupportpocketstuff.packet.play.EntityDataPacket;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamsPacketListener extends Connection.PacketListener {
 	private Connection con;
-	private HashMap<String, Integer> cachedUsers = new HashMap<String, Integer>();
-	private HashMap<String, CachedTeam> cachedTeams = new HashMap<String, CachedTeam>();
+	private ConcurrentHashMap<String, Integer> cachedUsers = new ConcurrentHashMap<String, Integer>();
+	private ConcurrentHashMap<String, CachedTeam> cachedTeams = new ConcurrentHashMap<String, CachedTeam>();
 	private static Field TEAM_NAME = null;
 	private static Field UPDATE_MODE = null;
 	private static Field TEAM_PREFIX = null;
