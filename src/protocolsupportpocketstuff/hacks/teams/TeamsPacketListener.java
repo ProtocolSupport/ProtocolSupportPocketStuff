@@ -154,7 +154,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 		}
 		throw new RuntimeException("Error while getting field \"" + field.getName() + "\" from " + source + "!");
 	}
-	
+
 	static class CachedTeam {
 		private String prefix;
 		private String suffix;
