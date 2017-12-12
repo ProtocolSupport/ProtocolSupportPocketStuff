@@ -97,7 +97,7 @@ public class ClientLoginPacket extends PEPacket {
 
 			HashMap<String, Object> clientInfo = new HashMap<>();
 			// "In general you shouldn't really expect the payload to be sent with psbpe" -Shevchik
-			if (clientPayload.has("clientRandomId"))
+			if (clientPayload.has("ClientRandomId"))
 				clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
 			if (clientPayload.has("DeviceModel"))
 				clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
