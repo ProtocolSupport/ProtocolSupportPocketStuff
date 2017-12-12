@@ -96,10 +96,16 @@ public class ClientLoginPacket extends PEPacket {
 			JsonObject clientPayload = clientLoginPacket.clientPayload;
 
 			HashMap<String, Object> clientInfo = new HashMap<>();
-			clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
-			clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
-			clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
-			clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
+			// "In general you shouldn't really expect the payload to be sent with psbpe" -Shevchik
+			if (clientPayload.has("clientRandomId"))
+				clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
+			if (clientPayload.has("DeviceModel"))
+				clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
+			if (clientPayload.has("DeviceOS"))
+				clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
+			if (clientPayload.has("GameVersion"))
+				clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
+
 			connection.addMetadata(StuffUtils.CLIENT_INFO_KEY, clientInfo);
 
 			String skinData = clientPayload.get("SkinData").getAsString();
