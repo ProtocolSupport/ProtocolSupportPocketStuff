@@ -214,7 +214,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			}
 
 			if (metaType == 0) {
-				long peBaseFlags = (Long) dw.getValue();
+				long peBaseFlags = (Integer) dw.getValue();
 
 				isInvisible = ((peBaseFlags & (1 << (7 - 1))) != 0);
 				showNametag = ((peBaseFlags & (1 << (15 - 1))) != 0);
