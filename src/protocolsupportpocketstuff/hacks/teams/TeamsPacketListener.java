@@ -15,9 +15,9 @@ import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.EntityDataPacket;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamsPacketListener extends Connection.PacketListener {
@@ -158,7 +158,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 	static class CachedTeam {
 		private String prefix;
 		private String suffix;
-		private List<String> players = new ArrayList<String>();
+		private Set<String> players = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
 		public CachedTeam(String prefix, String suffix) {
 			this.prefix = prefix;
@@ -208,7 +208,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 			this.suffix = suffix;
 		}
 
-		public List<String> getPlayers() {
+		public Set<String> getPlayers() {
 			return players;
 		}
 	}
