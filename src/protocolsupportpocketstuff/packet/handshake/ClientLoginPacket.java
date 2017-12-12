@@ -73,11 +73,11 @@ public class ClientLoginPacket extends PEPacket {
 	}
 
 	public class decodeHandler extends PEPacket.decodeHandler {
-		
+
 		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
 			super(plugin, connection);
 		}
-		
+
 		@Override
 		public void onRawPacketReceiving(RawPacketEvent e) {
 			//Custom prevention logic because we couldn't get the version yet.
@@ -97,14 +97,12 @@ public class ClientLoginPacket extends PEPacket {
 
 			HashMap<String, Object> clientInfo = new HashMap<>();
 			// "In general you shouldn't really expect the payload to be sent with psbpe" -Shevchik
-			if (clientPayload.has("ClientRandomId"))
+			if (clientPayload != null) {
 				clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
-			if (clientPayload.has("DeviceModel"))
 				clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
-			if (clientPayload.has("DeviceOS"))
 				clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
-			if (clientPayload.has("GameVersion"))
 				clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
+			}
 
 			connection.addMetadata(StuffUtils.CLIENT_INFO_KEY, clientInfo);
 
