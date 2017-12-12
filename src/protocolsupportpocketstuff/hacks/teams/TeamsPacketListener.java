@@ -154,19 +154,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 		}
 		throw new RuntimeException("Error while getting field \"" + field.getName() + "\" from " + source + "!");
 	}
-
-	static class CachedUser {
-		private long entityId;
-
-		public CachedUser(long entityId) {
-			this.entityId = entityId;
-		}
-
-		public long getEntityId() {
-			return entityId;
-		}
-	}
-
+	
 	static class CachedTeam {
 		private String prefix;
 		private String suffix;
