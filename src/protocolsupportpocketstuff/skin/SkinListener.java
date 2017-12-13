@@ -1,5 +1,6 @@
 package protocolsupportpocketstuff.skin;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -12,6 +13,7 @@ import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
+import protocolsupportpocketstuff.api.modals.callback.SimpleFormCallback;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
@@ -51,7 +53,14 @@ public class SkinListener implements Listener {
 				PocketCon.sendModal(con, 
 						new SimpleForm("hoi", "hallo")
 							.addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")))
-							.addButton(new ModalButton("Awesome").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://yumamom.com/wp-content/uploads/2015/05/LEGO.jpg"))));
+							.addButton(new ModalButton("Awesome").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://yumamom.com/wp-content/uploads/2015/05/LEGO.jpg"))),
+						new SimpleFormCallback() {
+
+							@Override
+							public void onSimpleFormResponse(Player player, String modalJSON, boolean isClosedByClient, int clickedButton) {
+								player.sendMessage("Thanks for clicking! :wave:");
+							}
+						});
 			}
 		}
 	}
