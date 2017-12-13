@@ -132,7 +132,9 @@ public class PocketCon {
 	}
 
 	public static void handleModalResponse(Connection connection, ModalResponseEvent event) {
-		ModalCallback modalCallback = PocketCon.getCallback(connection);
+		ModalCallback modalCallback = PocketCon.getCallback(connection);t
+		PocketCon.removeCallback(connection);
+
 		if (modalCallback == null)
 			return;
 
@@ -150,8 +152,6 @@ public class PocketCon {
 			boolean result = event instanceof ModalWindowResponseEvent ? ((ModalWindowResponseEvent) event).getResult() : false;
 			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), result);
 		}
-
-		PocketCon.removeCallback(connection);
 	}
 
 	/***
