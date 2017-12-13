@@ -4,7 +4,7 @@ public class ModalSlider extends ModalComplexUIElement {
 	
 	private float min;
 	private float max;
-	private float step;
+	private float step = 1f;
 	private float defaultValue;
 
 	public ModalSlider(String text) {
