@@ -132,12 +132,13 @@ public class PocketCon {
 	}
 
 	public static void handleModalResponse(Connection connection, ModalResponseEvent event) {
-		ModalCallback modalCallback = PocketCon.getCallback(connection);t
-		PocketCon.removeCallback(connection);
+		ModalCallback modalCallback = PocketCon.getCallback(connection);
 
 		if (modalCallback == null)
 			return;
 
+		PocketCon.removeCallback(connection);
+		
 		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled());
 		if (modalCallback instanceof SimpleFormCallback) {
 			SimpleFormCallback simpleFormCallback = (SimpleFormCallback) modalCallback;
