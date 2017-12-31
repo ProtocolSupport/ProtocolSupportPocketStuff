@@ -19,6 +19,8 @@ import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class ResourcePackListener extends Connection.PacketListener {
@@ -31,6 +33,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 	private boolean startThrottle = false;
 	private boolean downloadedAllPacks = false;
 	private ArrayList<ByteBuf> throttledPackets = new ArrayList<ByteBuf>();
+	private ExecutorService resourceChunkThreadPool = Executors.newSingleThreadExecutor();
 
 	public ResourcePackListener(ProtocolSupportPocketStuff plugin, Connection connection) {
 		this.plugin = plugin;
@@ -138,7 +141,7 @@ public class ResourcePackListener extends Connection.PacketListener {
 				return;
 			}
 
-			PocketCon.sendPocketPacket(connection, new ResourcePackChunkDataPacket(packId, chunkIdx, pack.get().getPackChunk(chunkIdx)));
+			resourceChunkThreadPool.submit(() -> PocketCon.sendPocketPacket(connection, new ResourcePackChunkDataPacket(packId, chunkIdx, pack.get().getPackChunk(chunkIdx))));
 		}
 	}
 }

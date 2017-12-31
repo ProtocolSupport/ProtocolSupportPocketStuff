@@ -17,6 +17,7 @@ public class StuffUtils {
 	public static final String SKIN_PROPERTY_NAME = "textures";
 	public static final String APPLY_SKIN_ON_JOIN_KEY = "applySkinOnJoin";
 	public static final String CLIENT_INFO_KEY = "clientInformationMap";
+	public static final String CLIENT_UUID_KEY = "clientUniqueId";
 
 	public static String toLegacy(IChatBaseComponent s) {
 		StringBuilder builder = new StringBuilder();

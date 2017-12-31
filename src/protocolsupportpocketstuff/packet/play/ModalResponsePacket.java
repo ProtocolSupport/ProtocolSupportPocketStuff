@@ -1,7 +1,9 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
+import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -66,26 +68,32 @@ public class ModalResponsePacket extends PEPacket {
 			JsonElement element = StuffUtils.JSON_PARSER.parse(parent.getModalJSON());
 			boolean isClosedByClient = element.isJsonNull();
 
-			if (modalType == ModalType.COMPLEX_FORM) {
-				ComplexFormResponseEvent event = new ComplexFormResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? null : element.getAsJsonArray());
-				event.setCancelled(isClosedByClient);
-				pm.callEvent(event);
-				return;
-			} else if (modalType == ModalType.MODAL_WINDOW) {
-				ModalWindowResponseEvent event = new ModalWindowResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? false : element.getAsBoolean());
-				event.setCancelled(isClosedByClient);
-				pm.callEvent(event);
-				return;
-			} else if (modalType == ModalType.SIMPLE_FORM) {
-				SimpleFormResponseEvent event = new SimpleFormResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? -1 : element.getAsNumber().intValue());
-				event.setCancelled(isClosedByClient);
-				pm.callEvent(event);
-				return;
-			}
+			new BukkitRunnable() {
+				public void run() {
+					// Don't ask me why this is needed, but it is... if we don't do this, an IllegalReferenceCountException is thrown
+					Connection _connection = ProtocolSupportAPI.getConnection(connection.getAddress());
+					if (modalType == ModalType.COMPLEX_FORM) {
+						ComplexFormResponseEvent event = new ComplexFormResponseEvent(_connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? null : element.getAsJsonArray());
+						event.setCancelled(isClosedByClient);
+						pm.callEvent(event);
+						return;
+					} else if (modalType == ModalType.MODAL_WINDOW) {
+						ModalWindowResponseEvent event = new ModalWindowResponseEvent(_connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? false : element.getAsBoolean());
+						event.setCancelled(isClosedByClient);
+						pm.callEvent(event);
+						return;
+					} else if (modalType == ModalType.SIMPLE_FORM) {
+						SimpleFormResponseEvent event = new SimpleFormResponseEvent(_connection, parent.getModalId(), parent.getModalJSON(), modalType, isClosedByClient ? -1 : element.getAsNumber().intValue());
+						event.setCancelled(isClosedByClient);
+						pm.callEvent(event);
+						return;
+					}
 
-			ModalResponseEvent event = new ModalResponseEvent(connection, parent.getModalId(), parent.getModalJSON(), modalType);
-			event.setCancelled(isClosedByClient);
-			pm.callEvent(event);
+					ModalResponseEvent event = new ModalResponseEvent(_connection, parent.getModalId(), parent.getModalJSON(), modalType);
+					event.setCancelled(isClosedByClient);
+					pm.callEvent(event);
+				}
+			}.runTask(ProtocolSupportPocketStuff.getInstance());
 		}
 	}
 }

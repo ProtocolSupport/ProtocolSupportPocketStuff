@@ -133,8 +133,11 @@ public class PocketCon {
 
 	public static void handleModalResponse(Connection connection, ModalResponseEvent event) {
 		ModalCallback modalCallback = PocketCon.getCallback(connection);
+
 		if (modalCallback == null)
 			return;
+
+		PocketCon.removeCallback(connection);
 
 		modalCallback.onModalResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled());
 		if (modalCallback instanceof SimpleFormCallback) {
@@ -150,8 +153,6 @@ public class PocketCon {
 			boolean result = event instanceof ModalWindowResponseEvent ? ((ModalWindowResponseEvent) event).getResult() : false;
 			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), result);
 		}
-
-		PocketCon.removeCallback(connection);
 	}
 
 	/***
@@ -230,6 +231,18 @@ public class PocketCon {
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, Object> getClientInformationMap(Connection connection) {
 		return (HashMap<String, Object>) connection.getMetadata(StuffUtils.CLIENT_INFO_KEY);
+	}
+
+	/***
+	 * Gets the client unique identifier
+	 * <br/><br/>
+	 * <b>This isn't the server unique identifier for the player</b>, this unique ID is sent by the client during login and
+	 * it is used for skin updates, player list updates and other misc stuff.
+	 * @param connection
+	 * @return the client unique identifier
+	 */
+	public static UUID getClientUniqueId(Connection connection) {
+		return (UUID) connection.getMetadata(StuffUtils.CLIENT_UUID_KEY);
 	}
 
 	/***

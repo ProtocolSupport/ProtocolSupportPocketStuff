@@ -15,15 +15,15 @@ import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.EntityDataPacket;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamsPacketListener extends Connection.PacketListener {
 	private Connection con;
-	private HashMap<String, Integer> cachedUsers = new HashMap<String, Integer>();
-	private HashMap<String, CachedTeam> cachedTeams = new HashMap<String, CachedTeam>();
+	private ConcurrentHashMap<String, Integer> cachedUsers = new ConcurrentHashMap<String, Integer>();
+	private ConcurrentHashMap<String, CachedTeam> cachedTeams = new ConcurrentHashMap<String, CachedTeam>();
 	private static Field TEAM_NAME = null;
 	private static Field UPDATE_MODE = null;
 	private static Field TEAM_PREFIX = null;
@@ -155,22 +155,10 @@ public class TeamsPacketListener extends Connection.PacketListener {
 		throw new RuntimeException("Error while getting field \"" + field.getName() + "\" from " + source + "!");
 	}
 
-	static class CachedUser {
-		private long entityId;
-
-		public CachedUser(long entityId) {
-			this.entityId = entityId;
-		}
-
-		public long getEntityId() {
-			return entityId;
-		}
-	}
-
 	static class CachedTeam {
 		private String prefix;
 		private String suffix;
-		private List<String> players = new ArrayList<String>();
+		private Set<String> players = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
 		public CachedTeam(String prefix, String suffix) {
 			this.prefix = prefix;
@@ -220,7 +208,7 @@ public class TeamsPacketListener extends Connection.PacketListener {
 			this.suffix = suffix;
 		}
 
-		public List<String> getPlayers() {
+		public Set<String> getPlayers() {
 			return players;
 		}
 	}
