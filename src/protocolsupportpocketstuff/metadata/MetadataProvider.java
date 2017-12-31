@@ -1,18 +1,22 @@
 package protocolsupportpocketstuff.metadata;
 
+import java.util.UUID;
+
+import org.bukkit.entity.EntityType;
+
 import protocolsupport.api.unsafe.pemetadata.PEMetaProvider;
-import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupportpocketstuff.api.util.PocketUtils;
 
 public class MetadataProvider extends PEMetaProvider {
-	
+
 	@Override
-	public float getEntitySize(NetworkEntity networkEntity) {
-		return PocketUtils.hasCustomScale(networkEntity.getId()) ? PocketUtils.getCustomScale(networkEntity.getId()) : 1;
+	public String getUseText(UUID uuid, int id, EntityType entitytype) {
+		return "Interact";
 	}
 
 	@Override
-	public String getInteractText(NetworkEntity entity) {
-		return "Interact";
+	public float getSizeScale(UUID uuid, int id, EntityType entitytype) {
+		return PocketUtils.hasCustomScale(id) ? PocketUtils.getCustomScale(id) : 1;
 	}
+
 }
