@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -61,7 +62,14 @@ public class SpawnEntityPacket extends PEPacket {
 		MiscSerializer.writeLFloat(serializer, pitch); // pitch
 		MiscSerializer.writeLFloat(serializer, yaw); // yaw
 
-		SetAttributesPacket.encodeAttributes(connection, serializer, attributes);
+		// We can't use SetAttributePackets#encodeAttributes because MCPE uses an different format in SpawnEntityPacket (why mojang?)
+		VarNumberSerializer.writeVarInt(serializer, attributes.size());
+		for (SetAttributesPacket.Attribute attribute : attributes) {
+			StringSerializer.writeString(serializer, connection.getVersion(), attribute.getName());
+			MiscSerializer.writeLFloat(serializer, attribute.getMinimum());
+			MiscSerializer.writeLFloat(serializer, attribute.getValue());
+			MiscSerializer.writeLFloat(serializer, attribute.getMaximum());
+		}
 
 		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
 
