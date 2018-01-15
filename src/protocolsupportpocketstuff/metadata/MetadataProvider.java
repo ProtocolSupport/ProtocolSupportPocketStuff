@@ -1,11 +1,10 @@
 package protocolsupportpocketstuff.metadata;
 
-import java.util.UUID;
-
 import org.bukkit.entity.EntityType;
-
 import protocolsupport.api.unsafe.pemetadata.PEMetaProvider;
 import protocolsupportpocketstuff.api.util.PocketUtils;
+
+import java.util.UUID;
 
 public class MetadataProvider extends PEMetaProvider {
 

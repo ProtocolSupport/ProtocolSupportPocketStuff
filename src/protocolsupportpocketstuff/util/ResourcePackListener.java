@@ -43,6 +43,9 @@ public class ResourcePackListener extends Connection.PacketListener {
 	@Override
 	public void onRawPacketSending(RawPacketEvent event) {
 		super.onRawPacketSending(event);
+		// Don't process anything if the server doesn't have any beh/res packs
+		if (PocketStuffAPI.getResourcePackManager().getBehaviorPacks().isEmpty() && PocketStuffAPI.getResourcePackManager().getResourcePacks().isEmpty()) { return; }
+
 		int packetId = VarNumberSerializer.readVarInt(event.getData());
 
 		if (packetId == PEPacketIDs.RESOURCE_PACK) {
@@ -69,6 +72,9 @@ public class ResourcePackListener extends Connection.PacketListener {
 	@Override
 	public void onRawPacketReceiving(RawPacketEvent event) {
 		super.onRawPacketReceiving(event);
+		// Don't process anything if the server doesn't have any beh/res packs
+		if (PocketStuffAPI.getResourcePackManager().getBehaviorPacks().isEmpty() && PocketStuffAPI.getResourcePackManager().getResourcePacks().isEmpty()) { return; }
+
 		ByteBuf buf = event.getData().copy();
 		int packetId = VarNumberSerializer.readVarInt(buf);
 
