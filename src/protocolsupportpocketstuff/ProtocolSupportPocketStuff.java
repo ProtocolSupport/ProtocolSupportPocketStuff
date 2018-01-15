@@ -60,14 +60,14 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		pm.registerEvents(this, this);
 		if(getConfig().getBoolean("skins.PCtoPE")) { pm.registerEvents(new SkinListener(this), this); }
 		if(getConfig().getBoolean("hacks.dimensions")) { pm.registerEvents(new DimensionListener(), this); }
-		
+
 		// = SPI = \\
 		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider(this)); }
 		PEMetaProviderSPI.setProvider(new MetadataProvider());
 
 		// = Cache = \\
 		Skins.INSTANCE.buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
-		
+
 		pm("Hello world! :D");
 	}
 
@@ -82,10 +82,13 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public void onConnectionHandshake(ConnectionHandshakeEvent e) {
 		Connection con = e.getConnection();
 		if(PocketCon.isPocketConnection(con)) {
-			
+
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
-			con.addPacketListener(new ResourcePackListener(this, con));
+
+			if (!PocketStuffAPI.getResourcePackManager().getBehaviorPacks().isEmpty() || !PocketStuffAPI.getResourcePackManager().getResourcePacks().isEmpty())
+				con.addPacketListener(new ResourcePackListener(this, con));
+
 			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.middleclick")) { con.addPacketListener(new BlockPickRequestPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
@@ -102,12 +105,12 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onDisable() {
 		pm("Bye world :O");
 	}
-	
+
 	/**
 	 * Sends a plugin message.
 	 * @param msg
