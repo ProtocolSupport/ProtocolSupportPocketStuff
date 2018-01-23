@@ -1,0 +1,52 @@
+{
+  "geometry.Tiles.PSPEFakeSkull": {
+    "bones": [
+      {
+        "pivot": [ 0, 24, 0 ],
+        "rotation": [ 0, 0, 0 ],
+        "cubes": [
+          {
+            "origin": [ -4, 0, -4 ],
+            "size": [ 8, 8, 8 ],
+            "uv": [ 0, 0 ],
+            "inflate": 0,
+            "mirror": false
+          }
+        ],
+        "META_BoneType": "base",
+        "name": "head",
+        "parent": null
+      },
+      {
+        "pivot": [ 0, 24, 0 ],
+        "rotation": [ 0, 0, 0 ],
+        "cubes": [
+          {
+            "origin": [ -4, 0, -4 ],
+            "size": [ 8, 8, 8 ],
+            "uv": [ 32, 0 ],
+            "inflate": 0.5,
+            "mirror": false
+          }
+        ],
+        "META_BoneType": "clothing",
+        "name": "hat",
+        "parent": "head"
+      }
+    ],
+    "texturewidth": 64,
+    "textureheight": 64,
+    "META_ModelVersion": "1.0.6",
+    "rigtype": "normal",
+    "animationArmsDown": false,
+    "animationArmsOutFront": false,
+    "animationStatueOfLibertyArms": false,
+    "animationSingleArmAnimation": true,
+    "animationStationaryLegs": true,
+    "animationSingleLegAnimation": false,
+    "animationNoHeadBob": true,
+    "animationDontShowArmor": true,
+    "animationUpsideDown": false,
+    "animationInvertedCrouch": false
+  }
+}

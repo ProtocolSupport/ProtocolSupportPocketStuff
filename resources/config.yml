@@ -31,6 +31,9 @@
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
 # teams       - Enables experimental caching and mucking with packets to support team prefix/suffixes for PE players.
 # bossbars    - Enables experimental caching and mucking with packets to boss bars for PE players.
+# player-heads-skins  - Options related to player heads with custom skins
+#   skull-blocks      - Enables experimental caching, "player heads to players" replacement to support player heads with skins for PE players.
+#   equipped-blocks   - Enables experimental caching, skin replacement to support equipped player heads with skins for PE players.
 #
 # !Do not change the config-version unless you know what you are doing!
 
@@ -53,4 +56,7 @@ hacks:
  itemframes: false
  teams: false
  bossbars: false
+ player-heads-skins:
+  skull-blocks: false
+  equipped-blocks: false
 config-version: 3

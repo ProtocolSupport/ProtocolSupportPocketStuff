@@ -18,6 +18,7 @@ import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
 import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
+import protocolsupportpocketstuff.hacks.skulls.SkullTilePacketListener;
 import protocolsupportpocketstuff.hacks.teams.TeamsPacketListener;
 import protocolsupportpocketstuff.metadata.MetadataProvider;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
@@ -92,6 +93,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.middleclick")) { con.addPacketListener(new BlockPickRequestPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
+			if (getConfig().getBoolean("hacks.player-heads-skins.skull-blocks")) { con.addPacketListener(new SkullTilePacketListener(con)); }
 			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
 				if (getConfig().getBoolean("hacks.teams")) {
 					con.addPacketListener(new TeamsPacketListener(this, con));
