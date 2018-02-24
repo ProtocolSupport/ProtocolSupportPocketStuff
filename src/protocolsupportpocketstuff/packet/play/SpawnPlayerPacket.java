@@ -56,15 +56,15 @@ public class SpawnPlayerPacket extends PEPacket {
 		StringSerializer.writeString(serializer, connection.getVersion(), name);
 		VarNumberSerializer.writeSVarLong(serializer, entityId); // entity ID
 		VarNumberSerializer.writeVarLong(serializer, entityId); // runtime ID
-		MiscSerializer.writeLFloat(serializer, x); // x
-		MiscSerializer.writeLFloat(serializer, y); // y
-		MiscSerializer.writeLFloat(serializer, z); // z
-		MiscSerializer.writeLFloat(serializer, motionX); // motx
-		MiscSerializer.writeLFloat(serializer, motionY); // moty
-		MiscSerializer.writeLFloat(serializer, motionZ); // motz
-		MiscSerializer.writeLFloat(serializer, pitch); // pitch
-		MiscSerializer.writeLFloat(serializer, headYaw); // yaw
-		MiscSerializer.writeLFloat(serializer, yaw); // yaw
+		serializer.writeFloatLE(x); // x
+		serializer.writeFloatLE(y); // y
+		serializer.writeFloatLE(z); // z
+		serializer.writeFloatLE(motionX); // motx
+		serializer.writeFloatLE(motionY); // moty
+		serializer.writeFloatLE(motionZ); // motz
+		serializer.writeFloatLE(pitch); // pitch
+		serializer.writeFloatLE(headYaw); // yaw
+		serializer.writeFloatLE(yaw); // yaw
 
 		VarNumberSerializer.writeSVarInt(serializer, 0); // held item stack
 

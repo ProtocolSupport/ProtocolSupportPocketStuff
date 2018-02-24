@@ -217,42 +217,6 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		}
 	}
 
-	public void sendSkullSkin(byte[] skullSkin, UUID uuid, boolean self) {
-		byte[] originalSkin = Skins.INSTANCE.getSkinFromUUID(uuid).clone();
-		System.arraycopy(skullSkin, 0, originalSkin, 0, 1024 * 4);
-
-		PESkinModel model = PESkinModel.getSkinModel(false);
-
-		PocketCon.sendPocketPacket(con, new SkinPacket(
-				self ? PocketCon.getClientUniqueId(con) : uuid,
-				model.getSkinId(),
-				model.getSkinName(),
-				"Steve",
-				originalSkin,
-				new byte[0],
-				model.getGeometryId(),
-				model.getGeometryData()
-		));
-
-	}
-
-	public void sendOriginalSkin(UUID uuid, boolean self) {
-		PESkinModel model = PESkinModel.getSkinModel(false);
-
-		byte[] originalSkin = Skins.INSTANCE.getSkinFromUUID(uuid).clone();
-
-		PocketCon.sendPocketPacket(con, new SkinPacket(
-				self ? PocketCon.getClientUniqueId(con) : uuid,
-				model.getSkinId(),
-				model.getSkinName(),
-				"Steve",
-				originalSkin,
-				new byte[0],
-				model.getGeometryId(),
-				model.getGeometryData()
-		));
-	}
-
 	public boolean isSkull(NBTTagCompoundWrapper tag) {
 		return tag.getString("id").equals("Skull");
 	}
