@@ -39,7 +39,7 @@ gen.mkdirs();
 //TODO: Add ProtocolSupport to dlibs (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 task updateLibs(type: Download) {
 	src([
-		'https://yivesmirror.com/files/spigot/spigot-1.12.1-R0.1-SNAPSHOT-b1378.jar'
+		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1605.jar'
 	])
 	dest dllibs
 	onlyIfNewer true

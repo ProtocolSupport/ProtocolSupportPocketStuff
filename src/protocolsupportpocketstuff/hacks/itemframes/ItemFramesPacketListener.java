@@ -260,12 +260,12 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			VarNumberSerializer.readSVarInt(data); // face
 			VarNumberSerializer.readSVarInt(data); // slot
 			ItemStackSerializer.readItemStack(data, con.getVersion(), I18NData.DEFAULT_LOCALE, true); // itemstack
-			data.readFloat(); // fromX
-			data.readFloat(); // fromY
-			data.readFloat(); // fromZ
-			data.readFloat(); // cX
-			data.readFloat(); // cY
-			data.readFloat(); // cZ
+			data.readFloatLE(); // fromX
+			data.readFloatLE(); // fromY
+			data.readFloatLE(); // fromZ
+			data.readFloatLE(); // cX
+			data.readFloatLE(); // cY
+			data.readFloatLE(); // cZ
 
 			int itemFrameX = position.getX();
 			int itemFrameY = position.getY();

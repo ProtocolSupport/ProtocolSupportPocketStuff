@@ -53,22 +53,22 @@ public class SpawnEntityPacket extends PEPacket {
 		VarNumberSerializer.writeSVarLong(serializer, entityId); // entity ID
 		VarNumberSerializer.writeVarLong(serializer, entityId); // runtime ID
 		VarNumberSerializer.writeVarInt(serializer, entityType); // boss bar entity id
-		serializer.writeFloat(x); // x
-		serializer.writeFloat(y); // y
-		serializer.writeFloat(z); // z
-		serializer.writeFloat(motionX); // motx
-		serializer.writeFloat(motionY); // moty
-		serializer.writeFloat(motionZ); // motz
-		serializer.writeFloat(pitch); // pitch
-		serializer.writeFloat(yaw); // yaw
+		serializer.writeFloatLE(x); // x
+		serializer.writeFloatLE(y); // y
+		serializer.writeFloatLE(z); // z
+		serializer.writeFloatLE(motionX); // motx
+		serializer.writeFloatLE(motionY); // moty
+		serializer.writeFloatLE(motionZ); // motz
+		serializer.writeFloatLE(pitch); // pitch
+		serializer.writeFloatLE(yaw); // yaw
 
 		// We can't use SetAttributePackets#encodeAttributes because MCPE uses an different format in SpawnEntityPacket (why mojang?)
 		VarNumberSerializer.writeVarInt(serializer, attributes.size());
 		for (SetAttributesPacket.Attribute attribute : attributes) {
 			StringSerializer.writeString(serializer, connection.getVersion(), attribute.getName());
-			serializer.writeFloat(attribute.getMinimum());
-			serializer.writeFloat(attribute.getValue());
-			serializer.writeFloat(attribute.getMaximum());
+			serializer.writeFloatLE(attribute.getMinimum());
+			serializer.writeFloatLE(attribute.getValue());
+			serializer.writeFloatLE(attribute.getMaximum());
 		}
 
 		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
