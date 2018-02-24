@@ -96,9 +96,9 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			if (!cachedArmorStands.containsKey(entityId))
 				return;
 
-			float x = MiscSerializer.readLFloat(data);
-			float y = MiscSerializer.readLFloat(data) + (float) Y_OFFSET;
-			float z = MiscSerializer.readLFloat(data);
+			float x = data.readFloat();
+			float y = data.readFloat() + (float) Y_OFFSET;
+			float z = data.readFloat();
 			int pitch = data.readByte();
 			int headYaw = data.readByte();
 			int yaw = data.readByte();
@@ -117,16 +117,16 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			if (typeId != ARMOR_STAND_ID)
 				return;
 
-			float x = MiscSerializer.readLFloat(data);
-			float y = MiscSerializer.readLFloat(data);
-			float z = MiscSerializer.readLFloat(data);
+			float x = data.readFloat();
+			float y = data.readFloat();
+			float z = data.readFloat();
 
-			MiscSerializer.readLFloat(data); // motx
-			MiscSerializer.readLFloat(data); // moty
-			MiscSerializer.readLFloat(data); // motz
+			data.readFloat(); // motx
+			data.readFloat(); // moty
+			data.readFloat(); // motz
 
-			MiscSerializer.readLFloat(data); // pitch
-			MiscSerializer.readLFloat(data); // yaw
+			data.readFloat(); // pitch
+			data.readFloat(); // yaw
 
 			VarNumberSerializer.readVarInt(data); // attribute length, unused
 

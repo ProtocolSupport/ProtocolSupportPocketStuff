@@ -29,9 +29,9 @@ public class DimensionPacket extends PEPacket {
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
 		VarNumberSerializer.writeSVarInt(serializer, toPocketDimension(enviroment));
-		MiscSerializer.writeLFloat(serializer, (float) position.getX());
-		MiscSerializer.writeLFloat(serializer, (float) position.getY());
-		MiscSerializer.writeLFloat(serializer, (float) position.getZ());
+		serializer.writeFloat((float) position.getX());
+		serializer.writeFloat((float) position.getY());
+		serializer.writeFloat((float) position.getZ());
 		serializer.writeBoolean(true); //unused value
 	}
 

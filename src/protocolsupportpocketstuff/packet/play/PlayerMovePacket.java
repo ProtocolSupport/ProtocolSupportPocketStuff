@@ -38,12 +38,12 @@ public class PlayerMovePacket extends PEPacket {
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		MiscSerializer.writeLFloat(serializer, x);
-		MiscSerializer.writeLFloat(serializer, y);
-		MiscSerializer.writeLFloat(serializer, z);
-		MiscSerializer.writeLFloat(serializer, pitch);
-		MiscSerializer.writeLFloat(serializer, headYaw);
-		MiscSerializer.writeLFloat(serializer, yaw); //head yaw actually
+		serializer.writeFloat(x);
+		serializer.writeFloat(y);
+		serializer.writeFloat(z);
+		serializer.writeFloat(pitch);
+		serializer.writeFloat(headYaw);
+		serializer.writeFloat(yaw); //head yaw actually
 		serializer.writeByte(mode);
 		serializer.writeBoolean(onGround); //on ground
 		VarNumberSerializer.writeVarLong(serializer, 0);

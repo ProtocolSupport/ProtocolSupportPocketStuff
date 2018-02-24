@@ -40,10 +40,10 @@ public class SetAttributesPacket extends PEPacket {
 	public static void encodeAttributes(Connection connection, ByteBuf serializer, List<Attribute> attributes) {
 		VarNumberSerializer.writeVarInt(serializer, attributes.size());
 		for (Attribute attribute : attributes) {
-			MiscSerializer.writeLFloat(serializer, attribute.getMinimum());
-			MiscSerializer.writeLFloat(serializer, attribute.getMaximum());
-			MiscSerializer.writeLFloat(serializer, attribute.getValue());
-			MiscSerializer.writeLFloat(serializer, attribute.getDefaultValue()); //default value
+			serializer.writeFloat(attribute.getMinimum());
+			serializer.writeFloat(attribute.getMaximum());
+			serializer.writeFloat(attribute.getValue());
+			serializer.writeFloat(attribute.getDefaultValue()); //default value
 			StringSerializer.writeString(serializer, connection.getVersion(), attribute.getName());
 		}
 	}
