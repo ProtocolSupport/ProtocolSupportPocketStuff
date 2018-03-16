@@ -39,7 +39,7 @@ gen.mkdirs();
 //TODO: Add ProtocolSupport to dlibs (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 task updateLibs(type: Download) {
 	src([
-		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'
+		'http://www.tcpr.ca/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1610.jar'
 	])
 	dest dllibs
 	onlyIfNewer true
@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-	shadow files(new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'), new File(dllibs, 'ProtocolSupport.jar'))
+	shadow files(new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1610.jar'), new File(dllibs, 'ProtocolSupport.jar'))
 }
 
 shadowJar {

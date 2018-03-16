@@ -9,7 +9,6 @@ import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -234,7 +233,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 
 			sendInteractEntityPacket(entry.getKey(), PacketPlayInUseEntity.EnumEntityUseAction.ATTACK);
 		}
-		if (packetId == PEPacketIDs.INVENTORY_TRANSACTION) { // GodPacket, now on ProtocolSupportPocketStuff!
+		if (packetId == 49) { // TODO: Use PEPacketIDs class when mcpeinventory is merged ~ GodPacket, now on ProtocolSupportPocketStuff!
 			int actionId = VarNumberSerializer.readVarInt(data);
 
 			if (actionId != ACTION_USE_ITEM)
