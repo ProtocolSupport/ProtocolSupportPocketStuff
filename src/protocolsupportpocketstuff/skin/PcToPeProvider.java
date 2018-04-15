@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class PcToPeProvider extends PESkinsProvider {
 
 	ProtocolSupportPocketStuff plugin;
-	Skins skinCache = Skins.INSTANCE;
+	Skins skinCache = Skins.getInstance();
 	
 	public PcToPeProvider(ProtocolSupportPocketStuff plugin) {
 		this.plugin = plugin;

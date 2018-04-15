@@ -15,11 +15,9 @@ import protocolsupportpocketstuff.api.PocketStuffAPI;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
-import protocolsupportpocketstuff.hacks.dimensions.DimensionListener;
 import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.skulls.SkullTilePacketListener;
-import protocolsupportpocketstuff.hacks.teams.TeamsPacketListener;
 import protocolsupportpocketstuff.metadata.MetadataProvider;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.BlockPickRequestPacket;
@@ -31,12 +29,9 @@ import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.ResourcePackListener;
 
-import java.io.File;
-
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
 	private static ProtocolSupportPocketStuff INSTANCE;
-	public static ServerPlatformIdentifier platform = ServerPlatformIdentifier.SPIGOT; // TODO: Add platform checker
 	public static ProtocolSupportPocketStuff getInstance() {
 		return INSTANCE;
 	}
@@ -44,31 +39,24 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
-
-		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
-
 		// = Config = \\
 		saveDefaultConfig();
-
-		new File(this.getDataFolder(), ResourcePackManager.FOLDER_NAME + "/").mkdirs();
-
-		ResourcePackManager resourcePackManager = new ResourcePackManager(this);
+		// = SPI = \\
+		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider(this)); }
+		PEMetaProviderSPI.setProvider(new MetadataProvider());
+		// = Cache = \\
+		Skins.getInstance().buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
+		// = ResourcePacks = \\
+		ResourcePackManager resourcePackManager = new ResourcePackManager();
 		resourcePackManager.reloadPacks();
 		PocketStuffAPI.setResourcePackManager(resourcePackManager);
-
 		// = Events = \\
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
 		if(getConfig().getBoolean("skins.PCtoPE")) { pm.registerEvents(new SkinListener(this), this); }
-		if(getConfig().getBoolean("hacks.dimensions")) { pm.registerEvents(new DimensionListener(), this); }
-
-		// = SPI = \\
-		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider(this)); }
-		PEMetaProviderSPI.setProvider(new MetadataProvider());
-
-		// = Cache = \\
-		Skins.INSTANCE.buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
-
+		// = Commands = \\
+		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
+		// = Welcome = \\
 		pm("Hello world! :D");
 	}
 
@@ -83,21 +71,14 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public void onConnectionHandshake(ConnectionHandshakeEvent e) {
 		Connection con = e.getConnection();
 		if(PocketCon.isPocketConnection(con)) {
-
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
-
-			if (!PocketStuffAPI.getResourcePackManager().getBehaviorPacks().isEmpty() || !PocketStuffAPI.getResourcePackManager().getResourcePacks().isEmpty())
-				con.addPacketListener(new ResourcePackListener(this, con));
-
+			if (!PocketStuffAPI.getResourcePackManager().isEmpty()) { con.addPacketListener(new ResourcePackListener(this, con)); }
 			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.middleclick")) { con.addPacketListener(new BlockPickRequestPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
 			if (getConfig().getBoolean("hacks.player-heads-skins.skull-blocks")) { con.addPacketListener(new SkullTilePacketListener(con)); }
-			if (platform == ServerPlatformIdentifier.SPIGOT) { // Spigot only hacks
-				if (getConfig().getBoolean("hacks.teams")) {
-					con.addPacketListener(new TeamsPacketListener(this, con));
-				}
+			if (ServerPlatformIdentifier.get() == ServerPlatformIdentifier.SPIGOT) {
 				if (getConfig().getBoolean("hacks.itemframes")) {
 					con.addPacketListener(new ItemFramesPacketListener(this, con));
 				}
@@ -118,7 +99,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	 * @param msg
 	 */
 	public void pm(String msg) {
-		msg = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] " + msg;
+		msg = PREFIX + msg;
 		if (getConfig().getBoolean("logging.disable-colors", false)) {
 			msg = ChatColor.stripColor(msg);
 		}
@@ -131,7 +112,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	 */
 	public void debug(String msg) {
 		if (!getConfig().getBoolean("logging.enable-debug", false)) { return; }
-		msg = "[" + ChatColor.RED + "PSPS" + ChatColor.RESET + "] " + msg;
+		msg = PREFIX + " [DEBUG] " + msg;
 		if (getConfig().getBoolean("logging.disable-colors", false)) {
 			msg = ChatColor.stripColor(msg);
 		}
