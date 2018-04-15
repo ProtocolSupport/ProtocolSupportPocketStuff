@@ -2,7 +2,6 @@ package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
@@ -51,4 +50,5 @@ public class PlayerMovePacket extends PEPacket {
 
 	@Override
 	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+
 }

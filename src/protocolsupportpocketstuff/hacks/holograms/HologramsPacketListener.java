@@ -2,6 +2,7 @@ package protocolsupportpocketstuff.hacks.holograms;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
+import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetPosition;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -23,10 +24,9 @@ import protocolsupportpocketstuff.packet.play.PlayerMovePacket;
 import protocolsupportpocketstuff.packet.play.SpawnPlayerPacket;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class HologramsPacketListener extends Connection.PacketListener {
+public class HologramsPacketListener extends PacketListener {
 	private Connection con;
 	private HashMap<Long, CachedArmorStand> cachedArmorStands = new HashMap<Long, CachedArmorStand>();
 	private static final HashMap<Integer, ReadableDataWatcherObject<?>> DATA_WATCHERS = new HashMap<Integer, ReadableDataWatcherObject<?>>();
@@ -114,7 +114,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			event.setCancelled(true);
 
 			armorStand.nametag = hologramName;
-			armorStand.isHologram = true;
+			armorStand.setHologram(true);
 
 			// omg it is an hologram :O
 			armorStand.spawnHologram(entityId, this);
@@ -134,7 +134,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			// omg it is an hologram :O
 			CachedArmorStand armorStand = cachedArmorStands.get(entityId);
 
-			armorStand.isHologram = true;
+			armorStand.setHologram(true);
 
 			if (armorStand.isSpawned)
 				return;
@@ -143,7 +143,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			event.setData(new EntityDestroyPacket(entityId).encode(con));
 
 			armorStand.nametag = hologramName;
-			armorStand.isHologram = true;
+			armorStand.setHologram(true);
 
 			cachedArmorStands.put(entityId, armorStand);
 
@@ -233,6 +233,14 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			);
 
 			PocketCon.sendPocketPacket(listener.con, packet);
+		}
+
+		public boolean isHologram() {
+			return isHologram;
+		}
+
+		public void setHologram(boolean isHologram) {
+			this.isHologram = isHologram;
 		}
 	}
 }

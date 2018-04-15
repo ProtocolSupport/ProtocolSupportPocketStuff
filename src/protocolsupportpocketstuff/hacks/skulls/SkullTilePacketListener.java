@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -324,9 +325,9 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 			CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(76);
 
-			metadata.put(39, new DataWatcherObjectFloatLe(1.05f)); // scale, needs to be a *bit* bigger than the original skull
-			metadata.put(54, new DataWatcherObjectFloatLe(0.001f)); // bb width
-			metadata.put(55, new DataWatcherObjectFloatLe(0.001f)); // bb height
+			metadata.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(1.05f)); //Needs to be a *bit* bigger than the original skull
+			metadata.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0.001f));
+			metadata.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0.001f));
 
 			UUID uuid = UUID.randomUUID();
 

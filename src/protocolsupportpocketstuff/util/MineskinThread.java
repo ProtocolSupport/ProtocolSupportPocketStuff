@@ -139,7 +139,6 @@ public class MineskinThread extends Thread {
 
 		//triggers an update for others player to see the new skin
 		new BukkitRunnable() {
-			@SuppressWarnings("deprecation")
 			public void run() {
 				Bukkit.getOnlinePlayers().stream()
 						.filter(onlinePlayer -> !onlinePlayer.equals(player))

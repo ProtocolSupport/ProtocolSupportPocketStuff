@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import org.bukkit.World.Environment;
 import org.bukkit.util.Vector;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
