@@ -145,8 +145,8 @@ public class MineskinThread extends Thread {
 						.filter(onlinePlayer -> onlinePlayer.canSee(player))
 						.forEach(onlinePlayer -> {
 							//removes the entity and display the new skin
-							onlinePlayer.hidePlayer(player);
-							onlinePlayer.showPlayer(player);
+							onlinePlayer.hidePlayer(plugin, player);
+							onlinePlayer.showPlayer(plugin, player);
 						});
 			}
 		}.runTask(ProtocolSupportPocketStuff.getInstance());
