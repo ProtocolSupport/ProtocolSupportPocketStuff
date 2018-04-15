@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.hacks.skulls;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
@@ -126,18 +127,36 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			return;
 		}
 		if (packetId == PEPacketIDs.CHUNK_DATA) {
-			VarNumberSerializer.readSVarInt(data); // chunk X
-			VarNumberSerializer.readSVarInt(data); // chunk Z
-			int length = VarNumberSerializer.readVarInt(data); // length
-			data.skipBytes(length);
+			int chunkX = VarNumberSerializer.readSVarInt(data); // chunk X
+			int chunkZ = VarNumberSerializer.readSVarInt(data); // chunk Z
+			byte[] byteArray = ArraySerializer.readByteArray(data, con.getVersion());
 
-			data.skipBytes(512); // heights
-			data.skipBytes(256); // biomes
-			data.readByte(); // borders
-			VarNumberSerializer.readSVarInt(data); // extra data
-			while (data.readableBytes() != 0) {
-				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(data, true, con.getVersion());
+			ByteBuf chunkdata = Unpooled.wrappedBuffer(byteArray);
+			int sections = chunkdata.readByte(); // how many sections we have in this chunk
 
+			for (int i = 0; i < sections; i++) {
+				chunkdata.readByte(); // subchunk version
+
+				chunkdata.readByte();
+				chunkdata.skipBytes(512);
+				int size = VarNumberSerializer.readSVarInt(chunkdata);
+				for (int x = 0; x < size; x++) {
+					VarNumberSerializer.readSVarInt(chunkdata);
+				}
+			}
+
+			chunkdata.skipBytes(512); // height map
+			chunkdata.skipBytes(256); // biome data
+
+			chunkdata.readByte(); // borders
+			VarNumberSerializer.readSVarInt(chunkdata); // extra data
+
+			System.out.println("owo whats this? WE ARE RECEIVING CHUNK " + chunkX + ", " + chunkZ);
+
+			while (chunkdata.readableBytes() != 0) {
+				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(chunkdata, true, con.getVersion());
+
+				System.out.println("owo tag: " + tag);
 				if (!isSkull(tag))
 					continue;
 
