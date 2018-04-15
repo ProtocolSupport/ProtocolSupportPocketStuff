@@ -8,7 +8,6 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
@@ -312,6 +311,10 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			this.position = position;
 		}
 
+		public Position getPosition() {
+			return position;
+		}
+
 		public boolean isCustomSkull() {
 			return tag != null && url != null;
 		}
@@ -323,8 +326,8 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		public void spawn(SkullTilePacketListener listener) {
 			isSpawned = true;
 
-			if (Skins.INSTANCE.hasPeSkin(url)) {
-				sendFakePlayer(listener, url, Skins.INSTANCE.getPeSkin(url));
+			if (Skins.getInstance().hasPcSkin(url)) {
+				sendFakePlayer(listener, url, Skins.getInstance().getPcSkin(url));
 			} else {
 				new Thread() {
 					public void run() {
@@ -332,7 +335,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 							BufferedImage image = ImageIO.read(new URL(url));
 							byte[] data = toData(image);
 							sendFakePlayer(listener, url, data);
-							Skins.INSTANCE.cachePeSkin(url, data);
+							Skins.getInstance().cachePcSkin(url, data);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}

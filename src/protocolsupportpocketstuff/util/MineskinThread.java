@@ -82,7 +82,7 @@ public class MineskinThread extends Thread {
 			String value = skinTexture.get("value").getAsString();
 
 			plugin.debug("Storing skin on cache...");
-			Skins.INSTANCE.cachePcSkin(uniqueSkinId, new SkinUtils.SkinDataWrapper(value, signature, isSlim));
+			Skins.getInstance().cachePeSkin(uniqueSkinId, new SkinUtils.SkinDataWrapper(value, signature, isSlim));
 			hackyStuff(connection, value, signature);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,7 +120,7 @@ public class MineskinThread extends Thread {
 
 		Player player = connection.getPlayer();
 
-		if (ProtocolSupportPocketStuff.platform == ServerPlatformIdentifier.SPIGOT) {
+		if (ServerPlatformIdentifier.get() == ServerPlatformIdentifier.SPIGOT) {
 			CraftPlayer craftPlayer = ((CraftPlayer) player);
 			EntityHuman entityHuman = craftPlayer.getHandle();
 
@@ -139,6 +139,7 @@ public class MineskinThread extends Thread {
 
 		//triggers an update for others player to see the new skin
 		new BukkitRunnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				Bukkit.getOnlinePlayers().stream()
 						.filter(onlinePlayer -> !onlinePlayer.equals(player))

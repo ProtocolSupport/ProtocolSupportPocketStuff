@@ -2,8 +2,7 @@ package protocolsupportpocketstuff.hacks.holograms;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetPosition;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -12,10 +11,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupportpocketstuff.api.util.PocketCon;
@@ -43,7 +42,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 		DATA_WATCHERS.put(4, new DataWatcherObjectString());
 		DATA_WATCHERS.put(5, new DataWatcherObjectItemStack());
 		DATA_WATCHERS.put(6, new DataWatcherObjectPosition());
-		DATA_WATCHERS.put(7, new DataWatcherObjectVarLong());
+		DATA_WATCHERS.put(7, new DataWatcherObjectSVarLong());
 		DATA_WATCHERS.put(8, new DataWatcherObjectPosition());
 	}
 
@@ -103,7 +102,7 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			int headYaw = data.readByte();
 			int yaw = data.readByte();
 			boolean onGround = data.readBoolean();
-			event.setData(new PlayerMovePacket(entityId, x, y, z, pitch, headYaw, yaw, Position.ANIMATION_MODE_ALL, onGround).encode(con));
+			event.setData(new PlayerMovePacket(entityId, x, y, z, pitch, headYaw, yaw, SetPosition.ANIMATION_MODE_ALL, onGround).encode(con));
 			return;
 		}
 		if (packetId == PEPacketIDs.SPAWN_ENTITY) {

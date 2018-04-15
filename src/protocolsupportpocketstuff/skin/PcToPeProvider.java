@@ -21,7 +21,7 @@ public class PcToPeProvider extends PESkinsProvider {
 	@Override
 	public byte[] getSkinData(String url) {
 		if (skinCache.hasPeSkin(url)) {
-			return skinCache.getPeSkin(url);
+			return skinCache.getPcSkin(url);
 		}
 		return null;
 	}
@@ -30,11 +30,11 @@ public class PcToPeProvider extends PESkinsProvider {
 	public void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback) {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 			try {
-				if (skinCache.hasPeSkin(url)) {
-					skindataApplyCallback.accept(skinCache.getPeSkin(url));
+				if (skinCache.hasPcSkin(url)) {
+					skindataApplyCallback.accept(skinCache.getPcSkin(url));
 				} else {
 					byte[] skin = toData(ImageIO.read(new URL(url)));
-					skinCache.cachePeSkin(url, skin);
+					skinCache.cachePcSkin(url, skin);
 					skindataApplyCallback.accept(skin);
 				}
 			} catch (IOException e) { }
