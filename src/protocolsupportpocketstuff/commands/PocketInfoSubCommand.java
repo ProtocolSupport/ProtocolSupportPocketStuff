@@ -1,11 +1,15 @@
 package protocolsupportpocketstuff.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketPlayer;
+import protocolsupportpocketstuff.util.BukkitUtils;
 
 public class PocketInfoSubCommand implements SubCommand {
+
 	@Override
 	public int getMinArgs() {
 		return 0;
@@ -14,24 +18,33 @@ public class PocketInfoSubCommand implements SubCommand {
 	@Override
 	public boolean handle(CommandSender sender, String[] args) {
 		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			if (!PocketPlayer.isPocketPlayer(player)) {
-				player.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§cThis command can only be executed by PE players");
-				return true;
+			if (args.length > 0) {
+				Player target = BukkitUtils.getBestMatchingPlayer(args[0]);
+				displayPocketInfo(sender, target);
+			} else {
+				Player player = (Player) sender;
+				displayPocketInfo(sender, player);
 			}
-
-			player.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§aClient Random ID: §e" + PocketPlayer.getClientRandomId(player));
-			player.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§aClient Version: §e" + PocketPlayer.getClientVersion(player));
-			player.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§aDevice Model: §e" + PocketPlayer.getDeviceModel(player));
-			player.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§aOperating System: §e" + PocketPlayer.getOperatingSystem(player));
 		} else {
-			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + "§cThis command can only be executed in game");
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.RED + "This command can only be executed in game");
 		}
 		return true;
 	}
 
 	@Override
 	public String getHelp() {
-		return null;
+		return "Displays information about currect pocket connection.";
 	}
+
+	private void displayPocketInfo(CommandSender sender, Player pocketPlayer) {
+		if (pocketPlayer != null && PocketPlayer.isPocketPlayer(pocketPlayer)) {
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Client Random ID: §e" + PocketPlayer.getClientRandomId(pocketPlayer));
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Client Version: §e" + PocketPlayer.getClientVersion(pocketPlayer));
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Device Model: §e" + PocketPlayer.getDeviceModel(pocketPlayer));
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Operating System: §e" + PocketPlayer.getOperatingSystem(pocketPlayer));
+		} else {
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.RED + "This command can only be executed on PE players");
+		}
+	}
+	
 }

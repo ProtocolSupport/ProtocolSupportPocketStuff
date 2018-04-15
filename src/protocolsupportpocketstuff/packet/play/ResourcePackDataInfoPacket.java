@@ -6,8 +6,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 public class ResourcePackDataInfoPacket extends PEPacket {

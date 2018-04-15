@@ -12,6 +12,7 @@ import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupportpocketstuff.api.PocketStuffAPI;
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePackManager;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
@@ -23,11 +24,10 @@ import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.BlockPickRequestPacket;
 import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
-import protocolsupportpocketstuff.resourcepacks.ResourcePackManager;
+import protocolsupportpocketstuff.resourcepacks.ResourcePackListener;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.SkinListener;
 import protocolsupportpocketstuff.storage.Skins;
-import protocolsupportpocketstuff.util.ResourcePackListener;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
@@ -42,7 +42,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		// = Config = \\
 		saveDefaultConfig();
 		// = SPI = \\
-		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider(this)); }
+		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider()); }
 		PEMetaProviderSPI.setProvider(new MetadataProvider());
 		// = Cache = \\
 		Skins.getInstance().buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
@@ -73,7 +73,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		if(PocketCon.isPocketConnection(con)) {
 			// = Packet Listeners = \\
 			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
-			if (!PocketStuffAPI.getResourcePackManager().isEmpty()) { con.addPacketListener(new ResourcePackListener(this, con)); }
+			if (!PocketStuffAPI.getResourcePackManager().isEmpty()) { con.addPacketListener(new ResourcePackListener(con)); }
 			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.middleclick")) { con.addPacketListener(new BlockPickRequestPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }

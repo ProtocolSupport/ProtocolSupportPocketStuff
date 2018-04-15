@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.util;
+package protocolsupportpocketstuff.skin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -14,6 +14,7 @@ import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.libs.kevinsawicki.http.HttpRequest;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.GsonUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -5,18 +5,16 @@ import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.storage.Skins;
 
 import javax.imageio.ImageIO;
+
+import org.bukkit.Bukkit;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.function.Consumer;
 
 public class PcToPeProvider extends PESkinsProvider {
 
-	ProtocolSupportPocketStuff plugin;
 	Skins skinCache = Skins.getInstance();
-	
-	public PcToPeProvider(ProtocolSupportPocketStuff plugin) {
-		this.plugin = plugin;
-	}
 	
 	@Override
 	public byte[] getSkinData(String url) {
@@ -28,7 +26,7 @@ public class PcToPeProvider extends PESkinsProvider {
 
 	@Override
 	public void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback) {
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+		Bukkit.getScheduler().runTaskAsynchronously(ProtocolSupportPocketStuff.getInstance(), () -> {
 			try {
 				if (skinCache.hasPcSkin(url)) {
 					skindataApplyCallback.accept(skinCache.getPcSkin(url));

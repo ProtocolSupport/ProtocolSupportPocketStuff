@@ -29,6 +29,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.DARK_PURPLE + "ProtocolSupportPocketStuff");
 			sender.sendMessage(ChatColor.GRAY + "/psps reloadpacks");
+			sender.sendMessage(ChatColor.GRAY + "/psps pocketinfo");
 			return true;
 		}
 		SubCommand subcommand = subcommands.get(args[0]);
@@ -49,4 +50,5 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				.filter(subcommand -> subcommand.startsWith(args[0]))
 				.collect(Collectors.toList());
 	}
+
 }

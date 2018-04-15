@@ -1,8 +1,8 @@
 package protocolsupportpocketstuff.api;
 
-import protocolsupportpocketstuff.resourcepacks.ResourcePackManager;
-
 import java.math.BigInteger;
+
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePackManager;
 
 public class PocketStuffAPI {
 

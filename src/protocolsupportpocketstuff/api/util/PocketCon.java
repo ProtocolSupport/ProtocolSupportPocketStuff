@@ -72,11 +72,11 @@ public class PocketCon {
 	 * @return
 	 */
 	public static int sendModal(Connection connection, Modal modal) {
-		return sendModal(connection, Modals.INSTANCE.takeId(), modal.toJSON(), null);
+		return sendModal(connection, Modals.getInstance().takeId(), modal.toJSON(), null);
 	}
 
 	public static int sendModal(Connection connection, Modal modal, ModalCallback callback) {
-		return sendModal(connection, Modals.INSTANCE.takeId(), modal.toJSON(), callback);
+		return sendModal(connection, Modals.getInstance().takeId(), modal.toJSON(), callback);
 	}
 
 	/***

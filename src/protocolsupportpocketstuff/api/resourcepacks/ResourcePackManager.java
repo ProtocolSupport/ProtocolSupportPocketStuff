@@ -1,12 +1,14 @@
-package protocolsupportpocketstuff.resourcepacks;
+package protocolsupportpocketstuff.api.resourcepacks;
 
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.resourcepacks.ZippedResourcePack;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResourcePackManager {
+
 	public static final String FOLDER_NAME = "pocketpacks";
 	private boolean forceResources;
 	private List<ResourcePack> behaviorPacks = new ArrayList<ResourcePack>();
@@ -58,7 +60,7 @@ public class ResourcePackManager {
 	}
 
 	/**
-	 * Reloads behaviour packs from config and disk.
+	 * Reloads behaviourpacks from config and disk.
 	 */
 	public void reloadBehaviorPacks() {
 		List<String> fileNames = ProtocolSupportPocketStuff.getInstance().getConfig().getStringList("pocketpacks.behavior-packs");
@@ -66,6 +68,7 @@ public class ResourcePackManager {
 		for (String fileName : fileNames) {
 			File file = new File(ProtocolSupportPocketStuff.getInstance().getDataFolder(), FOLDER_NAME + "/" + fileName);
 			ResourcePack pack = new ZippedResourcePack(file);
+			pack.init();
 			behaviorPacks.add(pack);
 		}
 		this.behaviorPacks = behaviorPacks;
@@ -80,8 +83,10 @@ public class ResourcePackManager {
 		for (String fileName : fileNames) {
 			File file = new File(ProtocolSupportPocketStuff.getInstance().getDataFolder(), FOLDER_NAME + "/" + fileName);
 			ResourcePack pack = new ZippedResourcePack(file);
+			pack.init();
 			resourcePacks.add(pack);
 		}
 		this.resourcePacks = resourcePacks;
 	}
+
 }

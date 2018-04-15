@@ -10,9 +10,9 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.packet.PEPacket;
+import protocolsupportpocketstuff.skin.MineskinThread;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.GsonUtils;
-import protocolsupportpocketstuff.util.MineskinThread;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.io.ByteArrayInputStream;

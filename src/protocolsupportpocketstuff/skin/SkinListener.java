@@ -19,7 +19,6 @@ import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.util.MineskinThread;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 public class SkinListener implements Listener {

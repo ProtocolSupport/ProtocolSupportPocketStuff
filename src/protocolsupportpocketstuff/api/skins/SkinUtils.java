@@ -7,6 +7,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 
 public class SkinUtils {
+	
+	/**
+	 * Gets a bufferedimage from ARGB byte array.
+	 * @param data
+	 * @return
+	 */
 	public static BufferedImage fromData(byte[] data) {
 		System.out.println(data.length);
 		Validate.isTrue((data.length == 8192) || (data.length == 16384), "Skin data must be either 8192 or 16384 bytes long!");
@@ -22,6 +28,9 @@ public class SkinUtils {
 		return skin;
 	}
 
+	/**
+	 * Wrapper for pc skindata.
+	 */
 	public static class SkinDataWrapper {
 		private String signature;
 		private String value;
@@ -31,12 +40,20 @@ public class SkinUtils {
 			this.signature = signature;
 		}
 
+		/**
+		 * @return the skin texture value.
+		 */
 		public String getValue() {
 			return value;
 		}
 
+		/**
+		 * @return the skin's mojang signature.
+		 */
 		public String getSignature() {
 			return signature;
 		}
+
 	}
+
 }

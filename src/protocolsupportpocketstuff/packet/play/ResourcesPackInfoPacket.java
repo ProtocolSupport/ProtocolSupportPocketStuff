@@ -3,8 +3,8 @@ package protocolsupportpocketstuff.packet.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.util.serializer.ResourcePackSerializer;
 
 import java.util.List;

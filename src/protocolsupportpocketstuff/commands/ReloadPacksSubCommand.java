@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.PocketStuffAPI;
-import protocolsupportpocketstuff.resourcepacks.ResourcePack;
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 
 public class ReloadPacksSubCommand implements SubCommand {
 	@Override

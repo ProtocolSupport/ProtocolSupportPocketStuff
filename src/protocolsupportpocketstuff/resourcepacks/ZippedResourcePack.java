@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.util.GsonUtils;
 import protocolsupportpocketstuff.util.StuffUtils;
 
@@ -20,6 +21,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ZippedResourcePack implements ResourcePack {
+
 	File file;
 	private String name;
 	private String uuid;
@@ -28,70 +30,12 @@ public class ZippedResourcePack implements ResourcePack {
 
 	public ZippedResourcePack(File file) {
 		this.file = file;
+	}
 
-		JsonObject manifest = null;
-
-		// Read manifest from ZIP
-		try (ZipFile zipFile = new ZipFile(file)) {
-			Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
-			while(entries.hasMoreElements()){
-				ZipEntry entry = entries.nextElement();
-				if (entry.getName().equals("pack_manifest.json"))
-					throw new InvalidResourcePackException("Unsupported old pack format");
-
-				if (!entry.getName().equals("manifest.json"))
-					continue;
-
-				InputStream stream = zipFile.getInputStream(entry);
-				StringWriter writer = new StringWriter();
-				IOUtils.copy(stream, writer, "UTF-8");
-				String manifestText = writer.toString();
-				manifest = GsonUtils.JSON_PARSER.parse(manifestText).getAsJsonObject();
-				writer.close();
-				stream.close();
-				zipFile.close();
-				break;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (manifest == null)
-			throw new InvalidResourcePackException("Unsupported pack format");
-
-		JsonObject header = manifest.getAsJsonObject("header");
-		this.name = header.get("name").getAsString();
-		this.uuid = header.get("uuid").getAsString();
-
-		JsonArray versionArray = header.get("version").getAsJsonArray(); // This is a JSON array
-		// [3, 2, 0]
-		// We need to convert it to 3.2.0
-		StringBuilder version = new StringBuilder();
-		int idx = 0;
-		for (JsonElement element : versionArray) {
-			version.append(element.getAsString());
-			idx++;
-			if (versionArray.size() > idx) {
-				version.append(".");
-			}
-		}
-		this.version = version.toString();
-
-		// Get SHA-256 of the file
-		try {
-			byte[] buffer = new byte[8192];
-			int count;
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			try (FileInputStream fis = new FileInputStream(file); BufferedInputStream bis = new BufferedInputStream(fis)) {
-				while ((count = bis.read(buffer)) > 0) {
-					digest.update(buffer, 0, count);
-				}
-				this.hash = digest.digest();
-			}
-		} catch (Exception e) {
-			throw new InvalidResourcePackException("Couldn't get the SHA256 from archive");
-		}
+	@Override
+	public void init() {
+		readManifest();
+		generateSha256();
 	}
 
 	@Override
@@ -142,5 +86,68 @@ public class ZippedResourcePack implements ResourcePack {
 			e.printStackTrace();
 		}
 		throw new RuntimeException("Something went very wrong");
+	}
+
+	private void readManifest() {
+		JsonObject manifest = null;
+
+		try (ZipFile zipFile = new ZipFile(file)) {
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+			while(entries.hasMoreElements()){
+				ZipEntry entry = entries.nextElement();
+				if (entry.getName().equals("pack_manifest.json"))
+					throw new InvalidResourcePackException("Unsupported old pack format");
+
+				if (!entry.getName().equals("manifest.json"))
+					continue;
+
+				InputStream stream = zipFile.getInputStream(entry);
+				StringWriter writer = new StringWriter();
+				IOUtils.copy(stream, writer, "UTF-8");
+				String manifestText = writer.toString();
+				manifest = GsonUtils.JSON_PARSER.parse(manifestText).getAsJsonObject();
+				writer.close();
+				stream.close();
+				zipFile.close();
+				break;
+			}
+		} catch (IOException e) {
+			throw new InvalidResourcePackException("Unsupported pack format");
+		}
+
+		JsonObject header = manifest.getAsJsonObject("header");
+		this.name = header.get("name").getAsString();
+		this.uuid = header.get("uuid").getAsString();
+
+		JsonArray versionArray = header.get("version").getAsJsonArray(); 
+		// This is a JSON array [3, 2, 0] We need to convert it to 3.2.0
+		StringBuilder version = new StringBuilder();
+		int idx = 0;
+		for (JsonElement element : versionArray) {
+			version.append(element.getAsString());
+			idx++;
+			if (versionArray.size() > idx) {
+				version.append(".");
+			}
+		}
+		this.version = version.toString();
+	}
+	
+	private void generateSha256() {
+		// Get SHA-256 of the file
+		try {
+			byte[] buffer = new byte[8192];
+			int count;
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			try (FileInputStream fis = new FileInputStream(file); BufferedInputStream bis = new BufferedInputStream(fis)) {
+				while ((count = bis.read(buffer)) > 0) {
+					digest.update(buffer, 0, count);
+				}
+				this.hash = digest.digest();
+			}
+		} catch (Exception e) {
+			throw new InvalidResourcePackException("Couldn't get the SHA256 from archive");
+		}
 	}
 }
