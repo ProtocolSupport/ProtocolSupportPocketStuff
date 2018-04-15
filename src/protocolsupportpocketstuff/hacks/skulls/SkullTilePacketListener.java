@@ -1,10 +1,12 @@
 package protocolsupportpocketstuff.hacks.skulls;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -128,55 +130,34 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		if (packetId == PEPacketIDs.CHUNK_DATA) {
 			int chunkX = VarNumberSerializer.readSVarInt(data); // chunk X
 			int chunkZ = VarNumberSerializer.readSVarInt(data); // chunk Z
-			VarNumberSerializer.readVarInt(data); // length
-			int sectionLength = data.readByte();
+			byte[] byteArray = ArraySerializer.readByteArray(data, con.getVersion());
 
-			int chunkXStart = chunkX << 4;
-			int chunkZStart = chunkZ << 4;
+			ByteBuf chunkdata = Unpooled.wrappedBuffer(byteArray);
+			int sections = chunkdata.readByte(); // how many sections we have in this chunk
 
-			HashMap<Long, Integer> skulls = new HashMap<>();
+			for (int i = 0; i < sections; i++) {
+				chunkdata.readByte(); // subchunk version
 
-			for (int idx = 0; sectionLength > idx; idx++) {
-				data.readByte(); // storage type
-				for (int x = 0; x < 16; x++) {
-					for (int z = 0; z < 16; z++) {
-						for (int y = 0; y < 16; y++) {
-							int id = data.readUnsignedByte();
-
-							if (id == SKULL_BLOCK_ID) {
-								skulls.put(StuffUtils.convertCoordinatesToLong(chunkXStart + x, (idx * 16) + y, chunkZStart + z), -1);
-							}
-						}
-					}
-				}
-				for (int x = 0; x < 16; x++) {
-					for (int z = 0; z < 16; z++) {
-						for (int y = 0; y < 16; y += 2) {
-							long position = StuffUtils.convertCoordinatesToLong(chunkXStart + x, (idx * 16) + y, chunkZStart + z);
-							long positionAbove = StuffUtils.convertCoordinatesToLong(chunkXStart + x, (idx * 16) + y + 1, chunkZStart + z);
-							int state = data.readUnsignedByte();
-
-							int dataValueAbove = state >> 4;
-							int dataValue = state & 0x0F;
-
-							if (skulls.containsKey(position)) {
-								skulls.put(position, dataValue);
-							}
-							if (skulls.containsKey(positionAbove)) {
-								skulls.put(positionAbove, dataValueAbove);
-							}
-						}
-					}
+				chunkdata.readByte();
+				chunkdata.skipBytes(512);
+				int size = VarNumberSerializer.readSVarInt(chunkdata);
+				for (int x = 0; x < size; x++) {
+					VarNumberSerializer.readSVarInt(chunkdata);
 				}
 			}
 
-			data.skipBytes(512); // heights
-			data.skipBytes(256); // biomes
-			data.readByte(); // borders
-			VarNumberSerializer.readSVarInt(data); // extra data
-			while (data.readableBytes() != 0) {
-				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(data, true, con.getVersion());
+			chunkdata.skipBytes(512); // height map
+			chunkdata.skipBytes(256); // biome data
 
+			chunkdata.readByte(); // borders
+			VarNumberSerializer.readSVarInt(chunkdata); // extra data
+
+			System.out.println("owo whats this? WE ARE RECEIVING CHUNK " + chunkX + ", " + chunkZ);
+
+			while (chunkdata.readableBytes() != 0) {
+				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(chunkdata, true, con.getVersion());
+
+				System.out.println("owo tag: " + tag);
 				if (!isSkull(tag))
 					continue;
 
@@ -188,7 +169,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 				// Is there's any possibility of an skull being on the chunk nbt tags but not really in the world? idk
 				// So that's why getOrDefault is used
-				handleSkull(position, tag, skulls.getOrDefault(StuffUtils.convertPositionToLong(position), 1));
+				handleSkull(position, tag, 3);
 			}
 		}
 	}
