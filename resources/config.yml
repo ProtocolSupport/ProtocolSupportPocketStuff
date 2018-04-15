@@ -25,21 +25,21 @@
 # !Packs must be added to ./plugins/ProtocolSupportPocketStuff/pocketpacks!
 #
 # = Hacks =
-# dimensions  - Enables using bukkit to fake dimension switching for pocket players.
 # middleclick - Enables using bukkit to fake middle click / blocks and entities pick.
+# farplace    - Enables using bukkit to allow pocket to place blocks further than pc.
 # holograms   - Enables experimental caching and "armor stand to player" replacement to support holograms for PE players.
 # itemframes  - Enables experimental caching and mucking with packets to support itemframes for PE players.
-# teams       - Enables experimental caching and mucking with packets to support team prefix/suffixes for PE players.
 # bossbars    - Enables experimental caching and mucking with packets to boss bars for PE players.
 # player-heads-skins  - Options related to player heads with custom skins
 #   skull-blocks      - Enables experimental caching, "player heads to players" replacement to support player heads with skins for PE players.
 #   equipped-blocks   - Enables experimental caching, skin replacement to support equipped player heads with skins for PE players.
 #
+# = Logging =
+# disable-colors - Disables console colors when logging if enabled.
+# enable-debug   - Enables PSPS debug messages when enabled.
+#
 # !Do not change the config-version unless you know what you are doing!
 
-logging:
- disable-colors: false
- enable-debug: false
 skins:
  PCtoPE: true
  PEtoPC: true
@@ -50,13 +50,15 @@ pocketpacks:
  behavior-packs: []
  resource-packs: []
 hacks: 
- dimensions: true
  middleclick: true
+ farplace: false
  holograms: true
  itemframes: false
- teams: false
  bossbars: false
  player-heads-skins:
   skull-blocks: false
   equipped-blocks: false
-config-version: 3
+logging:
+ disable-colors: false
+ enable-debug: false
+config-version: 4

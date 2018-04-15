@@ -43,7 +43,7 @@ dlDepsDirC.mkdirs()
 File dlDepsDirS = new File('dllibss')
 dlDepsDirS.mkdirs()
 
-//TODO: Add ProtocolSupport to dlibs (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
+//TODO: Add ProtocolSupport to dlLibsC (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 def dlDepsC = [
 	new Tuple(
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1609.jar',
@@ -69,7 +69,7 @@ void dlDeps(def dlDeps, File dlDepsDir) {
 		dlDepsNames.add(dlDepFile.getName())
 		if (!dlDepFile.exists()) {
 			if (dlDepFile.getName().equals("ProtocolSupport.jar")) {
-				throw new GradleException('You still need to compile ProtocolSupport pocket branch and put it in dllibsc!')
+				throw new GradleException('You still need to compile ProtocolSupport (pocket branch) and put it in dllibsc!')
 			} else {
 				logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
 				ant.get(src: dlDepUrl, dest: dlDepFile)

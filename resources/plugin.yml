@@ -1,10 +1,10 @@
 name: ProtocolSupportPocketStuff
 main: protocolsupportpocketstuff.ProtocolSupportPocketStuff
 depend: [ProtocolSupport]
-version: 0.01-dev
+version: 1.0
 author: ProtocolSupportTeam
 commands:
   protocolsupportpocketstuff:
     description: All ProtocolSupportPocketStuff commands
-    aliases: psps
+    aliases: [psps]
     usage: '/protocolsupportpocketstuff help'

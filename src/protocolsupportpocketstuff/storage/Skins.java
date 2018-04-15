@@ -1,67 +1,124 @@
 package protocolsupportpocketstuff.storage;
 
-import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.api.util.SkinUtils.SkinDataWrapper;
 import protocolsupportpocketstuff.libs.jodah.expiringmap.ExpiringMap;
 
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class houses all cached skins for PE and PC.
+ */
 public class Skins {
-	
-	private Map<String, byte[]> pocketSkinCache;
-	private Map<String, SkinDataWrapper> pcSkinCache;
 
-	public static final Skins INSTANCE = new Skins();
+	private Map<String, byte[]> pocketSkinCache; //Skin images for pocket.
+	private Map<String, SkinDataWrapper> pcSkinCache; //Skin datas for java.
+
 	private Skins() { }
-	
+	private static final Skins INSTANCE = new Skins();
+
+	/**
+	 * @return the skin storage.
+	 */
+	public static Skins getInstance() {
+		return INSTANCE;
+	}
+
+	/**
+	 * Builds the skincache. (this is called in onEnable in PSPS, calling it again will mean clearing the cache!)
+	 * @param size - the size of the cache.
+	 * @param rate - the rate at which items in the cash expire after last use.
+	 */
 	public void buildCache(int size, int rate) {
 		if(size > 0 && rate > 0) {
 			pocketSkinCache = ExpiringMap.builder().maxSize(size).expiration(rate, TimeUnit.HOURS).build();
 			pcSkinCache = ExpiringMap.builder().maxSize(size).expiration(rate, TimeUnit.HOURS).build();
 		}
 	}
-	
-	public void cachePeSkin(String url, byte[] skin) {
+
+	/**
+	 * Caches a PC skin for PE. 
+	 * @param url - the skinUrl beloing to the pcSkin.
+	 * @param skin - the byteArray with ARGB pixels to send to pe.
+	 */
+	public void cachePcSkin(String url, byte[] skin) {
 		pocketSkinCache.putIfAbsent(url, skin);
 	}
-	
-	public void cachePcSkin(String uuid, SkinUtils.SkinDataWrapper skinDataWrapper) { 
+
+	/**
+	 * Caches a PE skin for PC. 
+	 * @param uuid - the uuid of the player.
+	 * @param skinDataWrapper - the wrapped mc data from mineskin.
+	 */
+	public void cachePeSkin(String uuid, SkinDataWrapper skinDataWrapper) { 
 		pcSkinCache.putIfAbsent(uuid, skinDataWrapper);
 	}
 
-	public void clearPeSkin(String url) { 
+	/**
+	 * Clears a PC skin for PE.
+	 * @param url - the skinUrl beloging to pc's skin.
+	 */
+	public void clearPcSkin(String url) { 
 		pocketSkinCache.remove(url);
 	}
 
-    public void clearPcSkin(String uuid) {
+	/**
+	 * Clears a PE skin for PC.
+	 * @param uuid - the uuid of the player of the skin.
+	 */
+    public void clearPeSkin(String uuid) {
         pcSkinCache.remove(uuid);
     }
 
-	public boolean hasPeSkin(String url) {
+    /**
+     * Checks if PC skin is cached.
+     * @param url - the skinUrl.
+     * @return true if the skin was cached.
+     */
+	public boolean hasPcSkin(String url) {
 		return pocketSkinCache.containsKey(url);
 	}
 
-	public boolean hasPcSkin(String uuid) {
+	/**
+	 * Checks if PE skin is cached
+	 * @param uuid - the uuid of the skin's player.
+	 * @return true if the skin was cached
+	 */
+	public boolean hasPeSkin(String uuid) {
 		return pcSkinCache.containsKey(uuid);
 	}
 
-	public byte[] getPeSkin(String url) {
+	/**
+	 * Gets the image of the cached pc skin.
+	 * @param url - the skinUrl.
+	 * @return the skin in ARGB byte array.
+	 */
+	public byte[] getPcSkin(String url) {
 		return pocketSkinCache.get(url);
 	}
-	
-	public SkinDataWrapper getPcSkin(String uuid) {
+
+	/**
+	 * Gets the skin information of the PE skin.
+	 * @param uuid - the uuid of the player.
+	 * @return the skinData for PC.
+	 */
+	public SkinDataWrapper getPeSkin(String uuid) {
 		return pcSkinCache.get(uuid);
 	}
-	
-	public Set<Entry<String, byte[]>> getPeSkins() {
+
+	/**
+	 * @return all cached PC skins.
+	 */
+	public Set<Entry<String, byte[]>> getPCSkins() {
 		return pocketSkinCache.entrySet();
 	}
-	
-	public Set<Entry<String, SkinUtils.SkinDataWrapper>> getPcSkins() {
+
+	/**
+	 * @return all cached PE skins.
+	 */
+	public Set<Entry<String, SkinDataWrapper>> getPESkins() {
 		return pcSkinCache.entrySet();
 	}
 	
