@@ -36,7 +36,6 @@ import java.util.UUID;
 
 public class SkullTilePacketListener extends Connection.PacketListener {
 	private Connection con;
-	private boolean isSpawned = false;
 	private final HashMap<Long, CachedSkullBlock> cachedSkullBlocks = new HashMap<>();
 	private static final String SKULL_MODEL = StuffUtils.getResourceAsString("models/fake_skull_block.json");
 
@@ -45,29 +44,6 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 	public SkullTilePacketListener(Connection con) {
 		this.con = con;
-	}
-
-	@Override
-	public void onRawPacketReceiving(RawPacketEvent event) {
-		ByteBuf data = event.getData();
-		int packetId = VarNumberSerializer.readVarInt(data);
-
-		data.readByte();
-		data.readByte();
-
-		if (packetId == PEPacketIDs.PLAYER_MOVE) {
-			if (isSpawned)
-				return;
-
-			isSpawned = true;
-
-			for (CachedSkullBlock cachedSkullBlock : cachedSkullBlocks.values()) {
-				if (cachedSkullBlock.isCustomSkull()) {
-					cachedSkullBlock.spawn(this);
-				}
-			}
-			return;
-		}
 	}
 
 	@Override
@@ -269,9 +245,6 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		}
 
 		cachedSkullBlocks.put(StuffUtils.convertPositionToLong(position), cachedSkullBlock);
-
-		if (!isSpawned)
-			return;
 
 		if (!cachedSkullBlock.isCustomSkull())
 			return;

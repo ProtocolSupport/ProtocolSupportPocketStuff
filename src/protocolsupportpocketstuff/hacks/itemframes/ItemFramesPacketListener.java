@@ -37,7 +37,6 @@ import java.util.Map;
 public class ItemFramesPacketListener extends Connection.PacketListener {
 	private Connection con;
 	private HashMap<Integer, CachedItemFrame> cachedItemFrames = new HashMap<>();
-	private boolean isSpawned = false;
 
 	// Reflection stuff
 	private static Field SPAWN_ENTITY_ID = null;
@@ -192,20 +191,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		
 		Position position = new Position(0, 0, 0);
 
-		if (packetId == PEPacketIDs.PLAYER_MOVE) {
-			if (isSpawned)
-				return;
-
-			isSpawned = true;
-
-			// Workaround for item frames on login, sending "spawn item frame" packets on login doesn't work
-			// so we are going to spawn them when the player moves
-			// This isn't required for when the player teleports between worlds.
-			for (CachedItemFrame itemFrame : cachedItemFrames.values()) {
-				itemFrame.spawn(this);
-			}
-			return;
-		}
 		if (packetId == PEPacketIDs.PLAYER_ACTION) { // Used for when the player tries to hit a item frame when it doesn't have any item inside of it
 			VarNumberSerializer.readSVarLong(data); // entity ID
 			int action = VarNumberSerializer.readSVarInt(data);

@@ -28,7 +28,6 @@ public class BossBarPacketListener extends Connection.PacketListener {
 	
 	private Connection con;
 	private HashMap<Long, CachedBossBar> cachedBossBars = new HashMap<>();
-	private boolean isSpawned = false;
 
 	// Reflection stuff
 	private static Field BOSS_UUID;
@@ -60,29 +59,6 @@ public class BossBarPacketListener extends Connection.PacketListener {
 	}
 
 	@Override
-	public void onRawPacketReceiving(RawPacketEvent event) {
-		super.onRawPacketReceiving(event);
-
-		ByteBuf data = event.getData();
-		int packetId = VarNumberSerializer.readVarInt(data);
-
-		if (packetId == PEPacketIDs.PLAYER_MOVE) {
-			if (isSpawned)
-				return;
-
-			isSpawned = true;
-
-			// Workaround for holograms on login, sending "spawn hologram" packets on login doesn't work
-			// so we are going to spawn them when the player moves
-			// This isn't required for when the player teleports between worlds.
-			for (CachedBossBar cachedBossBar : cachedBossBars.values()) {
-				cachedBossBar.spawn(this);
-			}
-			return;
-		}
-	}
-
-	@Override
 	public void onPacketSending(PacketEvent event) {
 		super.onPacketSending(event);
 
@@ -104,9 +80,6 @@ public class BossBarPacketListener extends Connection.PacketListener {
 
 			cachedBossBars.put(unique, bossBar);
 
-			if (!isSpawned)
-				return;
-
 			bossBar.spawn(this);
 			return;
 		}
@@ -127,9 +100,6 @@ public class BossBarPacketListener extends Connection.PacketListener {
 
 			CachedBossBar bossBar = cachedBossBars.get(unique);
 			bossBar.title = StuffUtils.toLegacy(title);
-
-			if (!isSpawned)
-				return;
 
 			bossBar.updateMetadata(this);
 			return;

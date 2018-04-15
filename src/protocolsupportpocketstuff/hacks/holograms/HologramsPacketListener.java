@@ -32,7 +32,6 @@ public class HologramsPacketListener extends Connection.PacketListener {
 	private static final HashMap<Integer, ReadableDataWatcherObject<?>> DATA_WATCHERS = new HashMap<Integer, ReadableDataWatcherObject<?>>();
 	private static final int ARMOR_STAND_ID = 61;
 	private static final double Y_OFFSET = 1.6200000047683716D;
-	private boolean isSpawned = false;
 
 	static {
 		DATA_WATCHERS.put(0, new DataWatcherObjectByte());
@@ -48,31 +47,6 @@ public class HologramsPacketListener extends Connection.PacketListener {
 
 	public HologramsPacketListener(Connection con) {
 		this.con = con;
-	}
-
-	@Override
-	public void onRawPacketReceiving(RawPacketEvent event) {
-		super.onRawPacketReceiving(event);
-
-		ByteBuf data = event.getData();
-		int packetId = VarNumberSerializer.readVarInt(data);
-
-		if (packetId == PEPacketIDs.PLAYER_MOVE) {
-			if (isSpawned)
-				return;
-
-			isSpawned = true;
-
-			// Workaround for holograms on login, sending "spawn hologram" packets on login doesn't work
-			// so we are going to spawn them when the player moves
-			// This isn't required for when the player teleports between worlds.
-			for (Map.Entry<Long, CachedArmorStand> armorStand : cachedArmorStands.entrySet()) {
-				if (armorStand.getValue().isHologram) {
-					armorStand.getValue().spawnHologram(armorStand.getKey(), this);
-				}
-			}
-			return;
-		}
 	}
 
 	@Override
@@ -142,9 +116,6 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			armorStand.nametag = hologramName;
 			armorStand.isHologram = true;
 
-			if (!isSpawned)
-				return;
-
 			// omg it is an hologram :O
 			armorStand.spawnHologram(entityId, this);
 			return;
@@ -175,9 +146,6 @@ public class HologramsPacketListener extends Connection.PacketListener {
 			armorStand.isHologram = true;
 
 			cachedArmorStands.put(entityId, armorStand);
-
-			if (!isSpawned)
-				return;
 
 			armorStand.spawnHologram(entityId, this);
 			return;
