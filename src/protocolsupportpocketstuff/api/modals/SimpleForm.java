@@ -1,8 +1,7 @@
 package protocolsupportpocketstuff.api.modals;
 
-import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupportpocketstuff.api.modals.elements.ModalUIElement;
-import protocolsupportpocketstuff.util.StuffUtils;
+import protocolsupportpocketstuff.util.GsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,13 +56,11 @@ public class SimpleForm implements Modal {
 	}
 	
 	public String toJSON() {
-		Gson gson = StuffUtils.GSON;
-		return gson.toJson(this);
+		return GsonUtils.GSON.toJson(this);
 	}
 	
 	public static SimpleForm fromJson(String JSON) {
-		Gson gson = StuffUtils.GSON;
-		return gson.fromJson(JSON, SimpleForm.class);
+		return GsonUtils.GSON.fromJson(JSON, SimpleForm.class);
 	}
 	
 }

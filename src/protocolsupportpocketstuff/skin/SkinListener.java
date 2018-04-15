@@ -17,8 +17,8 @@ import protocolsupportpocketstuff.api.modals.callback.SimpleFormCallback;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
+import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.api.util.SkinUtils;
 import protocolsupportpocketstuff.util.MineskinThread;
 import protocolsupportpocketstuff.util.StuffUtils;
 

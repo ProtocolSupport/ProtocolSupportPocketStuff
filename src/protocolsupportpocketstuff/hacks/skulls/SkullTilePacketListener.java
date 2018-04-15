@@ -24,6 +24,7 @@ import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.packet.play.SpawnPlayerPacket;
 import protocolsupportpocketstuff.packet.play.TileDataUpdatePacket;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.GsonUtils;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 import javax.imageio.ImageIO;
@@ -196,7 +197,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 		String _json = new String(Base64.getDecoder().decode(value));
 
-		JsonObject json = StuffUtils.JSON_PARSER.parse(_json).getAsJsonObject();
+		JsonObject json = GsonUtils.JSON_PARSER.parse(_json).getAsJsonObject();
 
 		return json.get("textures").getAsJsonObject().get("SKIN").getAsJsonObject().get("url").getAsString();
 	}

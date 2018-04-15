@@ -1,7 +1,5 @@
 package protocolsupportpocketstuff.api.util;
 
-import org.bukkit.World.Environment;
-import org.bukkit.util.Vector;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
@@ -20,11 +18,11 @@ import protocolsupportpocketstuff.api.modals.callback.ModalWindowCallback;
 import protocolsupportpocketstuff.api.modals.callback.SimpleFormCallback;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.packet.play.DimensionPacket;
 import protocolsupportpocketstuff.packet.play.ModalRequestPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.packet.play.TransferPacket;
 import protocolsupportpocketstuff.storage.Modals;
+import protocolsupportpocketstuff.util.GsonUtils;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.util.Collection;
@@ -114,7 +112,7 @@ public class PocketCon {
 
 	public static ModalType detectModalType(String modalJSON) {
 		System.out.println(modalJSON);
-		JsonObject jsonParser = StuffUtils.JSON_PARSER.parse(modalJSON).getAsJsonObject();
+		JsonObject jsonParser = GsonUtils.JSON_PARSER.parse(modalJSON).getAsJsonObject();
 		String pocketType = jsonParser.get("type").getAsString();
 		return ModalType.getByPeName(pocketType);
 	}
@@ -165,16 +163,6 @@ public class PocketCon {
 	public static void sendSkin(Connection connection, UUID uuid, byte[] skin, PocketSkinModel skinModel) {
 		//TODO: "Steve" is actually a hack. The name send should be the previous skin name. Not sure if this matters though. Works for now :S"
 		sendPocketPacket(connection, new SkinPacket(uuid, skinModel.getSkinId(), skinModel.getSkinName(), "Steve", skin, new byte[0], skinModel.getGeometryId(), skinModel.getGeometryData()));
-	}
-	
-	/***
-	 * Sends a dimension change to a pocket connection.
-	 * @param connection
-	 * @param environment
-	 * @param location
-	 */
-	public static void sendDimensionChange(Connection connection, Environment environment, Vector location) {
-		sendPocketPacket(connection, new DimensionPacket(environment, location));
 	}
 
 	/***

@@ -11,7 +11,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.libs.kevinsawicki.http.HttpRequest;
 import protocolsupportpocketstuff.storage.Skins;
 
@@ -100,7 +100,7 @@ public class MineskinThread extends Thread {
 		HttpRequest httpRequest = HttpRequest.post("http://api.mineskin.org/generate/upload?name=&model=" + (isSlim ? "slim" : "steve") + "&visibility=1")
 				.userAgent("ProtocolSupportPocketStuff");
 		httpRequest.part("file", "mcpe_skin.png", null, inputStream);
-		return StuffUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
+		return GsonUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
 	}
 
 	public void hackyStuff(Connection connection, String value, String signature) {

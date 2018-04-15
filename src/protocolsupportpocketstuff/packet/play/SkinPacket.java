@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
-import protocolsupportpocketstuff.api.util.SkinUtils;
+import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 import java.util.Base64;

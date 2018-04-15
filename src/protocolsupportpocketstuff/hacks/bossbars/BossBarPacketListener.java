@@ -3,6 +3,7 @@ package protocolsupportpocketstuff.hacks.bossbars;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutBoss;
 import protocolsupport.api.Connection;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -155,8 +156,8 @@ public class BossBarPacketListener extends Connection.PacketListener {
 		}
 
 		public void updateMetadata(BossBarPacketListener listener) {
-			CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(76);
-			metadata.put(4, new DataWatcherObjectString(title));
+			CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(PeMetaBase.NAMETAG);
+			metadata.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(title));
 			PocketCon.sendPocketPacket(listener.con, new EntityDataPacket(unique, metadata));
 		}
 

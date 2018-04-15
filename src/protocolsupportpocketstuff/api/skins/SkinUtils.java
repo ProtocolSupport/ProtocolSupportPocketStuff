@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api.util;
+package protocolsupportpocketstuff.api.skins;
 
 import org.apache.commons.lang3.Validate;
 

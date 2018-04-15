@@ -16,7 +16,7 @@ import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.ModalType;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.StuffUtils;
+import protocolsupportpocketstuff.util.GsonUtils;
 
 public class ModalResponsePacket extends PEPacket {
 
@@ -65,7 +65,7 @@ public class ModalResponsePacket extends PEPacket {
 		public void handle() {
 			ModalResponsePacket parent = ModalResponsePacket.this;
 			ModalType modalType = PocketCon.getModalType(connection);
-			JsonElement element = StuffUtils.JSON_PARSER.parse(parent.getModalJSON());
+			JsonElement element = GsonUtils.JSON_PARSER.parse(parent.getModalJSON());
 			boolean isClosedByClient = element.isJsonNull();
 
 			new BukkitRunnable() {

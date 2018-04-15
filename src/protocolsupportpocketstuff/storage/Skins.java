@@ -1,6 +1,6 @@
 package protocolsupportpocketstuff.storage;
 
-import protocolsupportpocketstuff.api.util.SkinUtils.SkinDataWrapper;
+import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
 import protocolsupportpocketstuff.libs.jodah.expiringmap.ExpiringMap;
 
 import java.util.Map;

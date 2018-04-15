@@ -1,9 +1,8 @@
 package protocolsupportpocketstuff.api.modals;
 
-import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.complex.ModalComplexUIElement;
-import protocolsupportpocketstuff.util.StuffUtils;
+import protocolsupportpocketstuff.util.GsonUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,13 +62,11 @@ public class ComplexForm implements Modal {
 	}
 
 	public String toJSON() {
-		Gson gson = StuffUtils.GSON;
-		return gson.toJson(this);
+		return GsonUtils.GSON.toJson(this);
 	}
 	
 	public static ComplexForm fromJson(String JSON) {
-		Gson gson = StuffUtils.GSON;
-		return gson.fromJson(JSON, ComplexForm.class);
+		return GsonUtils.GSON.fromJson(JSON, ComplexForm.class);
 	}
 	
 }

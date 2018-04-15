@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.GsonUtils;
 import protocolsupportpocketstuff.util.MineskinThread;
 import protocolsupportpocketstuff.util.StuffUtils;
 
@@ -69,7 +70,7 @@ public class ClientLoginPacket extends PEPacket {
 		if (base.length < 2) {
 			return null;
 		}
-		return StuffUtils.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(base[1]))), JsonObject.class);
+		return GsonUtils.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(base[1]))), JsonObject.class);
 	}
 
 	public class decodeHandler extends PEPacket.decodeHandler {

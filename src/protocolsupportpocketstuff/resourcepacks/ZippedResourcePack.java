@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupportpocketstuff.util.GsonUtils;
 import protocolsupportpocketstuff.util.StuffUtils;
 
 import java.io.BufferedInputStream;
@@ -46,7 +47,7 @@ public class ZippedResourcePack implements ResourcePack {
 				StringWriter writer = new StringWriter();
 				IOUtils.copy(stream, writer, "UTF-8");
 				String manifestText = writer.toString();
-				manifest = StuffUtils.JSON_PARSER.parse(manifestText).getAsJsonObject();
+				manifest = GsonUtils.JSON_PARSER.parse(manifestText).getAsJsonObject();
 				writer.close();
 				stream.close();
 				zipFile.close();

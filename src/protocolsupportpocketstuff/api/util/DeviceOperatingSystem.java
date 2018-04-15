@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.api.util;
 
 public enum DeviceOperatingSystem {
+
 	ANDROID(1),
 	IOS(2),
 	OSX(3),
@@ -28,4 +29,5 @@ public enum DeviceOperatingSystem {
 		}
 		return DeviceOperatingSystem.UNKNOWN;
 	}
+
 }
