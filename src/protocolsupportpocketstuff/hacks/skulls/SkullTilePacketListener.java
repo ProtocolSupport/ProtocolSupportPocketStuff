@@ -139,8 +139,11 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			for (int i = 0; i < sections; i++) {
 				chunkdata.readByte(); // subchunk version
 
-				chunkdata.readByte();
-				chunkdata.skipBytes(512);
+				int paletteAndFlag = chunkdata.readByte();
+				int bitsPerBlocks = paletteAndFlag >> 1;
+
+				chunkdata.skipBytes((int) Math.ceil(4096.0 / Math.floor(32 / bitsPerBlocks)) * 4);
+
 				int size = VarNumberSerializer.readSVarInt(chunkdata);
 				for (int x = 0; x < size; x++) {
 					VarNumberSerializer.readSVarInt(chunkdata);
