@@ -29,15 +29,25 @@ import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.PocketInfoReceiver;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
+
 	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
+
 	private static ProtocolSupportPocketStuff INSTANCE;
 	public static ProtocolSupportPocketStuff getInstance() {
 		return INSTANCE;
 	}
 
 	@Override
-	public void onEnable() {
+	public void onLoad() {
 		INSTANCE = this;
+		// = ResourcePacks = \\
+		ResourcePackManager resourcePackManager = new ResourcePackManager();
+		resourcePackManager.reloadPacks();
+		PocketStuffAPI.setResourcePackManager(resourcePackManager);
+	}
+	
+	@Override
+	public void onEnable() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
 		// = Config = \\
@@ -53,9 +63,11 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		// = Metadata = \\
 		PEMetaProviderSPI.setProvider(new MetadataProvider());
 		// = ResourcePacks = \\
-		ResourcePackManager resourcePackManager = new ResourcePackManager();
-		resourcePackManager.reloadPacks();
-		PocketStuffAPI.setResourcePackManager(resourcePackManager);
+		if (!PocketStuffAPI.getResourcePackManager().isEmpty()) {
+			ResourcePackListener provider = new ResourcePackListener();
+			pm.registerEvents(provider, this);
+			PocketStuffAPI.registerPacketListeners(provider);
+		}
 		// = Skins = \\
 		if (getConfig().getBoolean("skins.PCtoPE")) {
 			PESkinsProviderSPI.setProvider(new PcToPeProvider());
@@ -85,7 +97,6 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		if (PocketCon.isPocketConnection(con)) {
 			// = Packet Listeners = \\
 			//con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
-			if (!PocketStuffAPI.getResourcePackManager().isEmpty()) { con.addPacketListener(new ResourcePackListener(con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
 			if (getConfig().getBoolean("hacks.player-heads-skins.skull-blocks")) { con.addPacketListener(new SkullTilePacketListener(con)); }
 			if (ServerPlatformIdentifier.get() == ServerPlatformIdentifier.SPIGOT) {
@@ -128,4 +139,5 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		}
 		getServer().getConsoleSender().sendMessage(msg);
 	}
+
 }

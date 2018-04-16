@@ -9,15 +9,15 @@ import protocolsupportpocketstuff.util.packet.serializer.ResourcePackSerializer;
 
 import java.util.List;
 
-public class ResourcesPackInfoPacket extends PEPacket {
+public class ResourcePackInfoPacket extends PEPacket {
 
 	private boolean forceResources;
 	private List<ResourcePack> behaviorPacks;
 	private List<ResourcePack> resourcePacks;
 
-	public ResourcesPackInfoPacket() { }
+	public ResourcePackInfoPacket() { }
 
-	public ResourcesPackInfoPacket(boolean forceResources, List<ResourcePack> behaviorPacks, List<ResourcePack> resourcePacks) {
+	public ResourcePackInfoPacket(boolean forceResources, List<ResourcePack> behaviorPacks, List<ResourcePack> resourcePacks) {
 		this.forceResources = forceResources;
 		this.behaviorPacks = behaviorPacks;
 		this.resourcePacks = resourcePacks;
