@@ -11,9 +11,9 @@ public class ModalRequestPacket extends PEPacket {
 
 	private int modalId;
 	private String modalJSON;
-	
+
 	public ModalRequestPacket() { }
-	
+
 	public ModalRequestPacket(int modalId, String modalJSON) {
 		this.modalId = modalId;
 		this.modalJSON = modalJSON;
@@ -31,15 +31,15 @@ public class ModalRequestPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		modalId = VarNumberSerializer.readVarInt(clientData);
-		modalJSON = StringSerializer.readString(clientData, connection.getVersion());
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		modalId = VarNumberSerializer.readVarInt(clientdata);
+		modalJSON = StringSerializer.readString(clientdata, connection.getVersion());
 	}
-	
+
 	public int getModalId() {
 		return modalId;
 	}
-	
+
 	public String getModalJSON() {
 		return modalJSON;
 	}

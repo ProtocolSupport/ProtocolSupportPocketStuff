@@ -11,8 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SetAttributesPacket extends PEPacket {
+
 	private long entityId;
 	private List<Attribute> attributes;
+
+	public SetAttributesPacket() { }
 
 	public SetAttributesPacket(long entityId, List<Attribute> attributes) {
 		this.entityId = entityId;
@@ -20,8 +23,7 @@ public class SetAttributesPacket extends PEPacket {
 	}
 
 	public SetAttributesPacket(long entityId, Attribute... attributes) {
-		this.entityId = entityId;
-		this.attributes = Arrays.asList(attributes);
+		this(entityId, Arrays.asList(attributes));
 	}
 
 
@@ -48,9 +50,12 @@ public class SetAttributesPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientData) {
+		throw new UnsupportedOperationException();
+	}
 
 	public static class Attribute {
+
 		private String name;
 		private float minimum;
 		private float maximum;
@@ -84,5 +89,7 @@ public class SetAttributesPacket extends PEPacket {
 		public float getDefaultValue() {
 			return defaultValue;
 		}
+
 	}
+
 }

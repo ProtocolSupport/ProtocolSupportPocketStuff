@@ -1,22 +1,11 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
-import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
-import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
-import protocolsupportpocketstuff.api.modals.ModalType;
-import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.GsonUtils;
 
 public class ModalResponsePacket extends PEPacket {
 
@@ -42,9 +31,9 @@ public class ModalResponsePacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		modalId = VarNumberSerializer.readVarInt(clientData);
-		modalJSON = StringSerializer.readString(clientData, connection.getVersion());
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		modalId = VarNumberSerializer.readVarInt(clientdata);
+		modalJSON = StringSerializer.readString(clientdata, connection.getVersion());
 	}
 
 	public int getModalId() {
@@ -55,7 +44,7 @@ public class ModalResponsePacket extends PEPacket {
 		return modalJSON;
 	}
 
-	public class decodeHandler extends PEPacket.decodeHandler {
+/**	public class decodeHandler extends PEPacket.decodeHandler {
 
 		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
 			super(plugin, connection);
@@ -95,5 +84,5 @@ public class ModalResponsePacket extends PEPacket {
 				}
 			}.runTask(ProtocolSupportPocketStuff.getInstance());
 		}
-	}
+	}*/
 }

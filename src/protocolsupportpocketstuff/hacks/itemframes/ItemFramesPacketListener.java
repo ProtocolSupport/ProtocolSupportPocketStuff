@@ -56,7 +56,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	// Constants
 	private static final int ACTION_USE_ITEM = 2;
 	private static final int ITEM_FRAME_ENTITY_ID = 71;
-	private static final int ITEM_FRAME_BLOCK_ID = 199;
+	private static final int ITEM_FRAME_BLOCK_ID = PEDataValues.BLOCK_ID.getRemap(199);
 
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
 		this.con = con;
@@ -386,7 +386,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		public void spawn(ItemFramesPacketListener listener) {
 			// First we change the block type...
 			// Item Frame block ID is 199
-			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), ItemFramesPacketListener.ITEM_FRAME_BLOCK_ID, getPEFacing());
+			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), ItemFramesPacketListener.ITEM_FRAME_BLOCK_ID + getPEFacing());
 
 			PocketCon.sendPocketPacket(listener.con, updateBlockPacket);
 
@@ -398,7 +398,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 
 		public void despawn(ItemFramesPacketListener listener) {
 			// We are going to set it to air because... well, there isn't too many other choices I guess *shrugs*
-			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), 0, 0);
+			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), 0);
 			PocketCon.sendPocketPacket(listener.con, updateBlockPacket);
 		}
 

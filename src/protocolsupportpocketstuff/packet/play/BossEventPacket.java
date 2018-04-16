@@ -6,12 +6,15 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class BossEventPacket extends PEPacket {
+
 	private long entityId;
 	private int eventId;
 
 	public static final int SHOW = 0;
 	public static final int UPDATE = 1;
 	public static final int REMOVE = 2;
+
+	public BossEventPacket() { }
 
 	public BossEventPacket(long entityId, int eventId) {
 		this.entityId = entityId;
@@ -31,4 +34,5 @@ public class BossEventPacket extends PEPacket {
 
 	@Override
 	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+
 }

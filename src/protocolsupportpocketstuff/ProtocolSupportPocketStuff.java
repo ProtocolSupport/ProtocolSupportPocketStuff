@@ -20,14 +20,13 @@ import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.skulls.SkullTilePacketListener;
 import protocolsupportpocketstuff.metadata.MetadataProvider;
-import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
-import protocolsupportpocketstuff.packet.play.BlockPickRequestPacket;
-import protocolsupportpocketstuff.packet.play.ModalResponsePacket;
-import protocolsupportpocketstuff.packet.play.SkinPacket;
+import protocolsupportpocketstuff.modals.ModalReceiver;
+import protocolsupportpocketstuff.packet.PEReceiver;
 import protocolsupportpocketstuff.resourcepacks.ResourcePackListener;
 import protocolsupportpocketstuff.skin.PcToPeProvider;
-import protocolsupportpocketstuff.skin.SkinListener;
+import protocolsupportpocketstuff.skin.PeToPcProvider;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.PocketInfoReceiver;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	public static final String PREFIX = "[" + ChatColor.DARK_PURPLE + "PSPS" + ChatColor.RESET + "] ";
@@ -39,21 +38,33 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(this, this);
 		// = Config = \\
 		saveDefaultConfig();
-		// = SPI = \\
-		if(getConfig().getBoolean("skins.PCtoPE")) { PESkinsProviderSPI.setProvider(new PcToPeProvider()); }
+		// = Storage = \\
+		Skins.getInstance().buildCache(
+			getConfig().getInt("skins.cache-size"), 
+			getConfig().getInt("skins.cache-rate")
+		);
+		// = API = \\
+		PocketStuffAPI.registerPacketListeners(new PocketInfoReceiver());
+		PocketStuffAPI.registerPacketListeners(new ModalReceiver());
+		// = Metadata = \\
 		PEMetaProviderSPI.setProvider(new MetadataProvider());
-		// = Cache = \\
-		Skins.getInstance().buildCache(getConfig().getInt("skins.cache-size"), getConfig().getInt("skins.cache-rate"));
 		// = ResourcePacks = \\
 		ResourcePackManager resourcePackManager = new ResourcePackManager();
 		resourcePackManager.reloadPacks();
 		PocketStuffAPI.setResourcePackManager(resourcePackManager);
-		// = Events = \\
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(this, this);
-		if(getConfig().getBoolean("skins.PCtoPE")) { pm.registerEvents(new SkinListener(this), this); }
+		// = Skins = \\
+		if (getConfig().getBoolean("skins.PCtoPE")) {
+			PESkinsProviderSPI.setProvider(new PcToPeProvider());
+		}
+		if (getConfig().getBoolean("skins.PEtoPC")) {
+			PeToPcProvider provider = new PeToPcProvider();
+			pm.registerEvents(provider, this);
+			PocketStuffAPI.registerPacketListeners(provider);
+		}
 		// = Commands = \\
 		getCommand("protocolsupportpocketstuff").setExecutor(new CommandHandler());
 		// = Welcome = \\
@@ -63,19 +74,18 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onConnectionOpen(ConnectionOpenEvent e) {
 		Connection con = e.getConnection();
-		// We can't check if it is a PE player yet because it is too early to figure out
-		con.addPacketListener(new ClientLoginPacket().new decodeHandler(this, con));
+		//We can't check if it is a PE player yet because it is too early to figure out
+		//The packet listener will detach automatically if the connection turns out to be non-pe.
+		con.addPacketListener(new PEReceiver.PEReceiverListener(con));
 	}
 
 	@EventHandler
 	public void onConnectionHandshake(ConnectionHandshakeEvent e) {
 		Connection con = e.getConnection();
-		if(PocketCon.isPocketConnection(con)) {
+		if (PocketCon.isPocketConnection(con)) {
 			// = Packet Listeners = \\
-			con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
+			//con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
 			if (!PocketStuffAPI.getResourcePackManager().isEmpty()) { con.addPacketListener(new ResourcePackListener(con)); }
-			if (getConfig().getBoolean("skins.PEtoPC")) { con.addPacketListener(new SkinPacket().new decodeHandler(this, con)); }
-			if (getConfig().getBoolean("hacks.middleclick")) { con.addPacketListener(new BlockPickRequestPacket().new decodeHandler(this, con)); }
 			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
 			if (getConfig().getBoolean("hacks.player-heads-skins.skull-blocks")) { con.addPacketListener(new SkullTilePacketListener(con)); }
 			if (ServerPlatformIdentifier.get() == ServerPlatformIdentifier.SPIGOT) {

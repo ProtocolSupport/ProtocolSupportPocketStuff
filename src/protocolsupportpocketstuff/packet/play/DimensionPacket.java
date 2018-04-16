@@ -12,14 +12,14 @@ public class DimensionPacket extends PEPacket {
 
 	private Environment enviroment;
 	private Vector position;
-	
+
 	public DimensionPacket() { }
-	
+
 	public DimensionPacket(Environment environment, Vector position) {
 		this.enviroment = environment;
 		this.position = position;
 	}
-	
+
 	@Override
 	public int getPacketId() {
 		return PEPacketIDs.CHANGE_DIMENSION;

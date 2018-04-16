@@ -8,13 +8,17 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.CollectionsUtils;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class EntityDataPacket extends PEPacket {
+
 	private long entityId;
 	private CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata;
 
-	public EntityDataPacket(long entityId, CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata) {
+	public EntityDataPacket() { }
+
+	public EntityDataPacket(long entityId, ArrayMap<DataWatcherObject<?>> metadata) {
 		this.entityId = entityId;
 		this.metadata = metadata;
 	}
@@ -31,5 +35,13 @@ public class EntityDataPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		this.entityId = VarNumberSerializer.readVarLong(clientdata);
+		clientdata.skipBytes(clientdata.readableBytes());
+	}
+
+	public long getEntityId() {
+		return entityId;
+	}
+
 }

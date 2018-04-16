@@ -5,14 +5,17 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.serializer.ResourcePackSerializer;
+import protocolsupportpocketstuff.util.packet.serializer.ResourcePackSerializer;
 
 import java.util.List;
 
 public class ResourcesPackInfoPacket extends PEPacket {
+
 	private boolean forceResources;
 	private List<ResourcePack> behaviorPacks;
 	private List<ResourcePack> resourcePacks;
+
+	public ResourcesPackInfoPacket() { }
 
 	public ResourcesPackInfoPacket(boolean forceResources, List<ResourcePack> behaviorPacks, List<ResourcePack> resourcePacks) {
 		this.forceResources = forceResources;
@@ -39,5 +42,8 @@ public class ResourcesPackInfoPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		throw new UnsupportedOperationException();
+	}
+
 }

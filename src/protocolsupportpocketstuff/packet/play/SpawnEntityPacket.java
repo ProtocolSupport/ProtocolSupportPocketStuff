@@ -14,6 +14,7 @@ import protocolsupportpocketstuff.packet.PEPacket;
 import java.util.List;
 
 public class SpawnEntityPacket extends PEPacket {
+
 	private long entityId;
 	private int entityType;
 	private float x;
@@ -27,7 +28,11 @@ public class SpawnEntityPacket extends PEPacket {
 	private List<SetAttributesPacket.Attribute> attributes;
 	private CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata;
 
-	public SpawnEntityPacket(long entityId, int entityType, float x, float y, float z, float motionX, float motionY, float motionZ, float pitch, float yaw, List<SetAttributesPacket.Attribute> attributes, CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata) {
+	public SpawnEntityPacket() { }
+
+	public SpawnEntityPacket(long entityId, int entityType, float x, float y, float z, 
+			float motionX, float motionY, float motionZ, float pitch, float yaw, 
+			List<SetAttributesPacket.Attribute> attributes, CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata) {
 		this.entityId = entityId;
 		this.entityType = entityType;
 		this.x = x;
@@ -60,7 +65,6 @@ public class SpawnEntityPacket extends PEPacket {
 		serializer.writeFloatLE(motionZ); // motz
 		serializer.writeFloatLE(pitch); // pitch
 		serializer.writeFloatLE(yaw); // yaw
-
 		// We can't use SetAttributePackets#encodeAttributes because MCPE uses an different format in SpawnEntityPacket (why mojang?)
 		VarNumberSerializer.writeVarInt(serializer, attributes.size());
 		for (SetAttributesPacket.Attribute attribute : attributes) {
@@ -69,12 +73,13 @@ public class SpawnEntityPacket extends PEPacket {
 			serializer.writeFloatLE(attribute.getValue());
 			serializer.writeFloatLE(attribute.getMaximum());
 		}
-
 		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
-
 		VarNumberSerializer.writeVarInt(serializer, 0); //links, not used
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		throw new UnsupportedOperationException();
+	}
+
 }

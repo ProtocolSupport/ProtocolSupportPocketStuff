@@ -7,8 +7,11 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class TransferPacket extends PEPacket {
+
 	private String address;
 	private short port;
+
+	public TransferPacket() { }
 
 	public TransferPacket(String address, short port) {
 		this.address = address;
@@ -27,5 +30,8 @@ public class TransferPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		throw new UnsupportedOperationException();
+	}
+
 }

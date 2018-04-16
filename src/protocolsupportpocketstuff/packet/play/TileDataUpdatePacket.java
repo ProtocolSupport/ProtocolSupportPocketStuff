@@ -10,18 +10,21 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class TileDataUpdatePacket extends PEPacket {
-	private int x;
-	private int y;
-	private int z;
 
+	private Position position = new Position(0, 0, 0);
 	private NBTTagCompoundWrapper tag;
 
 	public TileDataUpdatePacket() { }
 
+	public TileDataUpdatePacket(Position position, NBTTagCompoundWrapper tag) {
+		this.position = position;
+		this.tag = tag;
+	}
+
 	public TileDataUpdatePacket(int x, int y, int z, NBTTagCompoundWrapper tag) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.position.setX(x);
+		this.position.setY(y);
+		this.position.setZ(z);
 		this.tag = tag;
 	}
 
@@ -32,12 +35,22 @@ public class TileDataUpdatePacket extends PEPacket {
 
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
-		PositionSerializer.writePEPosition(serializer, new Position(x, y, z));
+		PositionSerializer.writePEPosition(serializer, position);
 		ItemStackSerializer.writeTag(serializer, true, connection.getVersion(), tag);
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		throw new UnsupportedOperationException();
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		PositionSerializer.readPEPositionTo(clientdata, position);
+		this.tag = ItemStackSerializer.readTag(clientdata, true, connection.getVersion());
 	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public NBTTagCompoundWrapper getTag() {
+		return tag;
+	}
+
 }

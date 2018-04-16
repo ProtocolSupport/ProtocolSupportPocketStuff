@@ -25,14 +25,14 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 
 public class MineskinThread extends Thread {
-	ProtocolSupportPocketStuff plugin;
+
+	ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
 	Connection connection;
 	String uniqueSkinId;
 	BufferedImage skin;
 	boolean isSlim;
 
-	public MineskinThread(ProtocolSupportPocketStuff plugin, Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
-		this.plugin = plugin;
+	public MineskinThread(Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
 		this.connection = connection;
 		this.uniqueSkinId = uniqueSkinId;
 		this.skin = SkinUtils.fromData(skinByteArray);

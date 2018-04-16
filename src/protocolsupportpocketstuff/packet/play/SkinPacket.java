@@ -7,12 +7,8 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
-import protocolsupportpocketstuff.api.event.PocketChangeSkinEvent;
-import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
 
-import java.util.Base64;
 import java.util.UUID;
 
 public class SkinPacket extends PEPacket {
@@ -58,22 +54,22 @@ public class SkinPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
-		uuid = MiscSerializer.readUUID(clientData);
-		skinId = StringSerializer.readString(clientData, version);
-		skinName = StringSerializer.readString(clientData, version);
-		previousName = StringSerializer.readString(clientData, version);
-		skinData = ArraySerializer.readByteArray(clientData, version);
-		capeData = ArraySerializer.readByteArray(clientData, version);
-		geometryId = StringSerializer.readString(clientData, version);
-		geometryData = StringSerializer.readString(clientData, version);
+		uuid = MiscSerializer.readUUID(clientdata);
+		skinId = StringSerializer.readString(clientdata, version);
+		skinName = StringSerializer.readString(clientdata, version);
+		previousName = StringSerializer.readString(clientdata, version);
+		skinData = ArraySerializer.readByteArray(clientdata, version);
+		capeData = ArraySerializer.readByteArray(clientdata, version);
+		geometryId = StringSerializer.readString(clientdata, version);
+		geometryData = StringSerializer.readString(clientdata, version);
 	}
-	
+
 	public UUID getUUID() {
 		return uuid;
 	}
-	
+
 	public String getSkinId() {
 		return skinId;
 	}
@@ -102,22 +98,4 @@ public class SkinPacket extends PEPacket {
 		return geometryData;
 	}
 
-	public class decodeHandler extends PEPacket.decodeHandler {
-
-		public decodeHandler(ProtocolSupportPocketStuff plugin, Connection connection) {
-			super(plugin, connection);
-		}
-
-		@Override
-		public void handle() {
-			SkinPacket parent = SkinPacket.this;
-			byte[] skinData = parent.getSkinData();
-			String dataAsBase64 = new String(Base64.getEncoder().encode(skinData));
-			String skinStorageId = UUID.nameUUIDFromBytes(dataAsBase64.getBytes()).toString();
-			pm.callEvent(new PocketChangeSkinEvent(connection,
-					skinStorageId, parent.getUUID(), SkinUtils.fromData(parent.getSkinData()), parent.getSkinName().equals("skin.Standard.CustomSlim")));
-		}
-		
-	}
-	
 }

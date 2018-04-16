@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.packet.listener;
+package protocolsupportpocketstuff.packet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,19 +10,22 @@ import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.api.utils.Any;
-import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.serializer.PacketSerializer;
+import protocolsupportpocketstuff.api.util.PocketPacketHandler;
+import protocolsupportpocketstuff.api.util.PocketPacketListener;
+import protocolsupportpocketstuff.util.packet.serializer.PacketSerializer;
 
-public class PocketReceiver extends PacketListener {
+public class PEReceiver {
 
-	private static final Map<Integer, Any<PEPacket, Set<Handler>>> packetHandlers = new Int2ObjectArrayMap<>();
+	protected static final Map<Integer, Any<PEPacket, Set<Handler>>> packetHandlers = new Int2ObjectArrayMap<>();
 
-	/**
-	 * Registers all pocket packet handlers in a pocket packet listener.
-	 * @param listener
-	 */
+    //=====================================================\\
+    //						Registration				   \\
+    //=====================================================\\
+
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public static void registerPacketListeners(PocketPacketListener listener) {
 		Class<? extends PocketPacketListener> clazz = listener.getClass();
@@ -39,13 +42,12 @@ public class PocketReceiver extends PacketListener {
 		}
 	}
 
-	/**
-	 * Adds a pocket packet handler
-	 * @param packet
-	 * @param handler
-	 */
+    //=====================================================\\
+    //						Handlers					   \\
+    //=====================================================\\
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static void addHandler(PEPacket packet, Handler handler) {
+	protected static void addHandler(PEPacket packet, Handler handler) {
 		int packetId = packet.getPacketId();
 		Any<PEPacket, Set<Handler>> any = packetHandlers.get(packetId);
 		if (any == null) {
@@ -78,15 +80,11 @@ public class PocketReceiver extends PacketListener {
 
 	}
 
-	private Connection connection;
+    //=====================================================\\
+    //						Receiver					   \\
+    //=====================================================\\
 
-	public PocketReceiver(Connection connection) {
-		this.connection = connection;
-	}
-
-	@Override
-	public void onRawPacketReceiving(RawPacketEvent event) {
-		ByteBuf clientdata = event.getData().copy();
+	protected static void decodehandle(Connection connection, ByteBuf clientdata) {
 		int packetId = PacketSerializer.readPacketId(clientdata);
 		Any<PEPacket, Set<Handler>> handlers = packetHandlers.get(packetId);
 		if (handlers == null) { return; }
@@ -95,6 +93,26 @@ public class PocketReceiver extends PacketListener {
 		handlers.getObj2().forEach(handler -> {
 			handler.handle(connection, packet);
 		});
+	}
+
+	public static class PEReceiverListener extends PacketListener {
+		private Connection connection;
+
+		public PEReceiverListener(Connection connection) {
+			this.connection = connection;
+		}
+
+		@Override
+		public void onRawPacketReceiving(RawPacketEvent event) {
+			if (connection.getVersion() == null) {
+				return; //Keep going until version type is known.
+			} else if (connection.getVersion() == ProtocolVersion.MINECRAFT_PE) {
+				decodehandle(connection, event.getData().copy()); //If version is PE, handle the packet.
+			} else {
+				connection.removePacketListener(this); //If version turns out not to be PE stop listening.
+			}
+		}
+
 	}
 
 }

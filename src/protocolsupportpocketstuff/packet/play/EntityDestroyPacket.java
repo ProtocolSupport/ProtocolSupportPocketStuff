@@ -7,7 +7,10 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 public class EntityDestroyPacket extends PEPacket {
+
 	private long entityId;
+
+	public EntityDestroyPacket() { }
 
 	public EntityDestroyPacket(long entityId) {
 		this.entityId = entityId;
@@ -24,5 +27,12 @@ public class EntityDestroyPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+		this.entityId = VarNumberSerializer.readSVarLong(clientdata);
+	}
+
+	public long getEntityId() {
+		return entityId;
+	}
+
 }

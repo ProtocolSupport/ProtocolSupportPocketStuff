@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.packet.listener;
+package protocolsupportpocketstuff.api.util;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

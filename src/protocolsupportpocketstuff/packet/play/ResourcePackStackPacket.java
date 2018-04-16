@@ -6,14 +6,17 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.serializer.ResourcePackSerializer;
+import protocolsupportpocketstuff.util.packet.serializer.ResourcePackSerializer;
 
 import java.util.List;
 
 public class ResourcePackStackPacket extends PEPacket {
+
 	private boolean forceResources;
 	private List<ResourcePack> behaviorPacks;
 	private List<ResourcePack> resourcePacks;
+
+	public ResourcePackStackPacket() { }
 
 	public ResourcePackStackPacket(boolean forceResources, List<ResourcePack> behaviorPacks, List<ResourcePack> resourcePacks) {
 		this.forceResources = forceResources;
@@ -40,5 +43,8 @@ public class ResourcePackStackPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) { }
+	public void readFromClientData(Connection connection, ByteBuf clientData) {
+		throw new UnsupportedOperationException();
+	}
+
 }

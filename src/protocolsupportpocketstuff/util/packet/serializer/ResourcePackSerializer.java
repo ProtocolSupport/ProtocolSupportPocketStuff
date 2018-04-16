@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.util.serializer;
+package protocolsupportpocketstuff.util.packet.serializer;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
