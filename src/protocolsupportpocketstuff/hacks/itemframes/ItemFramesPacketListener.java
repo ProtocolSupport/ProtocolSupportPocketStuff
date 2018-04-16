@@ -56,7 +56,11 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	// Constants
 	private static final int ACTION_USE_ITEM = 2;
 	private static final int ITEM_FRAME_ENTITY_ID = 71;
-	private static final int ITEM_FRAME_BLOCK_ID = PEDataValues.BLOCK_ID.getRemap(199);
+	// TODO: Check and refactor the variables name, they should be NORTH, SOUTH, EAST, WEST
+	private static final int ITEM_FRAME_BLOCK_ID_DATA0 = 1771;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA1 = 1772;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1773;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1774;
 
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
 		this.con = con;
@@ -292,7 +296,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			if (entry == null)
 				return;
 
-			if (id != ITEM_FRAME_BLOCK_ID)
+			if (id != ITEM_FRAME_BLOCK_ID_DATA0 && id != ITEM_FRAME_BLOCK_ID_DATA1 && id != ITEM_FRAME_BLOCK_ID_DATA2 && id != ITEM_FRAME_BLOCK_ID_DATA3)
 				event.setCancelled(true);
 			return;
 		}
@@ -365,16 +369,16 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 
 			switch (facing) {
 				case 3:
-					peFacing = 0;
+					peFacing = ITEM_FRAME_BLOCK_ID_DATA0;
 					break;
 				case 0:
-					peFacing = 2;
+					peFacing = ITEM_FRAME_BLOCK_ID_DATA2;
 					break;
 				case 2:
-					peFacing = 3;
+					peFacing = ITEM_FRAME_BLOCK_ID_DATA3;
 					break;
 				case 1:
-					peFacing = 1;
+					peFacing = ITEM_FRAME_BLOCK_ID_DATA1;
 					break;
 				default:
 					break;
@@ -386,7 +390,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		public void spawn(ItemFramesPacketListener listener) {
 			// First we change the block type...
 			// Item Frame block ID is 199
-			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), ItemFramesPacketListener.ITEM_FRAME_BLOCK_ID + getPEFacing());
+			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), getPEFacing());
 
 			PocketCon.sendPocketPacket(listener.con, updateBlockPacket);
 

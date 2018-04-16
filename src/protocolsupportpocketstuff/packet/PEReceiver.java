@@ -6,13 +6,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.api.utils.Any;
+import protocolsupport.libs.it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import protocolsupportpocketstuff.api.util.PocketPacketHandler;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.util.packet.serializer.PacketSerializer;
