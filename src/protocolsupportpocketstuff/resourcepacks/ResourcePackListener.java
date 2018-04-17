@@ -3,6 +3,7 @@ package protocolsupportpocketstuff.resourcepacks;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.PocketStuffAPI;
@@ -25,6 +26,8 @@ import java.util.Optional;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import io.netty.buffer.ByteBuf;
 
 public class ResourcePackListener extends PacketListener implements PocketPacketListener, Listener {
 
@@ -88,7 +91,9 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 
 	public static class ResourcePacketReplacer extends PacketListener {
 
-		private Connection connection;
+		protected ArrayList<ByteBuf> queue = new ArrayList<>(2000);
+		protected final Connection connection;
+		protected boolean queuePackets = false;
 
 		public ResourcePacketReplacer(Connection connection) {
 			this.connection = connection;
@@ -97,22 +102,30 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 		@Override
 		public void onRawPacketSending(RawPacketEvent event) {
 			super.onRawPacketSending(event);
-			int packetId = PacketSerializer.readPacketId(event.getData());
+			ByteBuf serverdata = event.getData();
+			int packetId = PacketSerializer.readPacketId(serverdata);
 			if (packetId == PEPacketIDs.RESOURCE_PACK) {
 				plugin.debug("Replacing resource pack data with real information...");
 				ResourcePackInfoPacket infoPacket = new ResourcePackInfoPacket(PocketStuffAPI.getResourcePackManager().resourcePacksRequired(), 
 						PocketStuffAPI.getResourcePackManager().getBehaviorPacks(), PocketStuffAPI.getResourcePackManager().getResourcePacks());
 				event.setData(infoPacket.encode(connection));
+				queuePackets = true;
 			} else if (packetId == PEPacketIDs.RESOURCE_STACK) {
-				if (connection.hasMetadata(packFinished)) {
+				if (!connection.hasMetadata(packFinished)) {
 					plugin.debug("Cancelling stack data...");
 					event.setCancelled(true);
 				} else {
-					plugin.debug("I'm done! Removing myself (resource listener)...");
+					plugin.debug("I'm done with resources! Sending queued packets and removing myself...");
+					queue.forEach(packet -> connection.sendRawPacket(MiscSerializer.readAllBytes(packet)));
 					connection.removePacketListener(this);
 				}
+			} else if (queuePackets) {
+				plugin.debug("Caching packet to resend after resource handling.");
+				queue.add(serverdata.copy());
+				event.setCancelled(true);
 			}
 		}
+
 	}
 
 }
