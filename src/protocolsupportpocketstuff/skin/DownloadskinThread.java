@@ -38,6 +38,7 @@ public class DownloadskinThread extends Thread {
 				skindataApplyCallback.accept(skin);
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			plugin.pm("Error downloading skin: " + url + "!");
 		}
 	}

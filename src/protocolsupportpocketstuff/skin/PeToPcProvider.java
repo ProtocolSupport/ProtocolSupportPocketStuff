@@ -29,8 +29,10 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 		boolean slim = packet.getJsonPayload().get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim");
 		new MineskinThread(skinByteArray, slim, (skindata) -> {
 			if (connection.getPlayer() == null) {
+				plugin.debug("MEta added!");
 				connection.addMetadata(StuffUtils.APPLY_SKIN_ON_JOIN_KEY, skindata);
 			} else {
+				plugin.debug("Dynamic skin update!");
 				SkinUtils.updateSkin(connection.getPlayer(), skinByteArray, skindata, slim);
 			}
 		}).start();
@@ -38,8 +40,12 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	@PocketPacketHandler
 	public void onSkinChange(Connection connection, SkinPacket packet) {
-		boolean slim = packet.getSkinName().equals("skin.Standard.CustomSlim");
+		//boolean slim = packet.getSkinName().equals("skin.Standard.CustomSlim");
+		System.out.println(packet.getGeometryId());
+		boolean slim = packet.getGeometryId().equals("geometry.humanoid.customSlim");
+		plugin.debug(slim + "sdkfjsdlfj");
 		new MineskinThread(packet.getSkinData(), slim, (skindata) -> {
+			plugin.debug("Dynamic skin update!");
 			SkinUtils.updateSkin(connection.getPlayer(), packet.getSkinData(), skindata, slim);
 		}).start();
 	}
@@ -47,6 +53,7 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 	@EventHandler
 	public void onPlayerPropertiesResolve(PlayerPropertiesResolveEvent event) {
 		Connection con = event.getConnection();
+		plugin.debug("Props for " + event.getName() + "...");
 		if (PocketCon.isPocketConnection(con)) {
 			//In this event the server actually doesn't have the uuid registered yet.
 			if (con.hasMetadata(StuffUtils.APPLY_SKIN_ON_JOIN_KEY)) {

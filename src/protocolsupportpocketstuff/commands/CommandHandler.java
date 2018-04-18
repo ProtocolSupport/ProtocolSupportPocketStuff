@@ -18,6 +18,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	{
 		subcommands.put("reloadpacks", new ReloadPacksSubCommand());
 		subcommands.put("pocketinfo", new PocketInfoSubCommand());
+		subcommands.put("skinz", new SkinsSubCommand());
 	}
 
 	@Override
@@ -30,6 +31,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			sender.sendMessage(ChatColor.DARK_PURPLE + "ProtocolSupportPocketStuff");
 			sender.sendMessage(ChatColor.GRAY + "/psps reloadpacks");
 			sender.sendMessage(ChatColor.GRAY + "/psps pocketinfo");
+			sender.sendMessage(ChatColor.GRAY + "/psps skinz");
 			return true;
 		}
 		SubCommand subcommand = subcommands.get(args[0]);

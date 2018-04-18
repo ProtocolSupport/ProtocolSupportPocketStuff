@@ -132,7 +132,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 	 * @param msg
 	 */
 	public void debug(String msg) {
-		if (!getConfig().getBoolean("logging.enable-debug", false)) { return; }
+		//if (!getConfig().getBoolean("logging.enable-debug", false)) { return; }
 		msg = PREFIX + " [DEBUG] " + msg;
 		if (getConfig().getBoolean("logging.disable-colors", false)) {
 			msg = ChatColor.stripColor(msg);

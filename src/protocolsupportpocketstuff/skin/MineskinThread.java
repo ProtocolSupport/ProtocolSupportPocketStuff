@@ -43,10 +43,11 @@ public class MineskinThread extends Thread {
 	@Override
 	public void run() {
 		super.run();
-		String uniqueSkinId = SkinUtils.uuidFromSkin(skin).toString();
+		String uniqueSkinId = SkinUtils.uuidFromSkin(skin, isSlim).toString();
 		if (skins.hasPeSkin(uniqueSkinId)) {
 			plugin.debug("PE skin already in cache!");
 			skindataUploadedCallback.accept(skins.getPeSkin(uniqueSkinId));
+			return;
 		}
 		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
 		try {
