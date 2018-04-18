@@ -1,11 +1,10 @@
-package protocolsupportpocketstuff.skin;
+package protocolsupportpocketstuff;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
-import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
@@ -18,7 +17,7 @@ import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 
-public class SkinListener implements Listener, PocketPacketListener {
+public class TestListener implements Listener, PocketPacketListener {
 	
 	private ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
 	

@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
@@ -151,6 +152,17 @@ public class PocketCon {
 			boolean result = event instanceof ModalWindowResponseEvent ? ((ModalWindowResponseEvent) event).getResult() : false;
 			modalWindowResponseEvent.onModalWindowResponse(connection.getPlayer(), event.getModalJSON(), event.isCancelled(), result);
 		}
+	}
+
+	/**
+	 * Sends a pc-like skin to a pocket connection.
+	 * @param connection
+	 * @param uuid
+	 * @param skin
+	 * @param isSlim
+	 */
+	public static void sendSkin(Connection connection, UUID uuid, byte[] skin, boolean isSlim) {
+		sendSkin(connection, uuid, skin, PocketSkinModel.fromPEModel(PESkinModel.getSkinModel(isSlim)));
 	}
 
 	/***

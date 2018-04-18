@@ -10,8 +10,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
+import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
+import protocolsupportpocketstuff.api.util.PocketPlayer;
 import protocolsupportpocketstuff.libs.kevinsawicki.http.HttpRequest;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.GsonUtils;
@@ -35,7 +38,7 @@ public class MineskinThread extends Thread {
 	public MineskinThread(Connection connection, String uniqueSkinId, byte[] skinByteArray, boolean isSlim) {
 		this.connection = connection;
 		this.uniqueSkinId = uniqueSkinId;
-		this.skin = SkinUtils.fromData(skinByteArray);
+		this.skin = SkinUtils.imagefromPEData(skinByteArray);
 		this.isSlim = isSlim;
 	}
 
@@ -84,7 +87,7 @@ public class MineskinThread extends Thread {
 
 			plugin.debug("Storing skin on cache...");
 			Skins.getInstance().cachePeSkin(uniqueSkinId, new SkinUtils.SkinDataWrapper(value, signature, isSlim));
-			hackyStuff(connection, value, signature);
+			updateSkins(connection, value, signature);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -104,7 +107,7 @@ public class MineskinThread extends Thread {
 		return GsonUtils.JSON_PARSER.parse(httpRequest.body()).getAsJsonObject();
 	}
 
-	public void hackyStuff(Connection connection, String value, String signature) {
+	public void updateSkins(Connection connection, String value, String signature) {
 		// Wait until the player is logged in
 		while (connection.getPlayer() == null) {
 			if (!connection.isConnected()) {
@@ -148,8 +151,15 @@ public class MineskinThread extends Thread {
 							//removes the entity and display the new skin
 							onlinePlayer.hidePlayer(plugin, player);
 							onlinePlayer.showPlayer(plugin, player);
+							//sends skin packet to dynamically update PE skins.
+							if (PocketPlayer.isPocketPlayer(onlinePlayer)) {
+								PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), SkinUtils.imageToPEData(skin), PocketSkinModel.fromPEModel(PESkinModel.getSkinModel(isSlim)));
+							}
 						});
 			}
 		}.runTask(ProtocolSupportPocketStuff.getInstance());
+	}
+	public static void test() {
+
 	}
 }
