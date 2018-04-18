@@ -3,6 +3,7 @@ package protocolsupportpocketstuff.api.skins;
 import protocolsupport.libs.com.google.gson.Gson;
 import protocolsupport.libs.com.google.gson.GsonBuilder;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupportpocketstuff.util.GsonUtils;
 
 public class PocketSkinModel {
@@ -119,12 +120,26 @@ public class PocketSkinModel {
 	}
 
 	/**
-	 * Gets a skin modal object from JSON string.
+	 * Gets a skin model object from JSON string.
 	 * @param skinJSON
 	 * @return
 	 */
 	public static PocketSkinModel fromJSON(String skinJSON) {
 		return GsonUtils.GSON.fromJson(skinJSON, PocketSkinModel.class);
 	}
-	
+
+	/**
+	 * Gets a skin model object from protocolsupport's model.
+	 * @param model
+	 * @return
+	 */
+	public static PocketSkinModel fromPEModel(PESkinModel model) {
+		PocketSkinModel newModel = new PocketSkinModel();
+		newModel.setSkinId(model.getSkinId());
+		newModel.setSkinName(model.getSkinName());
+		newModel.setGeometryId(model.getGeometryId());
+		newModel.setGeometryData(model.getGeometryData());
+		return newModel;
+	}
+
 }

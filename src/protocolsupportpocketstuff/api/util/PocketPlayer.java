@@ -97,7 +97,22 @@ public class PocketPlayer {
 	public static int sendModal(Player player, int modalId, String modalJSON, ModalCallback modalCallback) {
 		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modalId, modalJSON, modalCallback);
 	}
-	
+
+	/***
+	 * Sends a pc-like skin to a pocket connection.
+	 * <br/><br/>
+	 * <i>When sending multiple packets to pocket it is advised
+	 * to get the connection using {@link ProtocolSupportAPI.getConnection}
+	 * first and then use {@link PocketCon} to send the packets.</i>
+	 * @param player
+	 * @param uuid
+	 * @param skin
+	 * @param isSlim
+	 */
+	public static void sendSkin(Player player, UUID uuid, byte[] skin, boolean isSlim) {
+		PocketCon.sendSkin(ProtocolSupportAPI.getConnection(player), uuid, skin, isSlim);
+	}
+
 	/***
 	 * Sends a PocketSkin to a pocket connection.
 	 * <br/><br/>
