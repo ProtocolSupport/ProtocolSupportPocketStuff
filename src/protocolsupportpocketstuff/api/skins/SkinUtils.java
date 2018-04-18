@@ -116,7 +116,7 @@ public class SkinUtils {
 	public static void updateSkin(Player player, byte[] skin, boolean isSlim) {
 		new MineskinThread(skin, isSlim, (skindata) -> {
 			updateSkin(player, skin, skindata, isSlim);
-		}).start();;
+		}).start();
 	}
 
 	/***
