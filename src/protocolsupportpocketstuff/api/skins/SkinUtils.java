@@ -3,17 +3,15 @@ package protocolsupportpocketstuff.api.skins;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.libs.com.google.gson.JsonParser;
-import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.utils.JsonUtils;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketPlayer;
 import protocolsupportpocketstuff.skin.DownloadskinThread;
-import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.skin.MineskinThread;
 import protocolsupportpocketstuff.zplatform.PlatformThings;
 
 import java.awt.*;
@@ -23,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.UUID;
 
 public class SkinUtils {
 
@@ -31,7 +30,7 @@ public class SkinUtils {
 	 * @param data
 	 * @return
 	 */
-	public static BufferedImage imagefromPEData(byte[] data) {
+	public static BufferedImage imageFromPEData(byte[] data) {
 		System.out.println(data.length);
 		Validate.isTrue((data.length == 8192) || (data.length == 16384) || (data.length == 65536), "Skin data must be either 32*64 or 64*64 or 128*128 bytes long!");
 		int width = (data.length == 65536) ? 128 : 64, height = (data.length == 65536) ? 128 : ((data.length == 16384) ? 64 : 32);
@@ -94,6 +93,7 @@ public class SkinUtils {
 	/***
 	 * Very cool method that updates a player's skin on the fly!
 	 * This method downloads the skin first, to display it to PE players (if it isn't in cache).
+	 * <em>This method might runs async and may take some time to show results!</em>
 	 * @param player
 	 * @param skindata
 	 */
@@ -104,12 +104,47 @@ public class SkinUtils {
 			updateSkin(player, skin, skindata, isSlim);
 		}).start();
 	}
-	
-	public static void updateSkin(Player player, String url, ) {
-		String url = urlFromProperty(skindata);
-		boolean isSlim = slimFromProperty(skindata);
-		new DownloadskinThread(url, (skin) -> {
+
+	/***
+	 * Very cool method that updates a player's skin on the fly!
+	 * This method uploads the skin to mineskin and caches the texture, to display it so PC players can see it too!
+	 * <em>This method might runs async and may take some time to show results!</em>
+	 * @param player
+	 * @param skin
+	 * @param isSlim
+	 */
+	public static void updateSkin(Player player, byte[] skin, boolean isSlim) {
+		new MineskinThread(skin, isSlim, (skindata) -> {
 			updateSkin(player, skin, skindata, isSlim);
+		}).start();;
+	}
+
+	/***
+	 * Very cool method that updates a player's skin on the fly!
+	 * This method uploads the skin to mineskin and caches the texture, to display it so PC players can see it too!
+	 * <em>This method might runs async and may take some time to show results!</em>
+	 * @param player
+	 * @param skin
+	 * @param isSlim
+	 */
+	public static void updateSkin(Player player, BufferedImage skin, boolean isSlim) {
+		updateSkin(player, imageToPEData(skin), isSlim);
+	}
+
+	/***
+	 * Very cool method that updates a player's skin on the fly!
+	 * This method downloads the skin, uploads it to mineskin and caches the texture and response
+	 * and to display it to both PC and PE players sends the right packets for an update.
+	 * <em>This method might runs async and may take some time to show results!</em>
+	 * @param player
+	 * @param skinUrl
+	 * @param isSlim
+	 */
+	public static void updateSkin(Player player, String url, boolean isSlim) {
+		new DownloadskinThread(url, (skin) -> {
+			new MineskinThread(skin, isSlim, (skindata) -> {
+				updateSkin(player, skin, skindata, isSlim);
+			}).start();
 		}).start();
 	}
 
@@ -148,6 +183,22 @@ public class SkinUtils {
 			return null;
 		}
 		return JsonUtils.getJsonObject(texturesobject, "SKIN");
+	}
+
+	/***
+	 * Generates UUID from skin data for use in mineskin and cache reference.
+	 * @return
+	 */
+	public static UUID uuidFromSkin(byte[] skin) {
+		return UUID.nameUUIDFromBytes(skin);
+	}
+
+	/***
+	 * Generates UUID from bufferedimage for use in mineskin and cache reference.
+	 * @return
+	 */
+	public static UUID uuidFromSkin(BufferedImage skin) {
+		return uuidFromSkin(imageToPEData(skin));
 	}
 
 	/**
