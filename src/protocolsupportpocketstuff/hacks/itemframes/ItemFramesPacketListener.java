@@ -6,6 +6,7 @@ import net.minecraft.server.v1_12_R1.EnumHand;
 import net.minecraft.server.v1_12_R1.PacketPlayInUseEntity;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -117,6 +118,11 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	public void onPacketSending(PacketEvent event) {
 		super.onPacketSending(event);
 
+		// ===[ WORLD SWITCH ]===
+		if (event.getPacket() instanceof PacketPlayOutRespawn) {
+			cachedItemFrames.clear();
+			return;
+		}
 		// ===[ SPAWN ]===
 		if (event.getPacket() instanceof PacketPlayOutSpawnEntity) {
 			PacketPlayOutSpawnEntity packet = (PacketPlayOutSpawnEntity) event.getPacket();

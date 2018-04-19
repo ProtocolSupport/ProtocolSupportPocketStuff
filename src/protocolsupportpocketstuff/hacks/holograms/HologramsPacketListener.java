@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.hacks.holograms;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetPosition;
@@ -50,6 +51,15 @@ public class HologramsPacketListener extends PacketListener {
 	}
 
 	@Override
+	public void onPacketSending(PacketEvent event) {
+		// ===[ WORLD SWITCH ]===
+		if (event.getPacket() instanceof PacketPlayOutRespawn) {
+			cachedArmorStands.clear();
+			return;
+		}
+	}
+
+	@Override
 	public void onRawPacketSending(RawPacketEvent event) {
 		ByteBuf data = event.getData();
 
@@ -58,11 +68,6 @@ public class HologramsPacketListener extends PacketListener {
 		data.readByte();
 		data.readByte();
 
-		if (packetId == PEPacketIDs.CHANGE_DIMENSION) {
-			// Clear cached holograms on dimension switch
-			cachedArmorStands.clear();
-			return;
-		}
 		if (packetId == PEPacketIDs.ENTITY_TELEPORT) {
 			long entityId = VarNumberSerializer.readVarLong(data);
 

@@ -2,6 +2,7 @@ package protocolsupportpocketstuff.hacks.skulls;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
@@ -51,6 +52,15 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 	}
 
 	@Override
+	public void onPacketSending(PacketEvent event) {
+		// ===[ WORLD SWITCH ]===
+		if (event.getPacket() instanceof PacketPlayOutRespawn) {
+			cachedSkullBlocks.clear();
+			return;
+		}
+	}
+
+	@Override
 	public void onRawPacketSending(RawPacketEvent event) {
 		ByteBuf data = event.getData();
 		int packetId = VarNumberSerializer.readVarInt(data);
@@ -58,10 +68,6 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		data.readByte();
 		data.readByte();
 
-		if (packetId == PEPacketIDs.CHANGE_DIMENSION) {
-			cachedSkullBlocks.clear();
-			return;
-		}
 		if (packetId == PEPacketIDs.TILE_DATA_UPDATE) {
 			Position position = new Position(0, 0, 0);
 			PositionSerializer.readPEPositionTo(data, position);
