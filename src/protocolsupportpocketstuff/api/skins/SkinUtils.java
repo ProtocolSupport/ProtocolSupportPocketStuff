@@ -82,9 +82,11 @@ public class SkinUtils {
 				//removes the entity and display the new skin
 				onlinePlayer.hidePlayer(ProtocolSupportPocketStuff.getInstance(), player);
 				onlinePlayer.showPlayer(ProtocolSupportPocketStuff.getInstance(), player);
-				//sends skin packet to dynamically update PE skins.
 				if (PocketPlayer.isPocketPlayer(onlinePlayer)) {
-					PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), skin, isSlim);
+					Bukkit.getScheduler().runTaskLater(ProtocolSupportPocketStuff.getInstance(), () -> {
+						//sends skin packet to dynamically update PE skins.
+						PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), skin, isSlim);
+					}, 5l);
 				}
 			});
 		});
@@ -189,7 +191,8 @@ public class SkinUtils {
 	 * Generates UUID from skin data for use in mineskin and cache reference.
 	 * @return
 	 */
-	public static UUID uuidFromSkin(byte[] skin) {
+	public static UUID uuidFromSkin(byte[] skin, boolean isSlim) {
+		skin[skin.length-1] = (byte) (isSlim ? 1 : 0);
 		return UUID.nameUUIDFromBytes(skin);
 	}
 
@@ -197,8 +200,8 @@ public class SkinUtils {
 	 * Generates UUID from bufferedimage for use in mineskin and cache reference.
 	 * @return
 	 */
-	public static UUID uuidFromSkin(BufferedImage skin) {
-		return uuidFromSkin(imageToPEData(skin));
+	public static UUID uuidFromSkin(BufferedImage skin, boolean isSlim) {
+		return uuidFromSkin(imageToPEData(skin), isSlim);
 	}
 
 	/**

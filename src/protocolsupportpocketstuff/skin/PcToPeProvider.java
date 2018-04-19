@@ -1,6 +1,7 @@
 package protocolsupportpocketstuff.skin;
 
 import protocolsupport.api.unsafe.peskins.PESkinsProvider;
+import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.storage.Skins;
 
 import java.util.function.Consumer;
@@ -11,7 +12,8 @@ public class PcToPeProvider extends PESkinsProvider {
 
 	@Override
 	public byte[] getSkinData(String url) {
-		if (skins.hasPeSkin(url)) {
+		ProtocolSupportPocketStuff.getInstance().debug("Instantly returning skin: " + url);
+		if (skins.hasPcSkin(url)) {
 			return skins.getPcSkin(url);
 		}
 		return null;

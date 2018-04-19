@@ -6,7 +6,7 @@ import protocolsupportpocketstuff.api.entity.PocketMetadata;
 
 import java.util.UUID;
 
-public class MetadataProvider extends PEMetaProvider {
+public class EntityMetadataProvider extends PEMetaProvider {
 
 	public static final String DEFAULTINTERACT = "Interact";
 

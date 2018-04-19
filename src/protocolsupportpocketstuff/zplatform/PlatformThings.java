@@ -17,8 +17,10 @@ public abstract class PlatformThings {
 		switch(ServerPlatformIdentifier.get()) {
 		case GLOWSTONE:
 			stuff = new GlowstoneStuff();
+			break;
 		case SPIGOT:
 			stuff = new SpigotStuff();
+			break;
 		default:
 			throw new RuntimeException("Unsupported server platform!");
 		}

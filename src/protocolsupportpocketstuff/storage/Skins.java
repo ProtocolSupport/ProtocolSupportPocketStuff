@@ -87,6 +87,7 @@ public class Skins {
 	 * @return true if the skin was cached
 	 */
 	public boolean hasPeSkin(String uuid) {
+		System.out.println("MEEp" + uuid);
 		return pcSkinCache.containsKey(uuid);
 	}
 
