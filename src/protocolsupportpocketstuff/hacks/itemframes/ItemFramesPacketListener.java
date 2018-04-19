@@ -63,8 +63,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1726;
 	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1727;
 
-	int sentLoginSpawnedStatus = 0;
-
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
 		this.con = con;
 	}

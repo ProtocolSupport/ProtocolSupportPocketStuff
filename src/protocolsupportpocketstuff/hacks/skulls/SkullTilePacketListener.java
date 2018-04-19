@@ -45,7 +45,22 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 	private static final String SKULL_MODEL = StuffUtils.getResourceAsString("models/fake_skull_block.json");
 
 	// Constants
-	private static final int SKULL_BLOCK_ID = 144;
+	private static final int SKULL_RUNTIME_ID_0 = 1096;
+	private static final int SKULL_RUNTIME_ID_1 = SKULL_RUNTIME_ID_0 + 1;
+	private static final int SKULL_RUNTIME_ID_2 = SKULL_RUNTIME_ID_1 + 1;
+	private static final int SKULL_RUNTIME_ID_3 = SKULL_RUNTIME_ID_2 + 1;
+	private static final int SKULL_RUNTIME_ID_4 = SKULL_RUNTIME_ID_3 + 1;
+	private static final int SKULL_RUNTIME_ID_5 = SKULL_RUNTIME_ID_4 + 1;
+	private static final int SKULL_RUNTIME_ID_6 = SKULL_RUNTIME_ID_5 + 1;
+	private static final int SKULL_RUNTIME_ID_7 = SKULL_RUNTIME_ID_6 + 1;
+	private static final int SKULL_RUNTIME_ID_8 = SKULL_RUNTIME_ID_7 + 1;
+	private static final int SKULL_RUNTIME_ID_9 = SKULL_RUNTIME_ID_8 + 1;
+	private static final int SKULL_RUNTIME_ID_10 = SKULL_RUNTIME_ID_9 + 1;
+	private static final int SKULL_RUNTIME_ID_11 = SKULL_RUNTIME_ID_10 + 1;
+	private static final int SKULL_RUNTIME_ID_12 = SKULL_RUNTIME_ID_11 + 1;
+	private static final int SKULL_RUNTIME_ID_13 = SKULL_RUNTIME_ID_12 + 1;
+	private static final int SKULL_RUNTIME_ID_14 = SKULL_RUNTIME_ID_13 + 1;
+	private static final int SKULL_RUNTIME_ID_15 = SKULL_RUNTIME_ID_14 + 1;
 
 	public SkullTilePacketListener(Connection con) {
 		this.con = con;
@@ -109,9 +124,24 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 				flags += 0x08;
 			}
 
-			int dataValue = flags & flagsAndDataValue;
+			int dataValue = id - SKULL_RUNTIME_ID_0;
 
-			if (id == SKULL_BLOCK_ID) {
+			if (id == SKULL_RUNTIME_ID_0 ||
+				id == SKULL_RUNTIME_ID_1 ||
+				id == SKULL_RUNTIME_ID_2 ||
+				id == SKULL_RUNTIME_ID_3 ||
+				id == SKULL_RUNTIME_ID_4 ||
+				id == SKULL_RUNTIME_ID_5 ||
+				id == SKULL_RUNTIME_ID_6 ||
+				id == SKULL_RUNTIME_ID_7 ||
+				id == SKULL_RUNTIME_ID_8 ||
+				id == SKULL_RUNTIME_ID_9 ||
+				id == SKULL_RUNTIME_ID_10 ||
+				id == SKULL_RUNTIME_ID_11 ||
+				id == SKULL_RUNTIME_ID_12 ||
+				id == SKULL_RUNTIME_ID_13 ||
+				id == SKULL_RUNTIME_ID_14 ||
+				id == SKULL_RUNTIME_ID_15) {
 				if (!cachedSkullBlocks.containsKey(asLong)) {
 					CachedSkullBlock cachedSkullBlock = new CachedSkullBlock(position);
 					cachedSkullBlock.dataValue = dataValue; // Store the new dataValue from this block
@@ -142,18 +172,69 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			ByteBuf chunkdata = Unpooled.wrappedBuffer(byteArray);
 			int sections = chunkdata.readByte(); // how many sections we have in this chunk
 
+			int chunkXStart = chunkX << 4;
+			int chunkZStart = chunkZ << 4;
+
+			HashMap<Long, Integer> skulls = new HashMap<>();
+
 			for (int i = 0; i < sections; i++) {
 				chunkdata.readByte(); // subchunk version
 
+				// Borrowed from https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37 ~ thanks 7kasper!
 				int paletteAndFlag = chunkdata.readByte();
-				int bitsPerBlocks = paletteAndFlag >> 1;
+				boolean isRuntime = (paletteAndFlag & 1) != 0;
+				int bitsPerBlock = paletteAndFlag >> 1;
+				int blocksPerWord = (int) Math.floor(32 / bitsPerBlock);
+				int wordCount = (int) Math.ceil(4096.0 / blocksPerWord);
+				int blockIndex = chunkdata.readerIndex();
+				chunkdata.skipBytes(wordCount * 4); //4 bytes per word.
+				// Palette localPallete; //To get 'real' data
+				HashMap<Integer, Integer> palette = new HashMap<Integer, Integer>();
 
-				chunkdata.skipBytes((int) Math.ceil(4096.0 / Math.floor(32 / bitsPerBlocks)) * 4);
-
-				int size = VarNumberSerializer.readSVarInt(chunkdata);
-				for (int x = 0; x < size; x++) {
-					VarNumberSerializer.readSVarInt(chunkdata);
+				if (isRuntime) {
+					int palleteSize = VarNumberSerializer.readSVarInt(chunkdata);
+					for (int palletId = 0; palletId < palleteSize; palletId++) {
+						int runtimeId = VarNumberSerializer.readSVarInt(chunkdata);
+						palette.put(palletId, runtimeId);
+					}
+				} else {
+					throw new RuntimeException("Trying to read non-runtime chunk data on runtime!");
 				}
+				int afterPaletteIndex = chunkdata.readerIndex();
+				chunkdata.readerIndex(blockIndex);
+				int position = 0;
+				for (int wordi = 0; wordi < wordCount; wordi++) {
+					int word = chunkdata.readIntLE();
+					for (int block = 0; block < blocksPerWord; block++) {
+						int state = (word >> ((position & blocksPerWord) * bitsPerBlock)) & ((1 << bitsPerBlock) - 1);
+						int x = (position >> 8) & 0xF;
+						int y = position & 0xF;
+						int z = (position >> 4) & 0xF;
+
+						int blockId = palette.get(state);
+
+						if (blockId == SKULL_RUNTIME_ID_0 ||
+							blockId == SKULL_RUNTIME_ID_1 ||
+							blockId == SKULL_RUNTIME_ID_2 ||
+							blockId == SKULL_RUNTIME_ID_3 ||
+							blockId == SKULL_RUNTIME_ID_4 ||
+							blockId == SKULL_RUNTIME_ID_5 ||
+							blockId == SKULL_RUNTIME_ID_6 ||
+							blockId == SKULL_RUNTIME_ID_7 ||
+							blockId == SKULL_RUNTIME_ID_8 ||
+							blockId == SKULL_RUNTIME_ID_9 ||
+							blockId == SKULL_RUNTIME_ID_10 ||
+							blockId == SKULL_RUNTIME_ID_11 ||
+							blockId == SKULL_RUNTIME_ID_12 ||
+							blockId == SKULL_RUNTIME_ID_13 ||
+							blockId == SKULL_RUNTIME_ID_14 ||
+							blockId == SKULL_RUNTIME_ID_15) {
+							skulls.put(StuffUtils.convertCoordinatesToLong(chunkXStart + x, ((block / 256) * 16) + y, chunkZStart + z), blockId);
+						}
+						position++;
+					}
+				}
+				chunkdata.readerIndex(afterPaletteIndex);
 			}
 
 			chunkdata.skipBytes(512); // height map
@@ -174,9 +255,13 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 				Position position = new Position(x, y, z);
 
+				Integer id = skulls.getOrDefault(StuffUtils.convertPositionToLong(position), 1097);
+
+				int dataValue = id - SKULL_RUNTIME_ID_0; // If we do the current ID - first skull related ID, we will get the good old data value
+
 				// Is there's any possibility of an skull being on the chunk nbt tags but not really in the world? idk
 				// So that's why getOrDefault is used
-				handleSkull(position, tag, 3);
+				handleSkull(position, tag, dataValue);
 			}
 		}
 	}
