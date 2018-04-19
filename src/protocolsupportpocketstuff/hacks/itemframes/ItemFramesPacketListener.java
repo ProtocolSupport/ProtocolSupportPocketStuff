@@ -62,6 +62,8 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1726;
 	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1727;
 
+	int sentLoginSpawnedStatus = 0;
+
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
 		this.con = con;
 	}
@@ -281,11 +283,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		data.readByte();
 		data.readByte();
 
-		if (packetId == PEPacketIDs.CHANGE_DIMENSION) {
-			// Clear cached item frames on dimension switch
-			cachedItemFrames.clear();
-			return;
-		}
 		if (packetId == PEPacketIDs.UPDATE_BLOCK) {
 			Position position = new Position(0, 0, 0); 
 			PositionSerializer.readPEPositionTo(data, position);
@@ -301,8 +298,8 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			return;
 		}
 		if (packetId == PEPacketIDs.CHUNK_DATA) {
-			int chunkX = VarNumberSerializer.readSVarInt(event.getData());
-			int chunkZ = VarNumberSerializer.readSVarInt(event.getData());
+			int chunkX = VarNumberSerializer.readSVarInt(data);
+			int chunkZ = VarNumberSerializer.readSVarInt(data);
 
 			for (Map.Entry<Integer, CachedItemFrame> entry : cachedItemFrames.entrySet()) {
 				int itemChunkX = entry.getValue().getX() >> 4;
