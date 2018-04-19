@@ -156,12 +156,9 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			chunkdata.readByte(); // borders
 			VarNumberSerializer.readSVarInt(chunkdata); // extra data
 
-			System.out.println("owo whats this? WE ARE RECEIVING CHUNK " + chunkX + ", " + chunkZ);
-
 			while (chunkdata.readableBytes() != 0) {
 				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(chunkdata, true, con.getVersion());
 
-				System.out.println("owo tag: " + tag);
 				if (!isSkull(tag))
 					continue;
 
