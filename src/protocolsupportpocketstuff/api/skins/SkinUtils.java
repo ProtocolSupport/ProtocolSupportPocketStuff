@@ -82,12 +82,12 @@ public class SkinUtils {
 				//removes the entity and display the new skin
 				onlinePlayer.hidePlayer(ProtocolSupportPocketStuff.getInstance(), player);
 				onlinePlayer.showPlayer(ProtocolSupportPocketStuff.getInstance(), player);
-				Bukkit.getScheduler().runTaskLater(ProtocolSupportPocketStuff.getInstance(), () -> {
-					//sends skin packet to dynamically update PE skins.
-					if (PocketPlayer.isPocketPlayer(onlinePlayer)) {
+				if (PocketPlayer.isPocketPlayer(onlinePlayer)) {
+					Bukkit.getScheduler().runTaskLater(ProtocolSupportPocketStuff.getInstance(), () -> {
+						//sends skin packet to dynamically update PE skins.
 						PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), skin, isSlim);
-					}
-				}, 5l);
+					}, 5l);
+				}
 			});
 		});
 	}

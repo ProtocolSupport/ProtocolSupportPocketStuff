@@ -19,7 +19,7 @@ import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
 import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
 import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.skulls.SkullTilePacketListener;
-import protocolsupportpocketstuff.metadata.MetadataProvider;
+import protocolsupportpocketstuff.metadata.EntityMetadataProvider;
 import protocolsupportpocketstuff.modals.ModalReceiver;
 import protocolsupportpocketstuff.packet.PEReceiver;
 import protocolsupportpocketstuff.resourcepacks.ResourcePackListener;
@@ -61,7 +61,7 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		PocketStuffAPI.registerPacketListeners(new PocketInfoReceiver());
 		PocketStuffAPI.registerPacketListeners(new ModalReceiver());
 		// = Metadata = \\
-		PEMetaProviderSPI.setProvider(new MetadataProvider());
+		PEMetaProviderSPI.setProvider(new EntityMetadataProvider());
 		// = ResourcePacks = \\
 		if (!PocketStuffAPI.getResourcePackManager().isEmpty()) {
 			ResourcePackListener provider = new ResourcePackListener();

@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupportpocketstuff.api.util.PocketCon;
-import protocolsupportpocketstuff.metadata.MetadataProvider;
+import protocolsupportpocketstuff.metadata.EntityMetadataProvider;
 import protocolsupportpocketstuff.packet.play.EntityDataPacket;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,7 +68,7 @@ public class PocketMetadata {
 	 * @param interactText
 	 */
 	public static void setInteractText(int entityId, String interactText) {
-		if (interactText.equals(MetadataProvider.DEFAULTINTERACT)) {
+		if (interactText.equals(EntityMetadataProvider.DEFAULTINTERACT)) {
 			entityInteracts.remove(entityId);
 		} else {
 			entityInteracts.put(entityId, interactText);

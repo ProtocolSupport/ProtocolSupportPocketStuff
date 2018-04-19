@@ -16,10 +16,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.reflect.TypeToken;
 
 public class ClientLoginPacket extends PEPacket {
 
 	private int protocolVersion;
+	private Map<String, JsonObject> chain;
 	private JsonObject jsonPayload;
 
 	public ClientLoginPacket() { }
@@ -46,7 +51,10 @@ public class ClientLoginPacket extends PEPacket {
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
 		protocolVersion = clientData.readInt(); //protocol version
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
-		logindata.skipBytes(logindata.readIntLE()); //skip chain data
+		chain = GsonUtils.GSON.fromJson(
+				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
+				new TypeToken<Map<String, List<String>>>() { private static final long serialVersionUID = 1L; }.getType()
+		);
 		try { //decode skin data
 			InputStream inputStream = new ByteBufInputStream(logindata, logindata.readIntLE());
 			ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -65,6 +73,10 @@ public class ClientLoginPacket extends PEPacket {
 
 	public int getProtocolVersion() {
 		return protocolVersion;
+	}
+
+	public Map<String, JsonObject> getChain() {
+		return chain;
 	}
 
 	public JsonObject getJsonPayload() {
