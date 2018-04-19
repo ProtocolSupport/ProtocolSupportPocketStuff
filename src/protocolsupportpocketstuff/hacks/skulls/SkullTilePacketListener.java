@@ -176,6 +176,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			int chunkZStart = chunkZ << 4;
 
 			HashMap<Long, Integer> skulls = new HashMap<>();
+			HashMap<Long, Integer> blockIds = new HashMap<>();
 
 			for (int i = 0; i < sections; i++) {
 				chunkdata.readByte(); // subchunk version
@@ -206,7 +207,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 				for (int wordi = 0; wordi < wordCount; wordi++) {
 					int word = chunkdata.readIntLE();
 					for (int block = 0; block < blocksPerWord; block++) {
-						int state = (word >> ((position & blocksPerWord) * bitsPerBlock)) & ((1 << bitsPerBlock) - 1);
+						int state = (word >> ((position % blocksPerWord) * bitsPerBlock)) & ((1 << bitsPerBlock) - 1);
 						int x = (position >> 8) & 0xF;
 						int y = position & 0xF;
 						int z = (position >> 4) & 0xF;
@@ -229,8 +230,10 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 							blockId == SKULL_RUNTIME_ID_13 ||
 							blockId == SKULL_RUNTIME_ID_14 ||
 							blockId == SKULL_RUNTIME_ID_15) {
-							skulls.put(StuffUtils.convertCoordinatesToLong(chunkXStart + x, ((block / 256) * 16) + y, chunkZStart + z), blockId);
+							System.out.println("Found skull at " + x + ", " + y + ", " + z + " - " + (chunkXStart + x) + ", " + ((i * 16) + y) + ", " + (chunkZStart + z) + " - Block ID: " + blockId + " - Section: " + i + " state: " + state);
+							skulls.put(StuffUtils.convertCoordinatesToLong(chunkXStart + x, (i * 16) + y, chunkZStart + z), blockId);
 						}
+						blockIds.put(StuffUtils.convertCoordinatesToLong(chunkXStart + x, (i * 16) + y, chunkZStart + z), blockId);
 						position++;
 					}
 				}
@@ -255,9 +258,16 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 
 				Position position = new Position(x, y, z);
 
-				Integer id = skulls.getOrDefault(StuffUtils.convertPositionToLong(position), 1097);
+				Integer id = skulls.getOrDefault(StuffUtils.convertPositionToLong(position), -1);
+
+				if (id == -1) {
+					System.out.println("Skull at " + x + ", " + y + ", " + z + " has NBT tag, but doesn't have any ID! Bug? The block ID:tm: map says it has ID " + blockIds.get(StuffUtils.convertPositionToLong(position)));
+					return;
+				}
 
 				int dataValue = id - SKULL_RUNTIME_ID_0; // If we do the current ID - first skull related ID, we will get the good old data value
+
+				System.out.println("Spawning skull at " + x + ", " + y + ", " + z + " with ID " + id + " (data value: " + dataValue + ") ~ " + blockIds.get(StuffUtils.convertPositionToLong(position)));
 
 				// Is there's any possibility of an skull being on the chunk nbt tags but not really in the world? idk
 				// So that's why getOrDefault is used

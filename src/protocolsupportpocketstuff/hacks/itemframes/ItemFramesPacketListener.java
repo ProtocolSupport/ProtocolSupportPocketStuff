@@ -228,7 +228,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 
 			sendInteractEntityPacket(entry.getKey(), PacketPlayInUseEntity.EnumEntityUseAction.ATTACK);
 		}
-		if (packetId == 49) { // TODO: Use PEPacketIDs class when mcpeinventory is merged ~ GodPacket, now on ProtocolSupportPocketStuff!
+		if (packetId == PEPacketIDs.GOD_PACKET) {
 			int actionId = VarNumberSerializer.readVarInt(data);
 
 			if (actionId != ACTION_USE_ITEM)
