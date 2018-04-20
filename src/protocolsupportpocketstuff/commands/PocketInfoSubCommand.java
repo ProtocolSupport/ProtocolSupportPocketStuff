@@ -38,6 +38,7 @@ public class PocketInfoSubCommand implements SubCommand {
 
 	private void displayPocketInfo(CommandSender sender, Player pocketPlayer) {
 		if (pocketPlayer != null && PocketPlayer.isPocketPlayer(pocketPlayer)) {
+			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Client UUID: §e" + PocketPlayer.getClientUniqueId(pocketPlayer));
 			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Client Random ID: §e" + PocketPlayer.getClientRandomId(pocketPlayer));
 			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Client Version: §e" + PocketPlayer.getClientVersion(pocketPlayer));
 			sender.sendMessage(ProtocolSupportPocketStuff.PREFIX + ChatColor.GREEN + "Device Model: §e" + PocketPlayer.getDeviceModel(pocketPlayer));

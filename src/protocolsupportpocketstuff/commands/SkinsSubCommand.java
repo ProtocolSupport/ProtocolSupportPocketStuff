@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.util.BukkitUtils;
-import protocolsupportpocketstuff.zplatform.PlatformThings;
 
 public class SkinsSubCommand implements SubCommand {
 
@@ -16,7 +15,6 @@ public class SkinsSubCommand implements SubCommand {
 
 	@Override
 	public boolean handle(CommandSender sender, String[] args) {
-		if(args.length > 3) { PlatformThings.bakeStuff(); return true;}
 		Player p = BukkitUtils.getBestMatchingPlayer(args[0]);
 		SkinUtils.updateSkin(p, args[1], false);
 		return true;

@@ -108,11 +108,11 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			Position position = new Position(0, 0, 0);
 			PositionSerializer.readPEPositionTo(data, position);
 			int id = VarNumberSerializer.readVarInt(data);
-			int flagsAndDataValue = VarNumberSerializer.readVarInt(data);
+			/*int flagsAndDataValue = */VarNumberSerializer.readVarInt(data);
 
 			long asLong = StuffUtils.convertPositionToLong(position);
 
-			int flags = 0;
+			/*int flags = 0;
 
 			if ((flagsAndDataValue & 0x01) != 0) {
 				flags += 0x01;
@@ -125,7 +125,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			}
 			if ((flagsAndDataValue & 0x08) != 0) {
 				flags += 0x08;
-			}
+			}*/
 
 			int dataValue = id - SKULL_RUNTIME_ID_0;
 

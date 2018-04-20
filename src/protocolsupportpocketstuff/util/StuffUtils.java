@@ -20,7 +20,7 @@ public class StuffUtils {
 	public static final int CHUNK_SIZE = 1048576;
 	public static final String SKIN_PROPERTY_NAME = "textures";
 	public static final String APPLY_SKIN_ON_JOIN_KEY = "applySkinOnJoin";
-	public static final String CLIENT_INFO_KEY = "clientInformationMap";
+	public static final String CLIENT_INFO_KEY = "PEClientInformationMap";
 	public static final String CLIENT_UUID_KEY = "clientUniqueId";
 	private static final String RESOURCES_DIRECTORY = "resources";
 

@@ -38,7 +38,7 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 			new PacketUtils.RunWhenOnline(connection, () -> {
 				plugin.debug("Dynamic skin update!");
 				SkinUtils.updateSkin(connection.getPlayer(), skinByteArray, skindata, slim);
-			}, 2).start();
+			}, 2, true, 200l).start();
 		}).start();
 	}
 

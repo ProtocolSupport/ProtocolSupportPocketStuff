@@ -7,6 +7,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.JsonUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.util.GsonUtils;
 
@@ -15,16 +16,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.reflect.TypeToken;
 
+import protocolsupport.libs.com.nimbusds.jose.JWSObject;
+
 public class ClientLoginPacket extends PEPacket {
 
 	private int protocolVersion;
-	private Map<String, JsonObject> chain;
+	private Map<String, List<String>> chainData;
+	private JsonObject chainPayload;
 	private JsonObject jsonPayload;
 
 	public ClientLoginPacket() { }
@@ -51,10 +56,23 @@ public class ClientLoginPacket extends PEPacket {
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
 		protocolVersion = clientData.readInt(); //protocol version
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
-		chain = GsonUtils.GSON.fromJson(
+		chainData = GsonUtils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
 				new TypeToken<Map<String, List<String>>>() { private static final long serialVersionUID = 1L; }.getType()
 		);
+		List<String> chain = chainData.get("chain");
+		chain.forEach(element -> { //decode chain data
+			JWSObject jwsobject;
+			try {
+				jwsobject = JWSObject.parse(element);
+				JsonObject jsonobject = GsonUtils.GSON.fromJson(jwsobject.getPayload().toString(), JsonObject.class);
+				if (jsonobject.has("extraData")) {
+					chainPayload = JsonUtils.getJsonObject(jsonobject, "extraData");
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		});
 		try { //decode skin data
 			InputStream inputStream = new ByteBufInputStream(logindata, logindata.readIntLE());
 			ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -75,8 +93,8 @@ public class ClientLoginPacket extends PEPacket {
 		return protocolVersion;
 	}
 
-	public Map<String, JsonObject> getChain() {
-		return chain;
+	public JsonObject getChainPayload() {
+		return chainPayload;
 	}
 
 	public JsonObject getJsonPayload() {

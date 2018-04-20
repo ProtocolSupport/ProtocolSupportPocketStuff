@@ -139,6 +139,15 @@ public class PocketPlayer {
 	}
 
 	/***
+	 * Gets the client's UUID. Used for updating skin of the self player or other UUID specific things.
+	 * @param player
+	 * @return
+	 */
+	public static UUID getClientUniqueId(Player player) {
+		return PocketCon.getClientUniqueId(ProtocolSupportAPI.getConnection(player));
+	}
+
+	/***
 	 * Gets the client random ID assigned upon install to the user. This can be edited by the client, so beware!
 	 * @param player
 	 * @return client's random id
@@ -181,18 +190,6 @@ public class PocketPlayer {
 	 */
 	public static HashMap<String, Object> getClientInformationMap(Player player) {
 		return PocketCon.getClientInformationMap(ProtocolSupportAPI.getConnection(player));
-	}
-
-	/***
-	 * Gets the client unique identifier
-	 * <br/><br/>
-	 * <b>This isn't the server unique identifier for the player</b>, this unique ID is sent by the client during login and
-	 * it is used for skin updates, player list updates and other misc stuff.
-	 * @param player
-	 * @return the client unique identifier
-	 */
-	public static UUID getClientUniqueId(Player player) {
-		return PocketCon.getClientUniqueId(ProtocolSupportAPI.getConnection(player));
 	}
 
 	/***

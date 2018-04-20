@@ -9,7 +9,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import net.minecraft.server.v1_12_R1.EntityHuman;
-
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.EnumGamemode;
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
+import net.minecraft.server.v1_12_R1.WorldType;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
 import protocolsupportpocketstuff.zplatform.PlatformThings;
 
@@ -30,6 +36,23 @@ public class SpigotStuff extends PlatformThings {
 			e.printStackTrace();
 			return;
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void sendPlayerSkin(Player player, SkinDataWrapper skindata) {
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+		connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
+		connection.sendPacket(new PacketPlayOutRespawn(0, entityPlayer.world.getDifficulty(), WorldType.NORMAL, EnumGamemode.getById(player.getGameMode().getValue())));
+		player.setHealth(player.getHealth());
+		player.setMaxHealth(player.getMaxHealth());
+		player.setFlying(player.isFlying());
+		player.teleport(player.getLocation());
+		player.setLevel(player.getLevel());
+		player.setExp(player.getExp());
+		player.updateInventory();
+		connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
 	}
 
 }

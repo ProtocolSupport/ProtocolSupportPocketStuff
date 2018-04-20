@@ -27,6 +27,7 @@ import protocolsupportpocketstuff.skin.PcToPeProvider;
 import protocolsupportpocketstuff.skin.PeToPcProvider;
 import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.PocketInfoReceiver;
+import protocolsupportpocketstuff.zplatform.PlatformThings;
 
 public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 
@@ -39,7 +40,9 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 
 	@Override
 	public void onLoad() {
+		// = Pre-Init = \\
 		INSTANCE = this;
+		PlatformThings.bakeStuff();
 		// = ResourcePacks = \\
 		ResourcePackManager resourcePackManager = new ResourcePackManager();
 		resourcePackManager.reloadPacks();

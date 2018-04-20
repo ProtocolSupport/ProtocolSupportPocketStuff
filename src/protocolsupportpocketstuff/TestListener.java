@@ -20,8 +20,7 @@ import protocolsupportpocketstuff.api.util.PocketPacketListener;
 public class TestListener implements Listener, PocketPacketListener {
 	
 	private ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
-	
-	
+
     //=====================================================\\
     //					From Pocket						   \\
     //=====================================================\\

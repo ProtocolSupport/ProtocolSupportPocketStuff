@@ -11,6 +11,8 @@ public abstract class PlatformThings {
 
 	public abstract void setSkinProperties(Player player, SkinDataWrapper skindata);
 
+	public abstract void sendPlayerSkin(Player player, SkinDataWrapper skindata);
+
 	private static PlatformThings stuff;
 
 	public static void bakeStuff() {

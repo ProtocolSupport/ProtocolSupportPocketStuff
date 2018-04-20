@@ -79,16 +79,20 @@ public class SkinUtils {
 			.filter(onlinePlayer -> !onlinePlayer.equals(player))
 			.filter(onlinePlayer -> onlinePlayer.canSee(player))
 			.forEach(onlinePlayer -> {
-				//removes the entity and display the new skin
-				onlinePlayer.hidePlayer(ProtocolSupportPocketStuff.getInstance(), player);
-				onlinePlayer.showPlayer(ProtocolSupportPocketStuff.getInstance(), player);
 				if (PocketPlayer.isPocketPlayer(onlinePlayer)) {
-					Bukkit.getScheduler().runTaskLater(ProtocolSupportPocketStuff.getInstance(), () -> {
-						//sends skin packet to dynamically update PE skins.
-						PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), skin, isSlim);
-					}, 5l);
+					//sends skin packet to dynamically update PE skins.
+					PocketPlayer.sendSkin(onlinePlayer, player.getUniqueId(), skin, isSlim);
+				} else {
+					//removes the entity and display the new skin
+					onlinePlayer.hidePlayer(ProtocolSupportPocketStuff.getInstance(), player);
+					onlinePlayer.showPlayer(ProtocolSupportPocketStuff.getInstance(), player);
 				}
 			});
+			if (PocketPlayer.isPocketPlayer(player)) { //Send with clientUUID to cause update.
+				PocketPlayer.sendSkin(player, PocketPlayer.getClientUniqueId(player), skin, isSlim);
+			} else { //Need tons of HACK packets to fake this :F
+				PlatformThings.getStuff().sendPlayerSkin(player, skindata);
+			}
 		});
 	}
 
