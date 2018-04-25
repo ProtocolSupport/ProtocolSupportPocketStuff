@@ -22,6 +22,7 @@ public class ModalReceiver implements PocketPacketListener {
 	public void onModalResponse(Connection connection, ModalResponsePacket packet) {
 		ModalType type = ModalUtils.getSentType(connection);
 		JsonElement element = GsonUtils.JSON_PARSER.parse(packet.getModalJSON());
+		boolean isClosedByClient = element.isJsonNull();
 		ModalResponseEvent responseEvent;
 		switch(type) {
 			case MODAL_WINDOW: {
@@ -41,6 +42,7 @@ public class ModalReceiver implements PocketPacketListener {
 				responseEvent = new ModalResponseEvent(connection, packet.getModalId(), packet.getModalJSON(), type);
 			}
 		}
+		responseEvent.setCancelled(isClosedByClient);
 		Bukkit.getScheduler().runTask(ProtocolSupportPocketStuff.getInstance(), () -> {
 			Bukkit.getPluginManager().callEvent(responseEvent);
 			ModalUtils.getCallback(connection).ifPresent(consumer -> consumer.accept(responseEvent));
