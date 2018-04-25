@@ -64,6 +64,6 @@ public class TestListener implements Listener, PocketPacketListener {
 
 	@EventHandler
 	public void onComplexFormResponse(ComplexFormResponseEvent e) {
-		plugin.debug("ComplexFormResponseEvent received ~ " + e.getJsonArray());
+		plugin.debug("ComplexFormResponseEvent received ~ " + e.getResponses());
 	}
 }
