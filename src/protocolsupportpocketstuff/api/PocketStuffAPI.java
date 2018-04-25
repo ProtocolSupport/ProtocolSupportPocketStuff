@@ -8,7 +8,7 @@ import protocolsupportpocketstuff.packet.PEReceiver;
 
 public class PocketStuffAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(8);
+	private static final BigInteger apiversion = BigInteger.valueOf(9);
 	private static ResourcePackManager resourcePackManager;
 
 	/***

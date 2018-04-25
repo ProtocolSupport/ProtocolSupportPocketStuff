@@ -2,11 +2,10 @@ package protocolsupportpocketstuff.packet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
@@ -19,7 +18,7 @@ import protocolsupportpocketstuff.util.packet.serializer.PacketSerializer;
 
 public class PEReceiver {
 
-	protected static final Map<Integer, Any<PEPacket, Set<Handler>>> packetHandlers = new Int2ObjectArrayMap<>();
+	protected static final Map<Integer, Any<PEPacket, Set<Handler>>> packetHandlers = new HashMap<>();
 
     //=====================================================\\
     //						Registration				   \\

@@ -1,8 +1,10 @@
 package protocolsupportpocketstuff.api.modals.events;
 
+import java.util.List;
+
 import protocolsupport.api.Connection;
-import protocolsupport.libs.com.google.gson.JsonArray;
 import protocolsupportpocketstuff.api.modals.ModalType;
+import protocolsupportpocketstuff.api.modals.elements.ElementResponse;
 
 /***
  * This event is called when a player completes a {@link ComplexModal}
@@ -10,8 +12,7 @@ import protocolsupportpocketstuff.api.modals.ModalType;
  */
 public class ComplexFormResponseEvent extends ModalResponseEvent {
 
-	//TODO: No JSON array, but an array of response objects.
-	private JsonArray jsonArray;
+	private List<ElementResponse> responses;
 
 	/***
 	 * Creates a ComplexFormResponseEvent
@@ -21,25 +22,34 @@ public class ComplexFormResponseEvent extends ModalResponseEvent {
 	 * @param modalType
 	 * @param jsonArray
 	 */
-	public ComplexFormResponseEvent(Connection connection, int modalId, String modalJSON, ModalType modalType, JsonArray jsonArray) {
+	public ComplexFormResponseEvent(Connection connection, int modalId, String modalJSON, ModalType modalType, List<ElementResponse> responses) {
 		super(connection, modalId, modalJSON, modalType);
-		this.jsonArray = jsonArray;
+		this.responses = responses;
 	}
 
 	/***
-	 * Gets the responses as a jsonarray.
+	 * Gets the responses as a list.
 	 * @return
 	 */
-	public JsonArray getJsonArray() {
-		return jsonArray;
+	public List<ElementResponse> getResponses() {
+		return responses;
 	}
 
 	/***
-	 * Sets the jsonArray to muck with other handlers.
-	 * @param jsonArray
+	 * Gets the modal response beloning to the index of that element.
+	 * @param index
+	 * @return the response.
 	 */
-	public void setJsonArray(JsonArray jsonArray) {
-		this.jsonArray = jsonArray;
+	public ElementResponse getResponse(int index) {
+		return responses.get(index);
+	}
+
+	/***
+	 * Sets the Response list to muck with other handlers.
+	 * @param responses
+	 */
+	public void setResponses(List<ElementResponse> responses) {
+		this.responses = responses;
 	}
 
 }
