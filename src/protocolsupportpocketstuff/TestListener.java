@@ -1,6 +1,5 @@
 package protocolsupportpocketstuff;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -10,7 +9,6 @@ import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
 import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
-import protocolsupportpocketstuff.api.modals.callback.SimpleFormCallback;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
@@ -33,14 +31,13 @@ public class TestListener implements Listener, PocketPacketListener {
 			for(Connection con : PocketCon.getPocketConnections()) {
 				e.getPlayer().sendMessage("MEEEEEP!!");
 				PocketCon.sendModal(con, 
-						new SimpleForm("hoi", "hallo")
-							.addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")))
-							.addButton(new ModalButton("Awesome").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://yumamom.com/wp-content/uploads/2015/05/LEGO.jpg"))),
-						new SimpleFormCallback() {
-
-							@Override
-							public void onSimpleFormResponse(Player player, String modalJSON, boolean isClosedByClient, int clickedButton) {
-								player.sendMessage("Thanks for clicking! :wave:");
+					new SimpleForm("hoi", "hallo")
+						.addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")))
+						.addButton(new ModalButton("Awesome").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://yumamom.com/wp-content/uploads/2015/05/LEGO.jpg"))), response -> {
+							if (response.asSimpleFormResponse().getClickedButton() == 1) {
+								response.getPlayer().sendMessage("You are awesome!");
+							} else {
+								response.getPlayer().sendMessage("You are not awesome! :(");
 							}
 						});
 			}
@@ -50,9 +47,7 @@ public class TestListener implements Listener, PocketPacketListener {
 	//:F
 	@EventHandler
 	public void onClientResponse(ModalResponseEvent e) {
-		plugin.debug("ClientResponseEvent received ~ " + e.getClass().getSimpleName() + " ~ JSON: " + e.getModalJSON());
-
-		PocketCon.handleModalResponse(e.getConnection(), e);
+		plugin.debug("ClientResponseEvent received ~ " + e.getClass().getSimpleName() + " ~ JSON: " + e.getResponseString());
 	}
 
 	@EventHandler
