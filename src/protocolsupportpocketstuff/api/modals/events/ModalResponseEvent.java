@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api.event;
+package protocolsupportpocketstuff.api.modals.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

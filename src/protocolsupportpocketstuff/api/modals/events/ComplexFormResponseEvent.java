@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.api.event;
+package protocolsupportpocketstuff.api.modals.events;
 
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonArray;

@@ -5,8 +5,8 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.modals.Modal;
+import protocolsupportpocketstuff.api.modals.ModalCallback;
 import protocolsupportpocketstuff.api.modals.ModalType;
 import protocolsupportpocketstuff.api.modals.ModalUtils;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
@@ -20,7 +20,6 @@ import protocolsupportpocketstuff.util.StuffUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -82,7 +81,7 @@ public class PocketCon {
 	 * @param callback
 	 * @return the id of the modal.
 	 */
-	public static int sendModal(Connection connection, Modal modal, Consumer<ModalResponseEvent> callback) {
+	public static int sendModal(Connection connection, Modal modal, ModalCallback callback) {
 		return sendModal(connection, Modals.getInstance().takeId(), modal.toJSON(), callback);
 	}
 
@@ -112,7 +111,7 @@ public class PocketCon {
 	 * @param callback
 	 * @return the id of the modal.
 	 */
-	public static int sendModal(Connection connection, int id, String modalJSON, Consumer<ModalResponseEvent> callback) {
+	public static int sendModal(Connection connection, int id, String modalJSON, ModalCallback callback) {
 		if (callback != null) { ModalUtils.setCallback(connection, callback); }
 		ModalUtils.setSendType(connection, ModalType.fromModal(modalJSON));
 		sendPocketPacket(connection, new ModalRequestPacket(id, modalJSON));

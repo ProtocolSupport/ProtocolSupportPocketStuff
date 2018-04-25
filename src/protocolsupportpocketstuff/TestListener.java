@@ -4,14 +4,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import protocolsupport.api.Connection;
-import protocolsupportpocketstuff.api.event.ComplexFormResponseEvent;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
-import protocolsupportpocketstuff.api.event.ModalWindowResponseEvent;
-import protocolsupportpocketstuff.api.event.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.modals.SimpleForm;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage;
 import protocolsupportpocketstuff.api.modals.elements.ModalImage.ModalImageType;
 import protocolsupportpocketstuff.api.modals.elements.simple.ModalButton;
+import protocolsupportpocketstuff.api.modals.events.ComplexFormResponseEvent;
+import protocolsupportpocketstuff.api.modals.events.ModalResponseEvent;
+import protocolsupportpocketstuff.api.modals.events.ModalWindowResponseEvent;
+import protocolsupportpocketstuff.api.modals.events.SimpleFormResponseEvent;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 

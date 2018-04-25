@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 import protocolsupportpocketstuff.api.modals.Modal;
+import protocolsupportpocketstuff.api.modals.ModalCallback;
 import protocolsupportpocketstuff.api.skins.PocketSkinModel;
 import protocolsupportpocketstuff.packet.PEPacket;
 import protocolsupportpocketstuff.storage.Modals;
@@ -14,7 +14,6 @@ import protocolsupportpocketstuff.storage.Modals;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -101,7 +100,7 @@ public class PocketPlayer {
 	 * @param modalCallback
 	 * @return the id of the modal.
 	 */
-	public static int sendModal(Player player, Modal modal, Consumer<ModalResponseEvent> modalCallback) {
+	public static int sendModal(Player player, Modal modal, ModalCallback modalCallback) {
 		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modal, modalCallback);
 	}
 
@@ -140,7 +139,7 @@ public class PocketPlayer {
 	 * @param callback
 	 * @return the id of the modal.
 	 */
-	public static int sendModal(Player player, int modalId, String modalJSON, Consumer<ModalResponseEvent> callback) {
+	public static int sendModal(Player player, int modalId, String modalJSON, ModalCallback callback) {
 		return PocketCon.sendModal(ProtocolSupportAPI.getConnection(player), modalId, modalJSON, callback);
 	}
 

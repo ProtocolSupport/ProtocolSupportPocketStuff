@@ -1,10 +1,8 @@
 package protocolsupportpocketstuff.api.modals;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import protocolsupport.api.Connection;
-import protocolsupportpocketstuff.api.event.ModalResponseEvent;
 
 public class ModalUtils {
 
@@ -43,7 +41,7 @@ public class ModalUtils {
 	 * @param connection
 	 * @param callback
 	 */
-	public static void setCallback(Connection connection, Consumer<ModalResponseEvent> callback) {
+	public static void setCallback(Connection connection, ModalCallback callback) {
 		connection.addMetadata(modalCallbackKey, callback);
 	}
 
@@ -56,10 +54,9 @@ public class ModalUtils {
 	 * @param connection
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static Optional<Consumer<ModalResponseEvent>> getCallback(Connection connection) {
+	public static Optional<ModalCallback> getCallback(Connection connection) {
 		if (connection.hasMetadata(modalCallbackKey)) {
-			return Optional.of((Consumer<ModalResponseEvent>) connection.removeMetadata(modalCallbackKey));
+			return Optional.of((ModalCallback) connection.removeMetadata(modalCallbackKey));
 		} else {
 			return Optional.empty();
 		}
