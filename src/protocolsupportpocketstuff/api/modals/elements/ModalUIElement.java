@@ -34,4 +34,10 @@ public abstract class ModalUIElement {
 		return text;
 	}
 
+	/***
+	 * Fully clones a ModalUIElement
+	 * @return the cloned element.
+	 */
+	public abstract ModalUIElement clone();
+
 }

@@ -55,6 +55,14 @@ public class ModalImage {
 	}
 
 	/***
+	 * Fully clones the modalimage.
+	 * @return a new modalImage.
+	 */
+	public ModalImage clone() {
+		return new ModalImage(getType(), getData());
+	}
+
+	/***
 	 * The types a ModalImage can be.
 	 */
 	public enum ModalImageType {

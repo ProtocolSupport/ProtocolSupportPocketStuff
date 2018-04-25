@@ -38,4 +38,20 @@ public class ModalToggle extends ComplexModalUIElement {
 		return this;
 	}
 
+	/***
+	 * Gets the default value of this toggle.
+	 * @return the defaultValue.
+	 */
+	public boolean getDefaultValue() {
+		return defaultValue;
+	}
+
+	/***
+	 * Fully clones the ModalToggle.
+	 * @return the new Toggle.
+	 */
+	public ModalToggle clone() {
+		return new ModalToggle(getText()).setDefaultValue(getDefaultValue());
+	}
+
 }

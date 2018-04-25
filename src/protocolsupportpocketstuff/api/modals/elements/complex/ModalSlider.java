@@ -100,4 +100,13 @@ public class ModalSlider extends ComplexModalUIElement {
 		return max;
 	}
 
+	/***
+	 * Fully clones a ModalSlider.
+	 * @return the new Slider.
+	 */
+	public ModalSlider clone() {
+		return new ModalSlider(getText()).setStep(getStep()).setDefaultValue(getDefaultValue())
+			.setMaximumValue(getMaximumValue()).setMinimumValue(getMinimumValue());
+	}
+
 }

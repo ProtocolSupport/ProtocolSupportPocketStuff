@@ -112,6 +112,18 @@ public class ComplexForm implements Modal {
 	}
 
 	/***
+	 * Fully clones the ComplexForm.
+	 * You don't need to clone to resent a modal,
+	 * but it can be useful for construction.
+	 * @return a new ComplexForm.
+	 */
+	public ComplexForm clone() {
+		ComplexForm clone = new ComplexForm(getTitle());
+		getElements().forEach(element -> clone.addElement(element.clone()));
+		return clone;
+	}
+
+	/***
 	 * Converts this modal to JSON.
 	 * @return the JSON representation of this modal.
 	 */

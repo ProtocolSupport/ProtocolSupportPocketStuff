@@ -46,7 +46,7 @@ public class ModalInput extends ComplexModalUIElement {
 	/***
 	 * @return the input's placeholder.
 	 */
-	public String getPlaceHolder() {
+	public String getPlaceHolderText() {
 		return placeholder;
 	}
 
@@ -68,5 +68,13 @@ public class ModalInput extends ComplexModalUIElement {
 	public String getDefaultText() {
 		return defaultText;
 	}
-	
+
+	/***
+	 * Fully clones a ModalInput.
+	 * @return the new Input.
+	 */
+	public ModalInput clone() {
+		return new ModalInput(getText()).setPlaceholderText(getPlaceHolderText()).setDefaultText(getDefaultText());
+	}
+
 }

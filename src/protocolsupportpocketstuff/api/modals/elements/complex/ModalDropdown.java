@@ -93,4 +93,12 @@ public class ModalDropdown extends ComplexModalUIElement {
 		return defaultOptionIndex;
 	}
 
+	/***
+	 * Fully clones a ModalDropdown.
+	 * @return the new Dropdown.
+	 */
+	public ModalDropdown clone() {
+		return new ModalDropdown(getText()).setOptions(getOptions(), getDefaultOptionIndex());
+	}
+
 }

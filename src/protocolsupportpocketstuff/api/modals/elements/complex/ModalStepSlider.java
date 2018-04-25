@@ -78,7 +78,7 @@ public class ModalStepSlider extends ComplexModalUIElement {
 	/***
 	 * @return all step options.
 	 */
-	public List<String> getOptions() {
+	public List<String> getSteps() {
 		return steps;
 	}
 
@@ -93,10 +93,18 @@ public class ModalStepSlider extends ComplexModalUIElement {
 	}
 
 	/***
-	 * @return de index of the default step option.
+	 * @return the index of the default step option.
 	 */
 	public int getDefaultStepIndex() {
 		return defaultStepIndex;
+	}
+
+	/***
+	 * Fully clones a ModalStepSlider.
+	 * @return the new StepSlider.
+	 */
+	public ModalStepSlider clone() {
+		return new ModalStepSlider(getText()).setSteps(getSteps(), getDefaultStepIndex());
 	}
 
 }

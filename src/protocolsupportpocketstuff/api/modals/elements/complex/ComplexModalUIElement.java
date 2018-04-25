@@ -36,4 +36,10 @@ public abstract class ComplexModalUIElement extends ModalUIElement {
 		return type;
 	}
 
+	/***
+	 * Fully clones a ComplexModalUIElement
+	 * @return the cloned element.
+	 */
+	public abstract ComplexModalUIElement clone();
+
 }

@@ -22,6 +22,12 @@ public interface Modal {
 	String toJSON();
 
 	/***
+	 * Fully clones this modal.
+	 * @return the new modal.
+	 */
+	Modal clone();
+
+	/***
 	 * Gets a generic modal object decompiled from json.
 	 * @param json
 	 * @return the modal

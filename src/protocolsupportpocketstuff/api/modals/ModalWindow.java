@@ -114,6 +114,16 @@ public class ModalWindow implements Modal {
 		return button2;
 	}
 
+	/**
+	 * Fully clones the ModalWindow.
+	 * You don't need to clone to resent a modal,
+	 * but it can be useful for construction.
+	 * @return a new ModalWindow.
+	 */
+	public ModalWindow clone() {
+		return new ModalWindow(getTitle(), getContent(), getTrueButtonText(), getFalseButtonText());
+	}
+
 	/***
 	 * Converts this modal to JSON.
 	 * @return the JSON representation of this modal.

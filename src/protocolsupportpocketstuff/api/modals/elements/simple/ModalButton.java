@@ -57,4 +57,14 @@ public class ModalButton extends ModalUIElement {
 		return this;
 	}
 
+	/***
+	 * Fully clones a ModalButton.
+	 * @return a new ModalButton.
+	 */
+	public ModalButton clone() {
+		ModalButton clone = new ModalButton(getText());
+		clone.setImage(getButtonImage().clone());
+		return clone;
+	}
+
 }

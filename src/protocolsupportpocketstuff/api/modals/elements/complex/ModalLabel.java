@@ -25,4 +25,12 @@ public class ModalLabel extends ComplexModalUIElement {
 		return this;
 	}
 
+	/***
+	 * Fully clones a ModalLabel.
+	 * @return the new label.
+	 */
+	public ModalLabel clone() {
+		return new ModalLabel(getText());
+	}
+
 }

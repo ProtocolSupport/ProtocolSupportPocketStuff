@@ -30,6 +30,8 @@ public class TestListener implements Listener, PocketPacketListener {
 			e.getPlayer().sendMessage("Meep!");
 			for(Connection con : PocketCon.getPocketConnections()) {
 				e.getPlayer().sendMessage("MEEEEEP!!");
+				SimpleForm f = new SimpleForm("hoi", "hallo");
+				f.clone();
 				PocketCon.sendModal(con, 
 					new SimpleForm("hoi", "hallo")
 						.addButton(new ModalButton("Magbot").setImage(new ModalImage(ModalImageType.EXTERNAL_IMAGE, "http://magbot.nl/img/MagBot.png")))

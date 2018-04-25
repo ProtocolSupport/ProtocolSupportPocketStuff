@@ -109,6 +109,18 @@ public class SimpleForm implements Modal {
 	}
 
 	/***
+	 * Fully clones the SimpleForm.
+	 * You don't need to clone to resent a modal,
+	 * but it can be useful for construction.
+	 * @return a new SimpleForm.
+	 */
+	public SimpleForm clone() {
+		SimpleForm clone = new SimpleForm(getTitle(), getContent());
+		getButtons().forEach(button -> clone.addButton(button));
+		return clone;
+	}
+
+	/***
 	 * Converts this modal to JSON.
 	 * @return the JSON representation of this modal.
 	 */
@@ -124,5 +136,5 @@ public class SimpleForm implements Modal {
 	public static SimpleForm fromJson(String JSON) {
 		return GsonUtils.GSON.fromJson(JSON, SimpleForm.class);
 	}
-	
+
 }
