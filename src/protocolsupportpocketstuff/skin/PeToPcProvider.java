@@ -40,7 +40,6 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	@PocketPacketHandler
 	public void onSkinChange(Connection connection, SkinPacket packet) {
-		System.out.println(packet.getGeometryId());
 		boolean slim = SkinUtils.slimFromModel(packet.getGeometryId());
 		new MineskinThread(packet.getSkinData(), slim, (skindata) -> {
 			plugin.debug("Dynamic skin update!");
