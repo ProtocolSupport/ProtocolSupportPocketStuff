@@ -154,7 +154,7 @@ public class SkinUtils {
 		}).start();
 	}
 
-	/**
+	/***
 	 * Extracts the skinurl from skindata property.
 	 * @param skindata
 	 * @return the skinurl.
@@ -165,10 +165,10 @@ public class SkinUtils {
 		return JsonUtils.getString(skinobject, "url");
 	}
 
-	/**
+	/***
 	 * Extracts if the model contained in the skindata is slim or not.
 	 * @param skindata
-	 * @return
+	 * @return true if the modal is slim.
 	 */
 	public static boolean slimFromProperty(SkinDataWrapper skindata) {
 		JsonObject skinobject = skinJsonFromProperty(skindata);
@@ -177,10 +177,19 @@ public class SkinUtils {
 		return skinobject.has("metadata") && (skinMetadata = skinobject.get("metadata").getAsJsonObject()).has("model") && JsonUtils.getString(skinMetadata, "model").equals("slim");
 	}
 
-	/**
+	/***
+	 * Extracts if the model contained in the geomtry is slim or not.
+	 * @param geometryId
+	 * @return
+	 */
+	public static boolean slimFromModel(String geometryId) {
+		return geometryId.equals("geometry.humanoid.customSlim");
+	}
+
+	/***
 	 * Extracts the skinproperty object from skindata.
 	 * @param skindata
-	 * @return
+	 * @return the jsonProperty.
 	 */
 	public static JsonObject skinJsonFromProperty(SkinDataWrapper skindata) {
 		JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(skindata.getValue())), StandardCharsets.UTF_8));
@@ -193,7 +202,7 @@ public class SkinUtils {
 
 	/***
 	 * Generates UUID from skin data for use in mineskin and cache reference.
-	 * @return
+	 * @return the uuid.
 	 */
 	public static UUID uuidFromSkin(byte[] skin, boolean isSlim) {
 		skin[skin.length-1] = (byte) (isSlim ? 1 : 0);
@@ -202,13 +211,13 @@ public class SkinUtils {
 
 	/***
 	 * Generates UUID from bufferedimage for use in mineskin and cache reference.
-	 * @return
+	 * @return the uuid.
 	 */
 	public static UUID uuidFromSkin(BufferedImage skin, boolean isSlim) {
 		return uuidFromSkin(imageToPEData(skin), isSlim);
 	}
 
-	/**
+	/***
 	 * Wrapper for pc skindata.
 	 */
 	public static class SkinDataWrapper {
@@ -216,19 +225,24 @@ public class SkinUtils {
 		private String signature;
 		private String value;
 
+		/***
+		 * Creates a new SkinDataWrapper using its base64 value and signature.
+		 * @param value
+		 * @param signature
+		 */
 		public SkinDataWrapper(String value, String signature) {
 			this.value = value;
 			this.signature = signature;
 		}
 
-		/**
+		/***
 		 * @return the skin texture value.
 		 */
 		public String getValue() {
 			return value;
 		}
 
-		/**
+		/***
 		 * @return the skin's mojang signature.
 		 */
 		public String getSignature() {
