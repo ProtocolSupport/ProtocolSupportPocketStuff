@@ -27,10 +27,10 @@ import protocolsupport.libs.com.nimbusds.jose.JWSObject;
 
 public class ClientLoginPacket extends PEPacket {
 
-	private int protocolVersion;
-	private Map<String, List<String>> chainData;
-	private JsonObject chainPayload;
-	private JsonObject jsonPayload;
+	protected int protocolVersion;
+	protected Map<String, List<String>> chainData;
+	protected JsonObject chainPayload;
+	protected JsonObject jsonPayload;
 
 	public ClientLoginPacket() { }
 

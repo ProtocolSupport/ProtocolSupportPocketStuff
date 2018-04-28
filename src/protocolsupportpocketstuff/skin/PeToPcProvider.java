@@ -25,6 +25,7 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	@PocketPacketHandler
 	public void onConnect(Connection connection, ClientLoginPacket packet) {
+		if (packet.getJsonPayload() == null) { return; }
 		String skinData = packet.getJsonPayload().get("SkinData").getAsString();
 		byte[] skinByteArray = Base64.getDecoder().decode(skinData);
 		boolean slim = packet.getJsonPayload().get("SkinGeometryName").getAsString().equals("geometry.humanoid.customSlim");
