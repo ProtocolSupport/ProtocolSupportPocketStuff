@@ -58,9 +58,9 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static final int ACTION_USE_ITEM = 2;
 	private static final int ITEM_FRAME_ENTITY_ID = 71;
 	// TODO: Check and refactor the variables name, they should be NORTH, SOUTH, EAST, WEST
-	private static final int ITEM_FRAME_BLOCK_ID_DATA0 = 1724;
-	private static final int ITEM_FRAME_BLOCK_ID_DATA1 = 1725;
-	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1726;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA0 = 1771;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA1 = 1772;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1773;
 	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1727;
 
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
