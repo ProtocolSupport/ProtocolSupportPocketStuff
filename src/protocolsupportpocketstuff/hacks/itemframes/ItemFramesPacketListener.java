@@ -61,7 +61,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 	private static final int ITEM_FRAME_BLOCK_ID_DATA0 = 1771;
 	private static final int ITEM_FRAME_BLOCK_ID_DATA1 = 1772;
 	private static final int ITEM_FRAME_BLOCK_ID_DATA2 = 1773;
-	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1727;
+	private static final int ITEM_FRAME_BLOCK_ID_DATA3 = 1774;
 
 	public ItemFramesPacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
 		this.con = con;
@@ -365,7 +365,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			return spawnTag;
 		}
 
-		public int getPEFacing() {
+		public int getPERuntimeId() {
 			int peFacing = 0;
 
 			switch (facing) {
@@ -391,7 +391,7 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		public void spawn(ItemFramesPacketListener listener) {
 			// First we change the block type...
 			// Item Frame block ID is 199
-			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), getPEFacing());
+			UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket(getX(), getY(), getZ(), getPERuntimeId());
 
 			PocketCon.sendPocketPacket(listener.con, updateBlockPacket);
 

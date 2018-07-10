@@ -111,7 +111,7 @@ public class HologramsPacketListener extends PacketListener {
 			CachedArmorStand armorStand = new CachedArmorStand(x, y, z);
 			cachedArmorStands.put(entityId, armorStand);
 
-			String hologramName = retriveHologramName(data);
+			String hologramName = retrieveHologramName(data);
 
 			if (hologramName == null)
 				return;
@@ -131,7 +131,7 @@ public class HologramsPacketListener extends PacketListener {
 			if (!cachedArmorStands.containsKey(entityId))
 				return;
 
-			String hologramName = retriveHologramName(data);
+			String hologramName = retrieveHologramName(data);
 
 			if (hologramName == null)
 				return;
@@ -162,7 +162,7 @@ public class HologramsPacketListener extends PacketListener {
 		}
 	}
 
-	public String retriveHologramName(ByteBuf data) {
+	public String retrieveHologramName(ByteBuf data) {
 		boolean hasCustomName = false;
 		boolean isInvisible = false;
 		boolean showNametag = false;
@@ -186,7 +186,7 @@ public class HologramsPacketListener extends PacketListener {
 			}
 
 			if (metaType == 0) {
-				long peBaseFlags = (Integer) dw.getValue();
+				long peBaseFlags = (Long) dw.getValue();
 
 				isInvisible = ((peBaseFlags & (1 << (7 - 1))) != 0);
 				showNametag = ((peBaseFlags & (1 << (15 - 1))) != 0);
