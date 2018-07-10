@@ -195,6 +195,11 @@ public class HologramsPacketListener extends PacketListener {
 			}
 		}
 
+		System.out.println("hasCustomName: " + hasCustomName);
+		System.out.println("isInvisible: " + isInvisible);
+		System.out.println("showNametag: " + showNametag);
+		System.out.println("Nametag: " + nametag);
+
 		// TODO: Show base meta isn't set, bug?
 		// TODO: alwaysShowNametag seems to be failing on first join, why?
 		if (hasCustomName && isInvisible && showNametag /* && alwaysShowNametag *//* && !showBase */) {
