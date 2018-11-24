@@ -1,9 +1,9 @@
 package protocolsupportpocketstuff.util;
 
-import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.ChatModifier;
-import net.minecraft.server.v1_12_R1.EnumChatFormat;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.ChatComponentText;
+import net.minecraft.server.v1_13_R2.ChatModifier;
+import net.minecraft.server.v1_13_R2.EnumChatFormat;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.ChatColor;
 import protocolsupport.protocol.utils.types.Position;

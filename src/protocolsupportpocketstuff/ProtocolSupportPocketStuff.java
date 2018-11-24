@@ -16,8 +16,6 @@ import protocolsupportpocketstuff.api.resourcepacks.ResourcePackManager;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.commands.CommandHandler;
 import protocolsupportpocketstuff.hacks.bossbars.BossBarPacketListener;
-import protocolsupportpocketstuff.hacks.holograms.HologramsPacketListener;
-import protocolsupportpocketstuff.hacks.itemframes.ItemFramesPacketListener;
 import protocolsupportpocketstuff.hacks.skulls.SkullTilePacketListener;
 import protocolsupportpocketstuff.metadata.EntityMetadataProvider;
 import protocolsupportpocketstuff.modals.ModalReceiver;
@@ -100,12 +98,11 @@ public class ProtocolSupportPocketStuff extends JavaPlugin implements Listener {
 		if (PocketCon.isPocketConnection(con)) {
 			// = Packet Listeners = \\
 			//con.addPacketListener(new ModalResponsePacket().new decodeHandler(this, con));
-			if (getConfig().getBoolean("hacks.holograms")) { con.addPacketListener(new HologramsPacketListener(con)); }
 			if (getConfig().getBoolean("hacks.player-heads-skins.skull-blocks")) { con.addPacketListener(new SkullTilePacketListener(this, con)); }
 			if (ServerPlatformIdentifier.get() == ServerPlatformIdentifier.SPIGOT) {
-				if (getConfig().getBoolean("hacks.itemframes")) {
+				/*if (getConfig().getBoolean("hacks.itemframes")) {
 					con.addPacketListener(new ItemFramesPacketListener(this, con));
-				}
+				}*/
 				if (getConfig().getBoolean("hacks.bossbars")) {
 					con.addPacketListener(new BossBarPacketListener(con));
 				}

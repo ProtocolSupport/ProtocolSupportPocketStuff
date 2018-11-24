@@ -11,7 +11,6 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 import java.util.UUID;
@@ -77,8 +76,10 @@ public class SpawnPlayerPacket extends PEPacket {
 		serializer.writeFloatLE(pitch); // pitch
 		serializer.writeFloatLE(headYaw); // yaw
 		serializer.writeFloatLE(yaw); // yaw
-		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, ItemStackWrapper.NULL, true); //held item.
-		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
+		//TODO: fix
+		//ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, ItemStackWrapper.NULL, true); //held item.
+		//TODO: fix
+		//EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
 		//adventure settings
 		VarNumberSerializer.writeVarInt(serializer, 0);
 		VarNumberSerializer.writeVarInt(serializer, 0);

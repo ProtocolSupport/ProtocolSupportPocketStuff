@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
-import protocolsupportpocketstuff.zplatform.impl.glowstone.GlowstoneStuff;
 import protocolsupportpocketstuff.zplatform.impl.spigot.SpigotStuff;
 
 public abstract class PlatformThings {
@@ -17,9 +16,6 @@ public abstract class PlatformThings {
 
 	public static void bakeStuff() {
 		switch(ServerPlatformIdentifier.get()) {
-		case GLOWSTONE:
-			stuff = new GlowstoneStuff();
-			break;
 		case SPIGOT:
 			stuff = new SpigotStuff();
 			break;

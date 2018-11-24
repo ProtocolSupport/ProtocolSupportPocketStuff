@@ -47,8 +47,8 @@ public class SkinPacket extends PEPacket {
 		StringSerializer.writeString(serializer, version, skinId);
 		StringSerializer.writeString(serializer, version, skinName);
 		StringSerializer.writeString(serializer, version, previousName);
-		ArraySerializer.writeByteArray(serializer, version, skinData);
-		ArraySerializer.writeByteArray(serializer, version, capeData);
+		ArraySerializer.writeVarIntByteArray(serializer, skinData);
+		ArraySerializer.writeVarIntByteArray(serializer, capeData);
 		StringSerializer.writeString(serializer, version, geometryId);
 		StringSerializer.writeString(serializer, version, geometryData);
 	}
@@ -60,8 +60,8 @@ public class SkinPacket extends PEPacket {
 		skinId = StringSerializer.readString(clientdata, version);
 		skinName = StringSerializer.readString(clientdata, version);
 		previousName = StringSerializer.readString(clientdata, version);
-		skinData = ArraySerializer.readByteArray(clientdata, version);
-		capeData = ArraySerializer.readByteArray(clientdata, version);
+		skinData = ArraySerializer.readVarIntByteArray(clientdata);
+		capeData = ArraySerializer.readVarIntByteArray(clientdata);
 		geometryId = StringSerializer.readString(clientdata, version);
 		geometryData = StringSerializer.readString(clientdata, version);
 	}

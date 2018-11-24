@@ -31,7 +31,8 @@ public class ResourcePackDataInfoPacket extends PEPacket {
 		serializer.writeIntLE((int) Math.ceil(pack.getPackSize() / ResourcePackChunkDataPacket.CHUNK_SIZE)); //chunk count
 		serializer.writeLongLE(pack.getPackSize()); //res pack size
 		byte[] hash = pack.getSha256();
-		ArraySerializer.writeByteArray(serializer, connection.getVersion(), hash);
+		//TODO: fix
+		//ArraySerializer.writeByteArray(serializer, connection.getVersion(), hash);
 	}
 
 	@Override

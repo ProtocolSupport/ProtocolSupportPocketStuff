@@ -1,7 +1,7 @@
 package protocolsupportpocketstuff.hacks.bossbars;
 
-import net.minecraft.server.v1_12_R1.IChatBaseComponent;
-import net.minecraft.server.v1_12_R1.PacketPlayOutBoss;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.PacketPlayOutBoss;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;

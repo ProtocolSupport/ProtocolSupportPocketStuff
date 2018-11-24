@@ -31,7 +31,8 @@ public class EntityDataPacket extends PEPacket {
 	@Override
 	public void toData(Connection connection, ByteBuf serializer) {
 		VarNumberSerializer.writeVarLong(serializer, entityId);
-		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
+		//TODO: fix
+		//EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package protocolsupportpocketstuff.zplatform.impl.glowstone;
+/*package protocolsupportpocketstuff.zplatform.impl.glowstone;
 
 import org.bukkit.entity.Player;
 
@@ -40,3 +40,4 @@ public class GlowstoneStuff extends PlatformThings {
 	}
 
 }
+*/

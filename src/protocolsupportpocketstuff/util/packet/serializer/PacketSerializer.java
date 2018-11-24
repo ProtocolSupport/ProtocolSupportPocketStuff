@@ -7,8 +7,6 @@ public class PacketSerializer {
 
 	public static int readPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
-		from.readByte();
-		from.readByte();
 		return id;
 	}
 

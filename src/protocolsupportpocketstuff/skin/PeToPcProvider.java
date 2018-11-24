@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -35,7 +36,8 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 	public void onLoginFinish(PlayerLoginFinishEvent event) {
 		if (Skins.getInstance().hasPeSkin(event.getUUID().toString())) {
 			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(event.getUUID().toString());
-			event.addProperty(new ProfileProperty(SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+			GameProfile gameProfile = (GameProfile)event.getConnection().getProfile();
+			gameProfile.addProperty(new ProfileProperty(SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
 		}
 	}
 
