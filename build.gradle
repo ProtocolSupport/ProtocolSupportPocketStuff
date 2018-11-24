@@ -46,7 +46,7 @@ dlDepsDirS.mkdirs()
 //TODO: Add ProtocolSupport to dlLibsC (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 def dlDepsC = [
 	new Tuple(
-		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1609.jar',
+		'https://mcmirror.io/files/Spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1609.jar',
 		'spigot-1.12.2-1.jar'
 	),
 	new Tuple(
