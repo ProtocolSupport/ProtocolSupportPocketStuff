@@ -1,17 +1,15 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 import java.util.UUID;
@@ -30,7 +28,7 @@ public class SpawnPlayerPacket extends PEPacket {
 	private float pitch;
 	private float headYaw;
 	private float yaw;
-	private CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata;
+	//private CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata;
 
 	public SpawnPlayerPacket() { }
 
@@ -51,7 +49,7 @@ public class SpawnPlayerPacket extends PEPacket {
 		this.pitch = pitch;
 		this.headYaw = headYaw;
 		this.yaw = yaw;
-		this.metadata = metadata;
+		//this.metadata = metadata;
 	}
 
 	@Override
@@ -60,7 +58,7 @@ public class SpawnPlayerPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
 		StringSerializer.writeString(serializer, connection.getVersion(), name);
 		StringSerializer.writeString(serializer, connection.getVersion(), ""); //ThirdPartyName :F
@@ -77,8 +75,10 @@ public class SpawnPlayerPacket extends PEPacket {
 		serializer.writeFloatLE(pitch); // pitch
 		serializer.writeFloatLE(headYaw); // yaw
 		serializer.writeFloatLE(yaw); // yaw
-		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, ItemStackWrapper.NULL, true); //held item.
-		EntityMetadata.encodeMeta(serializer, connection.getVersion(), I18NData.DEFAULT_LOCALE, metadata);
+		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), NetworkItemStack.NULL, true); //held item.
+		//TODO Fix!
+		VarNumberSerializer.writeVarInt(serializer, 0);
+		//EntityMetadata.encodeMeta(serializer, connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), metadata);
 		//adventure settings
 		VarNumberSerializer.writeVarInt(serializer, 0);
 		VarNumberSerializer.writeVarInt(serializer, 0);
@@ -90,7 +90,7 @@ public class SpawnPlayerPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		throw new UnsupportedOperationException();
 	}
 

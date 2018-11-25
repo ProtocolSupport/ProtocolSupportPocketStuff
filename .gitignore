@@ -30,3 +30,5 @@ dllibsc/
 # jRebel
 *.rebel.xml.bak
 resources/rebel.xml
+
+out

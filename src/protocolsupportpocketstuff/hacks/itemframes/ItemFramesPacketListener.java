@@ -1,27 +1,25 @@
-package protocolsupportpocketstuff.hacks.itemframes;
+/*package protocolsupportpocketstuff.hacks.itemframes;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.server.v1_12_R1.DataWatcher;
-import net.minecraft.server.v1_12_R1.EnumHand;
-import net.minecraft.server.v1_12_R1.PacketPlayInUseEntity;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.EnumHand;
+import net.minecraft.server.v1_13_R2.PacketPlayInUseEntity;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_13_R2.PacketPlayOutRespawn;
+import net.minecraft.server.v1_13_R2.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_13_R2.ItemStack;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEItems;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.TileDataUpdatePacket;
@@ -94,10 +92,6 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 			// ===[ PacketPlayOutEntityDestroy ]===
 			DESTROY_ENTITY_ARRAY = PacketPlayOutEntityDestroy.class.getDeclaredField("a");
 			DESTROY_ENTITY_ARRAY.setAccessible(true);
-
-			// ===[ SpigotItemStackWrapper ]===
-			INIT_SPIGOT_ITEMSTACKWRAPPER = SpigotItemStackWrapper.class.getDeclaredConstructor(net.minecraft.server.v1_12_R1.ItemStack.class);
-			INIT_SPIGOT_ITEMSTACKWRAPPER.setAccessible(true);
 
 			// ===[ PacketPlayInUseEntity ]===
 			USE_ENTITY_ID = PacketPlayInUseEntity.class.getDeclaredField("a");
@@ -415,18 +409,16 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 				switch (dw.a().a()) {
 					case 6: // Set item inside Item Frame
 						try {
-							net.minecraft.server.v1_12_R1.ItemStack item = (net.minecraft.server.v1_12_R1.ItemStack) dw.b();
-							// Yes, Reflection to initialize an ItemStackWrapper
-							// This is only required so we don't end up with moar reflection just to get all the required stuff from the item (like NBT tags)
-							ItemStackWrapper wrapper = (ItemStackWrapper) ItemFramesPacketListener.INIT_SPIGOT_ITEMSTACKWRAPPER.newInstance(item);
+							net.minecraft.server.v1_13_R2.ItemStack item = (net.minecraft.server.v1_13_R2.ItemStack) dw.b();
 
 							// Remap the item to PE
 							// First we are going to remap it using remapToClient, to fix stuff like maps, enchantments, spawn eggs, etc
-							wrapper = ItemStackRemapper.remapToClient(listener.con.getVersion(), I18NData.DEFAULT_LOCALE, wrapper.getTypeId(), wrapper);
+							item = ItemStackRemapper.remapToClient(listener.con.getVersion(), I18NData.DEFAULT_LOCALE, wrapper.getTypeId(), wrapper);
 							NBTTagCompoundWrapper itemFrameTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 
 							// Then we are going to remap the item ID/value
 							IntTuple itemAndData = PEDataValues.ITEM_ID.getRemap(wrapper.getTypeId(), wrapper.getData());
+
 							int id = wrapper.getTypeId();
 							int data = wrapper.getData();
 
@@ -480,3 +472,4 @@ public class ItemFramesPacketListener extends Connection.PacketListener {
 		}
 	}
 }
+*/

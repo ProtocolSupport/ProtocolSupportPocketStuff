@@ -2,23 +2,25 @@ package protocolsupportpocketstuff.hacks.skulls;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_12_R1.PacketPlayOutRespawn;
+import net.minecraft.server.v1_13_R2.PacketPlayOutRespawn;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.util.PocketCon;
 import protocolsupportpocketstuff.packet.play.EntityDestroyPacket;
@@ -41,7 +43,8 @@ import java.util.SplittableRandom;
 import java.util.UUID;
 
 public class SkullTilePacketListener extends Connection.PacketListener {
-	private final Connection con;
+
+	private final ConnectionImpl con;
 	private final ProtocolSupportPocketStuff plugin;
 	private final HashMap<Long, CachedSkullBlock> cachedSkullBlocks = new HashMap<>();
 	private static final String SKULL_MODEL = StuffUtils.getResourceAsString("models/fake_skull_block.json");
@@ -64,7 +67,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 	private static final int SKULL_RUNTIME_ID_14 = SKULL_RUNTIME_ID_13 + 1;
 	private static final int SKULL_RUNTIME_ID_15 = SKULL_RUNTIME_ID_14 + 1;
 
-	public SkullTilePacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
+	public SkullTilePacketListener(ProtocolSupportPocketStuff plugin, ConnectionImpl con) {
 		this.plugin = plugin;
 		this.con = con;
 	}
@@ -83,21 +86,18 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		ByteBuf data = event.getData();
 		int packetId = VarNumberSerializer.readVarInt(data);
 
-		data.readByte();
-		data.readByte();
-
 		if (packetId == PEPacketIDs.TILE_DATA_UPDATE) {
 			Position position = new Position(0, 0, 0);
 			PositionSerializer.readPEPositionTo(data, position);
 			try {
-				NBTTagCompoundWrapper tag = NBTTagCompoundSerializer.readPeTag(data, true);
+				NBTCompound tag = PENBTSerializer.VI_INSTANCE.deserializeTag(data);
 
 				if (!isSkull(tag))
 					return;
 
 				handleSkull(position, tag, -1);
 
-				tag.remove("Owner"); // remove the owner tag, if we don't remove it, the skull stays with the default parameters (skeleton with rot 0)
+				tag.removeTag("Owner"); // remove the owner tag, if we don't remove it, the skull stays with the default parameters (skeleton with rot 0)
 				event.setData(new TileDataUpdatePacket(position.getX(), position.getY(), position.getZ(), tag).encode(con));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -170,7 +170,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		if (packetId == PEPacketIDs.CHUNK_DATA) {
 			int chunkX = VarNumberSerializer.readSVarInt(data); // chunk X
 			int chunkZ = VarNumberSerializer.readSVarInt(data); // chunk Z
-			byte[] byteArray = ArraySerializer.readByteArray(data, con.getVersion());
+			byte[] byteArray = ArraySerializer.readVarIntByteArray(data);
 
 			ByteBuf chunkdata = Unpooled.wrappedBuffer(byteArray);
 			int sections = chunkdata.readByte(); // how many sections we have in this chunk
@@ -248,14 +248,14 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			VarNumberSerializer.readSVarInt(chunkdata); // extra data
 
 			while (chunkdata.readableBytes() != 0) {
-				NBTTagCompoundWrapper tag = ItemStackSerializer.readTag(chunkdata, true, con.getVersion());
+				NBTCompound tag = ItemStackSerializer.readTag(chunkdata, true, con.getVersion());
 
 				if (!isSkull(tag))
 					continue;
 
-				int x = tag.getIntNumber("x");
-				int y = tag.getIntNumber("y");
-				int z = tag.getIntNumber("z");
+				int x = tag.getNumberTag("x").getAsInt();
+				int y = tag.getNumberTag("y").getAsInt();
+				int z = tag.getNumberTag("z").getAsInt();
 
 				Position position = new Position(x, y, z);
 
@@ -275,25 +275,22 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		}
 	}
 
-	public boolean isSkull(NBTTagCompoundWrapper tag) {
-		return tag.getString("id").equals("Skull");
+	public boolean isSkull(NBTCompound tag) {
+		System.out.println("isSkull " + tag.getTagOfType("id", NBTType.STRING).getValue());
+		return tag.getTagOfType("id", NBTType.STRING).getValue().equals("Skull");
 	}
 
-	public String getUrlFromSkull(NBTTagCompoundWrapper tag, boolean isItem) {
-		if (!tag.hasKeyOfType(isItem ? "SkullOwner" : "Owner", NBTTagType.COMPOUND))
-			return null;
+	public String getUrlFromSkull(NBTCompound tag, boolean isItem) {
+		NBTCompound owner = tag.getTagOfType(isItem ? "SkullOwner" : "Owner", NBTType.COMPOUND);
+		if (owner == null) return null;
 
-		NBTTagCompoundWrapper owner = tag.getCompound(isItem ? "SkullOwner" : "Owner");
+		NBTCompound properties = owner.getTagOfType("Properties", NBTType.COMPOUND);
+		if (properties == null) return null;
 
-		if (!owner.hasKeyOfType("Properties", NBTTagType.COMPOUND))
-			return null;
+		NBTList<NBTCompound> textures = properties.getTagListOfType("textures", NBTType.COMPOUND);
+		if (textures == null) return null;
 
-		NBTTagCompoundWrapper properties = owner.getCompound("Properties");
-
-		if (!properties.hasKeyOfType("textures", NBTTagType.LIST))
-			return null;
-
-		String value = properties.getList("textures").getCompound(0).getString("Value");
+		String value = textures.getTag(0).getTagOfType("Value", NBTType.STRING).getValue();
 
 		String _json = new String(Base64.getDecoder().decode(value));
 
@@ -302,14 +299,14 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		return json.get("textures").getAsJsonObject().get("SKIN").getAsJsonObject().get("url").getAsString();
 	}
 
-	public void handleSkull(Position position, NBTTagCompoundWrapper tag, int dataValue) {
+	public void handleSkull(Position position, NBTCompound tag, int dataValue) {
 		if (position == null && tag == null) {
-			throw new RuntimeException("Both Position and NBTTagCompoundWrapper are null!");
+			throw new RuntimeException("Both Position and NBTCompound are null!");
 		}
 		if (position == null) {
-			int x = tag.getIntNumber("x");
-			int y = tag.getIntNumber("y");
-			int z = tag.getIntNumber("z");
+			int x = tag.getNumberTag("x").getAsInt();
+			int y = tag.getNumberTag("y").getAsInt();
+			int z = tag.getNumberTag("z").getAsInt();
 
 			position = new Position(x, y, z);
 		}
@@ -358,7 +355,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 	static class CachedSkullBlock {
 		private long entityId = new SplittableRandom().nextLong(Integer.MAX_VALUE, Long.MAX_VALUE);
 		private Position position;
-		private NBTTagCompoundWrapper tag;
+		private NBTCompound tag;
 		private String url;
 		private int dataValue = 1;
 		private boolean isSpawned = false;
@@ -401,9 +398,9 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 		}
 
 		private void sendFakePlayer(SkullTilePacketListener listener, String url, byte[] data) {
-			int x = tag.getIntNumber("x");
-			int y = tag.getIntNumber("y");
-			int z = tag.getIntNumber("z");
+			int x = tag.getNumberTag("x").getAsInt();
+			int y = tag.getNumberTag("y").getAsInt();
+			int z = tag.getNumberTag("z").getAsInt();
 
 			CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(76);
 
@@ -419,7 +416,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 			float zOffset = 0.5F;
 
 			if (dataValue == 1) { // on ground
-				int rot = tag.getByteNumber("Rot");
+				int rot = tag.getNumberTag("Rot").getAsByte();
 				switch (rot) {
 					case 0:
 						yaw = 180F;
@@ -511,7 +508,6 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 					"geometry.Tiles.PSPEFakeSkull",
 					SKULL_MODEL
 			));
-
 			TileDataUpdatePacket tileDataUpdatePacket = new TileDataUpdatePacket(x, y, z, tag);
 			PocketCon.sendPocketPacket(listener.con, tileDataUpdatePacket);
 		}

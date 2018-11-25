@@ -1,8 +1,8 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -41,27 +41,27 @@ public class SkinPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		ProtocolVersion version = connection.getVersion();
 		MiscSerializer.writeUUID(serializer, version, uuid);
 		StringSerializer.writeString(serializer, version, skinId);
 		StringSerializer.writeString(serializer, version, skinName);
 		StringSerializer.writeString(serializer, version, previousName);
-		ArraySerializer.writeByteArray(serializer, version, skinData);
-		ArraySerializer.writeByteArray(serializer, version, capeData);
+		ArraySerializer.writeVarIntByteArray(serializer, skinData);
+		ArraySerializer.writeVarIntByteArray(serializer, capeData);
 		StringSerializer.writeString(serializer, version, geometryId);
 		StringSerializer.writeString(serializer, version, geometryData);
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		uuid = MiscSerializer.readUUID(clientdata);
 		skinId = StringSerializer.readString(clientdata, version);
 		skinName = StringSerializer.readString(clientdata, version);
 		previousName = StringSerializer.readString(clientdata, version);
-		skinData = ArraySerializer.readByteArray(clientdata, version);
-		capeData = ArraySerializer.readByteArray(clientdata, version);
+		skinData = ArraySerializer.readVarIntByteArray(clientdata);
+		capeData = ArraySerializer.readVarIntByteArray(clientdata);
 		geometryId = StringSerializer.readString(clientdata, version);
 		geometryData = StringSerializer.readString(clientdata, version);
 	}

@@ -1,7 +1,7 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
@@ -19,7 +19,7 @@ public class BlockPickRequestPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		VarNumberSerializer.writeSVarInt(serializer, position.getX());
 		VarNumberSerializer.writeSVarInt(serializer, position.getY());
 		VarNumberSerializer.writeSVarInt(serializer, position.getZ());
@@ -28,7 +28,7 @@ public class BlockPickRequestPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		position.setX(VarNumberSerializer.readSVarInt(clientdata));
 		position.setY(VarNumberSerializer.readSVarInt(clientdata));
 		position.setZ(VarNumberSerializer.readSVarInt(clientdata));

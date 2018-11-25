@@ -3,7 +3,7 @@ package protocolsupportpocketstuff.packet.play;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
@@ -19,7 +19,7 @@ public class ResourcePackResponsePacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -29,7 +29,7 @@ public class ResourcePackResponsePacket extends PEPacket {
 	public static final int COMPLETED = 4;
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		this.status = clientdata.readByte();
 		if (status != REFUSED) {
 			int entryCount = clientdata.readShortLE();
