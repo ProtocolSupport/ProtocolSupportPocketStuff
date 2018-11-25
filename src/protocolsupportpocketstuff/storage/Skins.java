@@ -49,7 +49,7 @@ public class Skins {
 
 	/**
 	 * Caches a PE skin for PC. 
-	 * @param uuid - the uuid of the player.
+	 * @param uuid - the uuid of the skin.
 	 * @param skinDataWrapper - the wrapped mc data from mineskin.
 	 */
 	public void cachePeSkin(String uuid, SkinDataWrapper skinDataWrapper) { 
@@ -66,7 +66,7 @@ public class Skins {
 
 	/**
 	 * Clears a PE skin for PC.
-	 * @param uuid - the uuid of the player of the skin.
+	 * @param uuid - the uuid of the skins image.
 	 */
     public void clearPeSkin(String uuid) {
         pcSkinCache.remove(uuid);
@@ -83,11 +83,10 @@ public class Skins {
 
 	/**
 	 * Checks if PE skin is cached
-	 * @param uuid - the uuid of the skin's player.
+	 * @param uuid - the uuid of the player's skin.
 	 * @return true if the skin was cached
 	 */
 	public boolean hasPeSkin(String uuid) {
-		System.out.println("MEEp" + uuid);
 		return pcSkinCache.containsKey(uuid);
 	}
 
@@ -102,7 +101,7 @@ public class Skins {
 
 	/**
 	 * Gets the skin information of the PE skin.
-	 * @param uuid - the uuid of the player.
+	 * @param uuid - the uuid of the player's skin.
 	 * @return the skinData for PC.
 	 */
 	public SkinDataWrapper getPeSkin(String uuid) {

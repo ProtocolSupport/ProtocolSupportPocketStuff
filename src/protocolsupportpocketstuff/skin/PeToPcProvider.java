@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -15,27 +14,36 @@ import protocolsupportpocketstuff.api.util.PocketPacketHandler;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
-import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.PacketUtils;
 
 public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	private static final ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
-	public static final String SKIN_PROPERTY_NAME = "textures";
+	public static final String TRANSFER_SKIN = "PEApplySkinOnJoin";
 
 	@PocketPacketHandler
 	public void onConnect(Connection connection, ClientLoginPacket packet) {
 		if (packet.getJsonPayload() == null) { return; }
-		String skinData = packet.getJsonPayload().get("SkinData").getAsString();
-		byte[] skinByteArray = Base64.getDecoder().decode(skinData);
-		boolean slim = SkinUtils.slimFromModel(packet.getJsonPayload().get("SkinGeometryName").getAsString());
-		new MineskinThread(skinByteArray, slim, (skindata) -> { /* Just cache it. */}).start();
+		byte[] skin = Base64.getDecoder().decode(packet.getJsonPayload().get("SkinData").getAsString());
+		boolean isSlim = SkinUtils.slimFromModel(packet.getJsonPayload().get("SkinGeometryName").getAsString());
+		new MineskinThread(skin, isSlim, (skindata) -> {
+			if (connection.getPlayer() == null) {
+				//Player is still finalising login, the finish event will likely catch the skin.
+				connection.addMetadata(TRANSFER_SKIN, skindata);
+			} else {
+				//Dynamically update when we can, propagate the skin to everyone.
+				new PacketUtils.RunWhenOnline(connection, () -> {
+					SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
+				}, 2, true, 200L); 
+			}
+		}).start();
 	}
 
 	@EventHandler
 	public void onLoginFinish(PlayerLoginFinishEvent event) {
-		if (Skins.getInstance().hasPeSkin(event.getUUID().toString())) {
-			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(event.getUUID().toString());
-			event.addProperty(new ProfileProperty(SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
+		if (event.getConnection().hasMetadata(TRANSFER_SKIN)) {
+			SkinDataWrapper skinData = (SkinDataWrapper) event.getConnection().getMetadata(TRANSFER_SKIN);
+			event.addProperty(skinData.toProfileProperty());
 		}
 	}
 
@@ -43,7 +51,7 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 	public void onSkinChange(Connection connection, SkinPacket packet) {
 		boolean slim = SkinUtils.slimFromModel(packet.getGeometryId());
 		new MineskinThread(packet.getSkinData(), slim, (skindata) -> {
-			plugin.debug("Dynamic skin update!");
+			plugin.debug(connection.getPlayer().getName() + " did a dynamic skin update!");
 			SkinUtils.updateSkin(connection.getPlayer(), packet.getSkinData(), skindata, slim);
 		}).start();
 	}
