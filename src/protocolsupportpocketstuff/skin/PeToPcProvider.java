@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import protocolsupport.api.Connection;
-import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -40,7 +40,7 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 	}
 
 	@EventHandler
-	public void onLoginFinish(PlayerLoginFinishEvent event) {
+	public void onLoginFinish(PlayerProfileCompleteEvent event) {
 		if (event.getConnection().hasMetadata(TRANSFER_SKIN)) {
 			SkinDataWrapper skinData = (SkinDataWrapper) event.getConnection().getMetadata(TRANSFER_SKIN);
 			event.addProperty(skinData.toProfileProperty());

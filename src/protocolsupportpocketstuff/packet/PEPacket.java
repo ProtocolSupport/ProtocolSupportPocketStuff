@@ -4,9 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public abstract class PEPacket {
 
 	public abstract int getPacketId();
