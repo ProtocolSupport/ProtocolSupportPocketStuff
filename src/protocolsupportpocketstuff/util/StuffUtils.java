@@ -1,11 +1,6 @@
 package protocolsupportpocketstuff.util;
 
-//import net.minecraft.server.v1_12_R1.ChatComponentText;
-//import net.minecraft.server.v1_12_R1.ChatModifier;
-//import net.minecraft.server.v1_12_R1.EnumChatFormat;
-//import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import org.apache.commons.io.IOUtils;
-import org.bukkit.ChatColor;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 
@@ -14,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class StuffUtils {
 	public static final int CHUNK_SIZE = 1048576;
@@ -49,6 +43,7 @@ public class StuffUtils {
 		return ((x & 0x3FFFFFFL) << 38) | ((y & 0xFFFL) << 26) | ((z & 0x3FFFFFFL));
 	}
 
+	// TODO Remove hack / spigot code from this class!
 //	public static String toLegacy(IChatBaseComponent s) {
 //		StringBuilder builder = new StringBuilder();
 //		legacy(builder, s);

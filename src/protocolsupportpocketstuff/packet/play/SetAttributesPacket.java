@@ -2,6 +2,7 @@ package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -33,7 +34,7 @@ public class SetAttributesPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		encodeAttributes(connection, serializer, attributes);
 	}
@@ -50,7 +51,7 @@ public class SetAttributesPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientData) {
 		throw new UnsupportedOperationException();
 	}
 

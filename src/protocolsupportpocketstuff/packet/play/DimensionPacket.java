@@ -3,7 +3,8 @@ package protocolsupportpocketstuff.packet.play;
 import io.netty.buffer.ByteBuf;
 import org.bukkit.World.Environment;
 import org.bukkit.util.Vector;
-import protocolsupport.api.Connection;
+
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.packet.PEPacket;
@@ -26,7 +27,7 @@ public class DimensionPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		VarNumberSerializer.writeSVarInt(serializer, toPocketDimension(enviroment));
 		serializer.writeFloat((float) position.getX());
 		serializer.writeFloat((float) position.getY());
@@ -35,7 +36,7 @@ public class DimensionPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {	}
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientData) {	}
 	
 	private static int toPocketDimension(Environment dimId) {
 		switch (dimId) {

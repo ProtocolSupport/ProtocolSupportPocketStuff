@@ -1,8 +1,8 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -25,17 +25,17 @@ public class ResourcePackDataInfoPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, pack.getPackId());
 		serializer.writeIntLE(ResourcePackChunkDataPacket.CHUNK_SIZE); //max chunk size 1MB
 		serializer.writeIntLE((int) Math.ceil(pack.getPackSize() / ResourcePackChunkDataPacket.CHUNK_SIZE)); //chunk count
 		serializer.writeLongLE(pack.getPackSize()); //res pack size
 		byte[] hash = pack.getSha256();
-		ArraySerializer.writeByteArray(serializer, connection.getVersion(), hash);
+		ArraySerializer.writeVarIntByteArray(serializer, hash);
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -1,7 +1,7 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -25,13 +25,13 @@ public class ModalResponsePacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		VarNumberSerializer.writeVarInt(serializer, modalId);
 		StringSerializer.writeString(serializer, connection.getVersion(), modalJSON);
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		modalId = VarNumberSerializer.readVarInt(clientdata);
 		modalJSON = StringSerializer.readString(clientdata, connection.getVersion());
 	}

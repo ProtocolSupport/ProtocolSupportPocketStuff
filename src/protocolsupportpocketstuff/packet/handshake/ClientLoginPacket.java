@@ -1,29 +1,13 @@
 package protocolsupportpocketstuff.packet.handshake;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
-import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
-import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.utils.JsonUtils;
 import protocolsupportpocketstuff.packet.PEPacket;
-import protocolsupportpocketstuff.util.GsonUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.reflect.TypeToken;
-
-import protocolsupport.libs.com.nimbusds.jose.JWSObject;
 
 public class ClientLoginPacket extends PEPacket {
 
@@ -40,21 +24,22 @@ public class ClientLoginPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		throw new UnsupportedOperationException();
 	}
 
-	private JsonObject decodeToken(String token) {
-		String[] base = token.split("\\.");
-		if (base.length < 2) {
-			return null;
-		}
-		return GsonUtils.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(base[1]))), JsonObject.class);
-	}
+//	private JsonObject decodeToken(String token) {
+//		String[] base = token.split("\\.");
+//		if (base.length < 2) {
+//			return null;
+//		}
+//		return GsonUtils.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(base[1]))), JsonObject.class);
+//	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		protocolVersion = clientData.readInt(); //protocol version
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientData) {
+		clientData.readBytes(clientData.readableBytes());
+		/*protocolVersion = clientData.readInt(); //protocol version
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArray(clientData));
 		chainData = GsonUtils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
@@ -86,7 +71,7 @@ public class ClientLoginPacket extends PEPacket {
 			result.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	public int getProtocolVersion() {

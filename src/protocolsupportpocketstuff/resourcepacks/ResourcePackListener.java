@@ -1,8 +1,8 @@
 package protocolsupportpocketstuff.resourcepacks;
 
-import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
@@ -35,7 +35,7 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 	private static final String packFinished = "peResourcesDownloaded";
 
 	@PocketPacketHandler
-	public void onResourceResponse(Connection connection, ResourcePackResponsePacket packet) {
+	public void onResourceResponse(ConnectionImpl connection, ResourcePackResponsePacket packet) {
 		switch (packet.getStatus()) {
 			case ResourcePackResponsePacket.REFUSED: {
 				PocketCon.sendPocketPacket(connection, new DisconnectPacket(false, ChatColor.RED + "You must accept resource packs to join this server."));
@@ -67,7 +67,7 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 	}
 	
 	@PocketPacketHandler
-	public void onResourceRequest(Connection connection, ResourcePackRequestPacket packet) {
+	public void onResourceRequest(ConnectionImpl connection, ResourcePackRequestPacket packet) {
 		plugin.debug("Sending part " + packet.getChunkIndex() + " of the " + packet.getPackId() + " res/beh pack");
 		ArrayList<ResourcePack> packs = new ArrayList<ResourcePack>();
 		packs.addAll(PocketStuffAPI.getResourcePackManager().getBehaviorPacks());
@@ -83,7 +83,7 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 
 	@EventHandler
 	public void onConnectionHandshake(ConnectionHandshakeEvent event) {
-		Connection connection = event.getConnection();
+		ConnectionImpl connection = (ConnectionImpl) event.getConnection();
 		if (PocketCon.isPocketConnection(connection)) {
 			connection.addPacketListener(new ResourcePacketReplacer(connection));
 		}
@@ -92,10 +92,10 @@ public class ResourcePackListener extends PacketListener implements PocketPacket
 	public static class ResourcePacketReplacer extends PacketListener {
 
 		protected ArrayList<ByteBuf> queue = new ArrayList<>(2000);
-		protected final Connection connection;
+		protected final ConnectionImpl connection;
 		protected boolean queuePackets = false;
 
-		public ResourcePacketReplacer(Connection connection) {
+		public ResourcePacketReplacer(ConnectionImpl connection) {
 			this.connection = connection;
 		}
 
