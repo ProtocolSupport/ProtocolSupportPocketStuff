@@ -90,7 +90,7 @@ public class MineskinThread extends Thread {
 			skins.cachePeSkin(uniqueSkinId, skindata);
 			String url = SkinUtils.urlFromProperty(skindata);
 			if (!skins.hasPcSkin(url)) {
-				plugin.debug("Caching skin for PE too!");
+				plugin.debug("Caching skin for PE players too (saves us a download)!");
 				skins.cachePcSkin(url, skin);
 			}
 			skindataUploadedCallback.accept(skindata);

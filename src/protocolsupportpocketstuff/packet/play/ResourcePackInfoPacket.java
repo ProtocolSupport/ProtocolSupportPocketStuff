@@ -1,7 +1,7 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
@@ -29,7 +29,7 @@ public class ResourcePackInfoPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		serializer.writeBoolean(forceResources);
 		serializer.writeShortLE(behaviorPacks.size()); // beh pack count
 		for (ResourcePack pack : behaviorPacks) {
@@ -42,7 +42,7 @@ public class ResourcePackInfoPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		throw new UnsupportedOperationException();
 	}
 

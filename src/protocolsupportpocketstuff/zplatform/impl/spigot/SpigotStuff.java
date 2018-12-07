@@ -2,13 +2,19 @@ package protocolsupportpocketstuff.zplatform.impl.spigot;
 
 import java.lang.reflect.Field;
 
-import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
+import net.minecraft.server.v1_13_R2.DimensionManager;
+import net.minecraft.server.v1_13_R2.EntityHuman;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
+import net.minecraft.server.v1_13_R2.EnumGamemode;
+import net.minecraft.server.v1_13_R2.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_13_R2.PacketPlayOutRespawn;
+import net.minecraft.server.v1_13_R2.WorldType;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -39,7 +45,19 @@ public class SpigotStuff extends PlatformThings {
 		Connection connection = ProtocolSupportAPI.getConnection(player);
 		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 		connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
-		connection.sendPacket(new PacketPlayOutRespawn(DimensionManager.a(0), entityPlayer.world.getDifficulty(), WorldType.NORMAL, EnumGamemode.getById(player.getGameMode().getValue())));
+		DimensionManager dimThing = null;
+		switch (player.getWorld().getEnvironment()) {
+		case NETHER:
+			dimThing = DimensionManager.NETHER;
+			break;
+		case NORMAL:
+			dimThing = DimensionManager.OVERWORLD;
+			break;
+		case THE_END:
+			dimThing = DimensionManager.THE_END;
+			break;
+		}
+		connection.sendPacket(new PacketPlayOutRespawn(dimThing, entityPlayer.world.getDifficulty(), WorldType.NORMAL, EnumGamemode.getById(player.getGameMode().getValue())));
 		player.setHealth(player.getHealth());
 		player.setMaxHealth(player.getMaxHealth());
 		player.setFlying(player.isFlying());

@@ -6,6 +6,7 @@ import net.minecraft.server.v1_13_R2.PacketPlayOutRespawn;
 import org.apache.commons.lang3.Validate;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -17,9 +18,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
@@ -44,7 +43,8 @@ import java.util.SplittableRandom;
 import java.util.UUID;
 
 public class SkullTilePacketListener extends Connection.PacketListener {
-	private final Connection con;
+
+	private final ConnectionImpl con;
 	private final ProtocolSupportPocketStuff plugin;
 	private final HashMap<Long, CachedSkullBlock> cachedSkullBlocks = new HashMap<>();
 	private static final String SKULL_MODEL = StuffUtils.getResourceAsString("models/fake_skull_block.json");
@@ -67,7 +67,7 @@ public class SkullTilePacketListener extends Connection.PacketListener {
 	private static final int SKULL_RUNTIME_ID_14 = SKULL_RUNTIME_ID_13 + 1;
 	private static final int SKULL_RUNTIME_ID_15 = SKULL_RUNTIME_ID_14 + 1;
 
-	public SkullTilePacketListener(ProtocolSupportPocketStuff plugin, Connection con) {
+	public SkullTilePacketListener(ProtocolSupportPocketStuff plugin, ConnectionImpl con) {
 		this.plugin = plugin;
 		this.con = con;
 	}

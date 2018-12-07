@@ -46,10 +46,14 @@ dlDepsDirS.mkdirs()
 //TODO: Add ProtocolSupport to dlLibsC (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 def dlDepsC = [
 	new Tuple(
-		'https://mcmirror.io/files/Paper/Paper-1.13.2-b388.jar',
-		'Paper-1.13.2-b388.jar'
+		'https://mcmirror.io/files/Spigot/Spigot-1.13.2-a1f2566-20181123-1027.jar',
+		'spigot-1.13.2.jar'
 	),
-	new Tuple(
+//	new Tuple(
+//		'https://github.com/GlowstoneMC/Glowstone/releases/download/2018.2.0/glowstone.jar',
+//		'glowstone-1.12.2-1.jar'
+//	),
+		new Tuple(
 		'Hah. You need to compile this yourself!',
 		'ProtocolSupport.jar'
 	)

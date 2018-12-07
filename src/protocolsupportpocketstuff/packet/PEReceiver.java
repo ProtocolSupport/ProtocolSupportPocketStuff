@@ -12,6 +12,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.Connection.PacketListener;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupportpocketstuff.api.util.PocketPacketHandler;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.util.packet.serializer.PacketSerializer;
@@ -83,7 +84,7 @@ public class PEReceiver {
     //						Receiver					   \\
     //=====================================================\\
 
-	protected static void decodehandle(Connection connection, ByteBuf clientdata) {
+	protected static void decodehandle(ConnectionImpl connection, ByteBuf clientdata) {
 		int packetId = PacketSerializer.readPacketId(clientdata);
 		Any<PEPacket, Set<Handler>> handlers = packetHandlers.get(packetId);
 		if (handlers == null) { return; }
@@ -95,9 +96,10 @@ public class PEReceiver {
 	}
 
 	public static class PEReceiverListener extends PacketListener {
-		private Connection connection;
 
-		public PEReceiverListener(Connection connection) {
+		private ConnectionImpl connection;
+
+		public PEReceiverListener(ConnectionImpl connection) {
 			this.connection = connection;
 		}
 

@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.JsonUtils;
@@ -40,7 +41,7 @@ public class ClientLoginPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -53,7 +54,7 @@ public class ClientLoginPacket extends PEPacket {
 	}
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientData) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientData) {
 		protocolVersion = clientData.readInt(); //protocol version
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArraySlice(clientData));
 		chainData = GsonUtils.GSON.fromJson(

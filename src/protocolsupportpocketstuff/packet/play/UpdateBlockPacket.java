@@ -1,7 +1,7 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -33,7 +33,7 @@ public class UpdateBlockPacket extends PEPacket {
 	}
 
 	@Override
-	public void toData(Connection connection, ByteBuf serializer) {
+	public void toData(ConnectionImpl connection, ByteBuf serializer) {
 		PositionSerializer.writePEPosition(serializer, position);
 		VarNumberSerializer.writeVarInt(serializer, blockId);
 		VarNumberSerializer.writeVarInt(serializer, flags);
@@ -45,7 +45,7 @@ public class UpdateBlockPacket extends PEPacket {
 	private static final int flags = (flag_update_neighbors | flag_network | flag_priority);
 
 	@Override
-	public void readFromClientData(Connection connection, ByteBuf clientdata) {
+	public void readFromClientData(ConnectionImpl connection, ByteBuf clientdata) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.libs.com.google.gson.JsonElement;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.libs.com.google.gson.JsonParser;
@@ -221,6 +222,7 @@ public class SkinUtils {
 	 */
 	public static class SkinDataWrapper {
 
+		private static final String PROPERTY_NAME = "textures";
 		private String signature;
 		private String value;
 
@@ -246,6 +248,13 @@ public class SkinUtils {
 		 */
 		public String getSignature() {
 			return signature;
+		}
+
+		/**
+		 * @return a profile property containing the wrapped data.
+		 */
+		public ProfileProperty toProfileProperty() {
+			return new ProfileProperty(PROPERTY_NAME, getValue(), getSignature());
 		}
 
 	}

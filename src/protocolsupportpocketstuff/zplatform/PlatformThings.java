@@ -19,6 +19,9 @@ public abstract class PlatformThings {
 		case SPIGOT:
 			stuff = new SpigotStuff();
 			break;
+		case GLOWSTONE:
+//			stuff = new GlowstoneStuff();
+//			break;
 		default:
 			throw new RuntimeException("Unsupported server platform!");
 		}
