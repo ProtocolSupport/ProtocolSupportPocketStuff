@@ -46,7 +46,7 @@ dlDepsDirS.mkdirs()
 //TODO: Add ProtocolSupport to dlLibsC (Obviously we're in beta and cannot download yet so compilation will have to be done for now)
 def dlDepsC = [
 	new Tuple(
-		'https://yivesmirror.com/files/paper/Paper-1.13.2-b388.jar',
+		'https://mcmirror.io/files/Paper/Paper-1.13.2-b388.jar',
 		'Paper-1.13.2-b388.jar'
 	),
 	new Tuple(
