@@ -1,7 +1,11 @@
 package protocolsupportpocketstuff.skin;
 
 import java.util.Base64;
+import java.util.Map;
+import java.util.WeakHashMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -17,11 +21,15 @@ import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
 import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.zplatform.PlatformThings;
 
 public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	private static final ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
 	public static final String SKIN_PROPERTY_NAME = "textures";
+
+	//TODO: remove on player leave
+	private Map<Connection, String> connectionToSkinMap = new WeakHashMap<>();
 
 	@PocketPacketHandler
 	public void onConnect(Connection connection, ClientLoginPacket packet) {
@@ -29,13 +37,24 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 		String skinData = packet.getJsonPayload().get("SkinData").getAsString();
 		byte[] skinByteArray = Base64.getDecoder().decode(skinData);
 		boolean slim = SkinUtils.slimFromModel(packet.getJsonPayload().get("SkinGeometryName").getAsString());
-		new MineskinThread(skinByteArray, slim, (skindata) -> { /* Just cache it. */}).start();
+		String uniqueSkinId = SkinUtils.uuidFromSkin(skinByteArray, slim).toString();
+		String username = packet.getChainPayload().get("displayName").getAsString();
+		connectionToSkinMap.put(connection, uniqueSkinId);
+		new MineskinThread(skinByteArray, slim, (skindata) -> {
+			Bukkit.getScheduler().runTask(ProtocolSupportPocketStuff.getInstance(), () -> {
+				Player player = Bukkit.getPlayer(username);
+				if (player != null) {
+					PlatformThings.getStuff().setSkinProperties(player, skindata); // ?
+				}
+			});
+		}).start();
 	}
 
 	@EventHandler
 	public void onLoginFinish(PlayerLoginFinishEvent event) {
-		if (Skins.getInstance().hasPeSkin(event.getUUID().toString())) {
-			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(event.getUUID().toString());
+		String uniqueSkinId = connectionToSkinMap.get(event.getConnection());
+		if (uniqueSkinId != null && Skins.getInstance().hasPeSkin(uniqueSkinId)) {
+			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(uniqueSkinId);
 			GameProfile gameProfile = (GameProfile)event.getConnection().getProfile();
 			gameProfile.addProperty(new ProfileProperty(SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
 		}

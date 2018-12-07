@@ -54,9 +54,8 @@ public class ClientLoginPacket extends PEPacket {
 
 	@Override
 	public void readFromClientData(Connection connection, ByteBuf clientData) {
-		//TODO: fix
-		/*protocolVersion = clientData.readInt(); //protocol version
-		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientData, connection.getVersion()));
+		protocolVersion = clientData.readInt(); //protocol version
+		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArraySlice(clientData));
 		chainData = GsonUtils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
 				new TypeToken<Map<String, List<String>>>() { private static final long serialVersionUID = 1L; }.getType()
@@ -87,7 +86,7 @@ public class ClientLoginPacket extends PEPacket {
 			result.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 
 	public int getProtocolVersion() {

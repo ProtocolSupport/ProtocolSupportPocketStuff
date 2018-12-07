@@ -31,7 +31,6 @@ public class SkinUtils {
 	 * @return
 	 */
 	public static BufferedImage imageFromPEData(byte[] data) {
-		System.out.println(data.length);
 		Validate.isTrue((data.length == 8192) || (data.length == 16384) || (data.length == 65536), "Skin data must be either 32*64 or 64*64 or 128*128 bytes long!");
 		int width = (data.length == 65536) ? 128 : 64, height = (data.length == 65536) ? 128 : ((data.length == 16384) ? 64 : 32);
 		ByteArrayInputStream stream = new ByteArrayInputStream(data);

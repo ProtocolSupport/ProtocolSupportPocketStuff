@@ -7,6 +7,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.Utils;
 import protocolsupportpocketstuff.packet.PEPacket;
 
 import java.util.UUID;
@@ -51,6 +52,7 @@ public class SkinPacket extends PEPacket {
 		ArraySerializer.writeVarIntByteArray(serializer, capeData);
 		StringSerializer.writeString(serializer, version, geometryId);
 		StringSerializer.writeString(serializer, version, geometryData);
+		serializer.writeBoolean(false); //premium skin
 	}
 
 	@Override
@@ -64,6 +66,7 @@ public class SkinPacket extends PEPacket {
 		capeData = ArraySerializer.readVarIntByteArray(clientdata);
 		geometryId = StringSerializer.readString(clientdata, version);
 		geometryData = StringSerializer.readString(clientdata, version);
+		clientdata.readBoolean();
 	}
 
 	public UUID getUUID() {
