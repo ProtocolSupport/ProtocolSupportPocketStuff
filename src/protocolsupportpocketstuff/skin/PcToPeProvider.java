@@ -14,7 +14,6 @@ public class PcToPeProvider extends PESkinsProvider {
 	public byte[] getSkinData(String url) {
 		ProtocolSupportPocketStuff.getInstance().debug("Instantly returning skin: " + url);
 		if (skins.hasPcSkin(url)) {
-			ProtocolSupportPocketStuff.getInstance().debug("Instantly returning skin length: " + skins.getPcSkin(url).length);
 			return skins.getPcSkin(url);
 		}
 		return null;

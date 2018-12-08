@@ -40,15 +40,11 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 		String uniqueSkinId = SkinUtils.uuidFromSkin(skin, isSlim).toString();
 		connectionToSkinMap.put(connection, uniqueSkinId);
 		new MineskinThread(skin, isSlim, (skindata) -> {
-			if (connection.getPlayer() == null) {
-				//Player is still finalising login, the finish event will likely catch the skin.
-				connection.addMetadata(TRANSFER_SKIN, skindata);
-			} else {
-				//Dynamically update when we can, propagate the skin to everyone.
-				new PacketUtils.RunWhenOnline(connection, () -> {
-					SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
-				}, 2, true, 200L);
-			}
+			connection.addMetadata(TRANSFER_SKIN, skindata);
+			//Dynamically update when we can, propagate the skin to everyone.
+			new PacketUtils.RunWhenOnline(connection, () -> {
+				SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
+			}, 2, true, 200L);
 		}).start();
 	}
 

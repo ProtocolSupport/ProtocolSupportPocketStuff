@@ -3,7 +3,6 @@ package protocolsupportpocketstuff.packet.handshake;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
-import protocolsupport.api.Connection;
 import protocolsupport.libs.com.google.gson.JsonObject;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;

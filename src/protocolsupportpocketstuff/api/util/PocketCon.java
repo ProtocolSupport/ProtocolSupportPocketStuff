@@ -139,7 +139,7 @@ public class PocketCon {
 	 */
 	public static void sendSkin(Connection connection, UUID uuid, byte[] skin, PocketSkinModel skinModel) {
 		//TODO: "Steve" is actually a hack. The name send should be the previous skin name. Not sure if this matters though. Works for now :S"
-		sendPocketPacket(connection, new SkinPacket(uuid, skinModel.getSkinId(), "Steve"/*skinModel.getSkinName()*/, "Steve", skin, new byte[0], skinModel.getGeometryId(), skinModel.getGeometryData()));
+		sendPocketPacket(connection, new SkinPacket(uuid, skinModel.getSkinId(), skinModel.getSkinName(), "Steve", skin, new byte[0], skinModel.getGeometryId(), skinModel.getGeometryData()));
 	}
 
 	/***
