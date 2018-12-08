@@ -50,6 +50,8 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 
 	@EventHandler
 	public void onLoginFinish(PlayerLoginFinishEvent event) {
+		//TODO: this might need be needed anymore, needs some more thorough testing to see if we can ditch this
+		//TODO: neither even works reliably, but both together seem slightly better maybe???
 		String uniqueSkinId = connectionToSkinMap.get(event.getConnection());
 		if (uniqueSkinId != null && Skins.getInstance().hasPeSkin(uniqueSkinId)) {
 			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(uniqueSkinId);
