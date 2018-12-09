@@ -66,6 +66,20 @@ public class SkinUtils {
 		return stream.toByteArray();
 	}
 
+	/**
+	 * Resize image by half.
+	 * @param inputImage input image
+	 * @return resized image
+	 */
+	public static BufferedImage resizeHalf(BufferedImage inputImage) {
+		BufferedImage outputImage = new BufferedImage(inputImage.getWidth() / 2, inputImage.getHeight() / 2, inputImage.getType());
+		Graphics2D g2d = outputImage.createGraphics();
+		g2d.drawImage(inputImage, 0, 0, outputImage.getWidth(), outputImage.getHeight(), null);
+		g2d.dispose();
+
+		return outputImage;
+	}
+
 	/***
 	 * Very cool method that updates a player's skin on the fly!
 	 * @param player

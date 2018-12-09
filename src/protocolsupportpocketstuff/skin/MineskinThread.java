@@ -9,7 +9,6 @@ import protocolsupportpocketstuff.storage.Skins;
 import protocolsupportpocketstuff.util.GsonUtils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,15 +40,6 @@ public class MineskinThread extends Thread {
 		this.skindataUploadedCallback = skindataUploadedCallback;
 	}
 
-	public static BufferedImage resize(BufferedImage inputImage) {
-		BufferedImage outputImage = new BufferedImage(inputImage.getWidth() / 2, inputImage.getHeight() / 2, inputImage.getType());
-		Graphics2D g2d = outputImage.createGraphics();
-		g2d.drawImage(inputImage, 0, 0, outputImage.getWidth(), outputImage.getHeight(), null);
-		g2d.dispose();
-
-		return outputImage;
-	}
-
 	@Override
 	public void run() {
 		super.run();
@@ -61,7 +51,7 @@ public class MineskinThread extends Thread {
 		}
 		//MineSkin limits
 		if(skinImage.getWidth() > 64 || skinImage.getHeight() > 64)
-			skinImage = resize(skinImage);
+			skinImage = SkinUtils.resizeHalf(skinImage);
 		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
 		try {
 			int tries = 0;

@@ -29,16 +29,11 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 	private static final ProtocolSupportPocketStuff plugin = ProtocolSupportPocketStuff.getInstance();
 	public static final String TRANSFER_SKIN = "PEApplySkinOnJoin";
 
-	//TODO: remove on player leave
-	private Map<Connection, String> connectionToSkinMap = new WeakHashMap<>();
-
 	@PocketPacketHandler
 	public void onConnect(Connection connection, ClientLoginPacket packet) {
 		if (packet.getJsonPayload() == null) { return; }
 		byte[] skin = Base64.getDecoder().decode(packet.getJsonPayload().get("SkinData").getAsString());
 		boolean isSlim = SkinUtils.slimFromModel(packet.getJsonPayload().get("SkinGeometryName").getAsString());
-		String uniqueSkinId = SkinUtils.uuidFromSkin(skin, isSlim).toString();
-		connectionToSkinMap.put(connection, uniqueSkinId);
 		new MineskinThread(skin, isSlim, (skindata) -> {
 			connection.addMetadata(TRANSFER_SKIN, skindata);
 			//Dynamically update when we can, propagate the skin to everyone.
@@ -46,18 +41,6 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 				SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
 			}, 2, true, 200L);
 		}).start();
-	}
-
-	@EventHandler
-	public void onLoginFinish(PlayerLoginFinishEvent event) {
-		//TODO: this might need be needed anymore, needs some more thorough testing to see if we can ditch this
-		//TODO: neither even works reliably, but both together seem slightly better maybe???
-		String uniqueSkinId = connectionToSkinMap.get(event.getConnection());
-		if (uniqueSkinId != null && Skins.getInstance().hasPeSkin(uniqueSkinId)) {
-			SkinDataWrapper skinDataWrapper = Skins.getInstance().getPeSkin(uniqueSkinId);
-			GameProfile gameProfile = (GameProfile) event.getConnection().getProfile();
-			gameProfile.addProperty(new ProfileProperty(StuffUtils.SKIN_PROPERTY_NAME, skinDataWrapper.getValue(), skinDataWrapper.getSignature()));
-		}
 	}
 
 	@EventHandler
