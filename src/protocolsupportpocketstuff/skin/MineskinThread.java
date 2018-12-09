@@ -49,6 +49,9 @@ public class MineskinThread extends Thread {
 			skindataUploadedCallback.accept(skins.getPeSkin(uniqueSkinId));
 			return;
 		}
+		//MineSkin limits
+		if(skinImage.getWidth() > 64 || skinImage.getHeight() > 64)
+			skinImage = SkinUtils.resizeHalf(skinImage);
 		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
 		try {
 			int tries = 0;

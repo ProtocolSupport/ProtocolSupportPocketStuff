@@ -27,7 +27,7 @@ public class SpigotStuff extends PlatformThings {
 		CraftPlayer craftPlayer = ((CraftPlayer) player);
 		EntityHuman entityHuman = craftPlayer.getHandle();
 		try {
-			Field gp2 = entityHuman.getClass().getSuperclass().getDeclaredField("g");
+			Field gp2 = EntityHuman.class.getDeclaredField("h");
 			gp2.setAccessible(true);
 			GameProfile profile = (GameProfile) gp2.get(entityHuman);
 			profile.getProperties().removeAll("textures");

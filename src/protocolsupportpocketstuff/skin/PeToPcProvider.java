@@ -1,12 +1,17 @@
 package protocolsupportpocketstuff.skin;
 
 import java.util.Base64;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import protocolsupport.api.Connection;
+import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
+import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -14,7 +19,10 @@ import protocolsupportpocketstuff.api.util.PocketPacketHandler;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
+import protocolsupportpocketstuff.storage.Skins;
+import protocolsupportpocketstuff.util.StuffUtils;
 import protocolsupportpocketstuff.util.PacketUtils;
+
 
 public class PeToPcProvider implements PocketPacketListener, Listener {
 
@@ -27,20 +35,16 @@ public class PeToPcProvider implements PocketPacketListener, Listener {
 		byte[] skin = Base64.getDecoder().decode(packet.getJsonPayload().get("SkinData").getAsString());
 		boolean isSlim = SkinUtils.slimFromModel(packet.getJsonPayload().get("SkinGeometryName").getAsString());
 		new MineskinThread(skin, isSlim, (skindata) -> {
-			if (connection.getPlayer() == null) {
-				//Player is still finalising login, the finish event will likely catch the skin.
-				connection.addMetadata(TRANSFER_SKIN, skindata);
-			} else {
-				//Dynamically update when we can, propagate the skin to everyone.
-				new PacketUtils.RunWhenOnline(connection, () -> {
-					SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
-				}, 2, true, 200L); 
-			}
+			connection.addMetadata(TRANSFER_SKIN, skindata);
+			//Dynamically update when we can, propagate the skin to everyone.
+			new PacketUtils.RunWhenOnline(connection, () -> {
+				SkinUtils.updateSkin(connection.getPlayer(), skin, skindata, isSlim);
+			}, 2, true, 200L);
 		}).start();
 	}
 
 	@EventHandler
-	public void onLoginFinish(PlayerProfileCompleteEvent event) {
+	public void onProfileFinish(PlayerProfileCompleteEvent event) {
 		if (event.getConnection().hasMetadata(TRANSFER_SKIN)) {
 			SkinDataWrapper skinData = (SkinDataWrapper) event.getConnection().getMetadata(TRANSFER_SKIN);
 			event.addProperty(skinData.toProfileProperty());

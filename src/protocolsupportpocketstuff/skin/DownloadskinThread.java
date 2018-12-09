@@ -33,7 +33,7 @@ public class DownloadskinThread extends Thread {
 			} else {
 				plugin.debug("Downloading skin...");
 				byte[] skin = SkinUtils.imageToPEData(ImageIO.read(new URL(url)));
-				plugin.debug("Caching skin...");
+				plugin.debug("Caching skin... length " + skin.length);
 				skins.cachePcSkin(url, skin);
 				skindataApplyCallback.accept(skin);
 			}

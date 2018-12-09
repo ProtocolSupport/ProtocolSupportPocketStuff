@@ -20,10 +20,10 @@ public class PocketInfoReceiver implements PocketPacketListener {
 		// "In general you shouldn't really expect the payload to be sent with psbpe" -Shevchik
 		if (chain != null && clientPayload != null) {
 			clientInfo.put("UUID", UUID.fromString(JsonUtils.getString(chain, "identity")));
-			clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
-			clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
-			clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
-			clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
+			if (clientPayload.get("ClientRandomId") != null) clientInfo.put("ClientRandomId", clientPayload.get("ClientRandomId").getAsLong());
+			if (clientPayload.get("DeviceModel") != null) clientInfo.put("DeviceModel", clientPayload.get("DeviceModel").getAsString());
+			if (clientPayload.get("DeviceOS") != null) clientInfo.put("DeviceOS", clientPayload.get("DeviceOS").getAsInt());
+			if (clientPayload.get("GameVersion") != null) clientInfo.put("GameVersion", clientPayload.get("GameVersion").getAsString());
 		}
 		connection.addMetadata(StuffUtils.CLIENT_INFO_KEY, clientInfo);
 	}

@@ -32,7 +32,6 @@ public class SkinUtils {
 	 * @return
 	 */
 	public static BufferedImage imageFromPEData(byte[] data) {
-		System.out.println(data.length);
 		Validate.isTrue((data.length == 8192) || (data.length == 16384) || (data.length == 65536), "Skin data must be either 32*64 or 64*64 or 128*128 bytes long!");
 		int width = (data.length == 65536) ? 128 : 64, height = (data.length == 65536) ? 128 : ((data.length == 16384) ? 64 : 32);
 		ByteArrayInputStream stream = new ByteArrayInputStream(data);
@@ -65,6 +64,20 @@ public class SkinUtils {
 			}
 		}
 		return stream.toByteArray();
+	}
+
+	/**
+	 * Resize image by half.
+	 * @param inputImage input image
+	 * @return resized image
+	 */
+	public static BufferedImage resizeHalf(BufferedImage inputImage) {
+		BufferedImage outputImage = new BufferedImage(inputImage.getWidth() / 2, inputImage.getHeight() / 2, inputImage.getType());
+		Graphics2D g2d = outputImage.createGraphics();
+		g2d.drawImage(inputImage, 0, 0, outputImage.getWidth(), outputImage.getHeight(), null);
+		g2d.dispose();
+
+		return outputImage;
 	}
 
 	/***
