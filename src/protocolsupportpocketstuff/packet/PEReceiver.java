@@ -9,8 +9,8 @@ import java.util.Set;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.Connection.PacketListener;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupportpocketstuff.api.util.PocketPacketHandler;
@@ -107,7 +107,7 @@ public class PEReceiver {
 		public void onRawPacketReceiving(RawPacketEvent event) {
 			if (connection.getVersion() == null) {
 				return; //Keep going until version type is known.
-			} else if (connection.getVersion() == ProtocolVersion.MINECRAFT_PE) {
+			} else if (connection.getVersion().getProtocolType() == ProtocolType.PE) {
 				decodehandle(connection, event.getData().copy()); //If version is PE, handle the packet.
 			} else {
 				connection.removePacketListener(this); //If version turns out not to be PE stop listening.
