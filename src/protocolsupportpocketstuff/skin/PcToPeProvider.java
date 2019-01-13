@@ -21,7 +21,7 @@ public class PcToPeProvider extends PESkinsProvider {
 
 	@Override
 	public void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback) {
-		new DownloadskinThread(url, skindataApplyCallback).start();		
+		new DownloadskinThread(url, skindataApplyCallback).start();
 	}
 
 }

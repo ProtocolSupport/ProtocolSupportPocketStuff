@@ -1,17 +1,12 @@
 package protocolsupportpocketstuff.skin;
 
 import java.util.Base64;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import protocolsupport.api.Connection;
-import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
-import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupportpocketstuff.ProtocolSupportPocketStuff;
 import protocolsupportpocketstuff.api.skins.SkinUtils;
 import protocolsupportpocketstuff.api.skins.SkinUtils.SkinDataWrapper;
@@ -19,8 +14,6 @@ import protocolsupportpocketstuff.api.util.PocketPacketHandler;
 import protocolsupportpocketstuff.api.util.PocketPacketListener;
 import protocolsupportpocketstuff.packet.handshake.ClientLoginPacket;
 import protocolsupportpocketstuff.packet.play.SkinPacket;
-import protocolsupportpocketstuff.storage.Skins;
-import protocolsupportpocketstuff.util.StuffUtils;
 import protocolsupportpocketstuff.util.PacketUtils;
 
 

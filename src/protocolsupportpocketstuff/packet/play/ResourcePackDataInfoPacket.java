@@ -1,11 +1,11 @@
 package protocolsupportpocketstuff.packet.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportpocketstuff.api.resourcepacks.ResourcePack;
 import protocolsupportpocketstuff.packet.PEPacket;
 
@@ -26,7 +26,7 @@ public class ResourcePackDataInfoPacket extends PEPacket {
 
 	@Override
 	public void toData(ConnectionImpl connection, ByteBuf serializer) {
-		StringSerializer.writeString(serializer, ProtocolVersion.MINECRAFT_PE, pack.getPackId());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PE, pack.getPackId());
 		serializer.writeIntLE(ResourcePackChunkDataPacket.CHUNK_SIZE); //max chunk size 1MB
 		serializer.writeIntLE((int) Math.ceil(pack.getPackSize() / ResourcePackChunkDataPacket.CHUNK_SIZE)); //chunk count
 		serializer.writeLongLE(pack.getPackSize()); //res pack size
