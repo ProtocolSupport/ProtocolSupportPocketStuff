@@ -75,7 +75,8 @@ public class SpawnPlayerPacket extends PEPacket {
 		serializer.writeFloatLE(pitch); // pitch
 		serializer.writeFloatLE(headYaw); // yaw
 		serializer.writeFloatLE(yaw); // yaw
-		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), NetworkItemStack.NULL, true); //held item.
+		//ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), NetworkItemStack.NULL, true); //held item.
+		ItemStackSerializer.writeItemStack(serializer,NetworkItemStack.NULL);
 		//TODO Fix!
 		VarNumberSerializer.writeVarInt(serializer, 0);
 		//EntityMetadata.encodeMeta(serializer, connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), metadata);
