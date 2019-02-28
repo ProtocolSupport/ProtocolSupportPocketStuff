@@ -19,7 +19,7 @@ public class DataWatcherObjectSVarLong extends ReadableDataWatcherObject<Long> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		this.value = VarNumberSerializer.readSVarLong(from);
 	}
 

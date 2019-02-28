@@ -14,7 +14,7 @@ public class DataWatcherObjectFloatLe extends ReadableDataWatcherObject<Float> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		this.value = from.readFloatLE();
 	}
 

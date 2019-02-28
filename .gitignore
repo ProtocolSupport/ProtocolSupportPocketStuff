@@ -26,6 +26,8 @@ dllibsc/
 # IntelliJ
 .idea/
 *.iml
+*.iws
+*.ipr
 
 # jRebel
 *.rebel.xml.bak
