@@ -74,8 +74,8 @@ public class PocketMetadata {
 			entityInteracts.put(entityId, interactText);
 		}
 		// Update to all players
-		CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(PeMetaBase.BUTTON_TEXT);
-		metadata.put(PeMetaBase.BUTTON_TEXT, new DataWatcherObjectString(interactText));
+		CollectionsUtils.ArrayMap<DataWatcherObject<?>> metadata = new CollectionsUtils.ArrayMap<>(PeMetaBase.BUTTON_TEXT_V1);
+		metadata.put(PeMetaBase.BUTTON_TEXT_V1, new DataWatcherObjectString(interactText));
 		EntityDataPacket packet = new EntityDataPacket(entityId, metadata);
 		for (Connection connection : PocketCon.getPocketConnections()) {
 			PocketCon.sendPocketPacket(connection, packet);
