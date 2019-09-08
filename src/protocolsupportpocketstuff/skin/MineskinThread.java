@@ -49,7 +49,7 @@ public class MineskinThread extends Thread {
 			skindataUploadedCallback.accept(skins.getPeSkin(uniqueSkinId));
 			return;
 		}
-		//MineSkin limits
+		// Minecraft limits
 		if(skinImage.getWidth() > 64 || skinImage.getHeight() > 64)
 			skinImage = SkinUtils.resizeHalf(skinImage);
 		plugin.debug("Sending skin " + uniqueSkinId + " to MineSkin...");
@@ -66,7 +66,7 @@ public class MineskinThread extends Thread {
 					return;
 				}
 				plugin.debug("[#" + (tries + 1) + "] Failed to send skin! Retrying again in 5s...");
-				Thread.sleep(5000); // Throttle
+				Thread.sleep(getRequestThrottle(mineskinResponse)); // Throttle
 				mineskinResponse = sendToMineSkin(os, isSlim);
 				plugin.debug("[#" + (tries + 1) + "] " + mineskinResponse);
 				tries++;
@@ -88,6 +88,19 @@ public class MineskinThread extends Thread {
 			plugin.pm("Error when uploading " + uniqueSkinId + " to Mineskin!");
 			e.printStackTrace();
 		}
+	}
+
+	private static long getRequestThrottle(JsonObject mineskinResponse) {
+		if (mineskinResponse.has("error")) {
+			String error = mineskinResponse.get("error").getAsString();
+			if ("Too many requests".equals(error) && mineskinResponse.has("delay")) {// Too many request sent in too little time
+				return (mineskinResponse.get("delay").getAsInt() + 1) * 1000;
+			}
+		}
+		if (mineskinResponse.has("nextRequest")) { // Required delay after successful generation
+			return (mineskinResponse.get("nextRequest").getAsInt() + 1) * 1000;
+		}
+		return 5000; // Default fallback
 	}
 
 	private static JsonObject sendToMineSkin(ByteArrayOutputStream byteArrayOutputStream, boolean isSlim) throws IOException {
